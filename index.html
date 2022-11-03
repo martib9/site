@@ -3,40 +3,69 @@
 <head>
   <title>DM?</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf8">
-  <meta property="og:image" content="sergey-surganov.jpg">
+  <meta property="og:image" content="lera.jpeg">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <body>
-<h1>LERA, PLEASE GET WELL SOON!</h1>
-<img src="lera.jpeg" alt="Best girl", width="500">
-<figcaption><small><i>Best girl</i></small></figcaption>
-<h2>These funny dogs are for you</h2>
-<br>
-<img src="1.gif">
-<img src="2.gif">
-<img src="3.gif">
-<img src="4.gif">
-<img src="5.gif">
-<img src="6.gif">
-<img src="7.gif">
-<img src="8.gif">
-<img src="9.gif">
-<img src="10.gif">
-<img src="11.gif">
-<img src="12.gif">
-<img src="13.gif">
-<img src="14.mp4">
-<img src="15.mp4">
-<img src="16.mp4">
-<img src="17.mp4">
-<img src="18.mp4">
-<img src="19.mp4">
-<img src="20.mp4">
-<img src="21.mp4">
-<img src="22.mp4">
-<img src="23.mp4">
-<img src="24.mp4">
-<p>© 2022<br></p>
+<div class="fade-in-text">  
+<div class="h1"><h1>LERA, PLEASE, GET WELL SOON!</h1></div>
+<div class="img"><img src="lera.jpeg" alt="Best girl"></div>
+<div class="fig"><figcaption><i>Best girl :)</i></figcaption></div>
+<div class="h2"><h2>These funny dogs are for you</h2></div>
+</div>
+<div class="grid">
+</div>
+<script id="rendered-js" >
+fetch(
+"https://api.giphy.com/v1/gifs/search?api_key=NQxPr4nWkjbjgFtv9cdcrPq67QfXq4gc&q=dogs&limit=50&offset=0&rating=r&lang=en").
+
+
+then(function (res) {
+  res.json().then(function (res) {
+    res.data.forEach(el => {
+      var gif = document.createElement("img");
+      gif.setAttribute("src", el.images.original.url);
+      gif.setAttribute("autoplay", "true");
+      gif.addEventListener("click", () => {
+        window.open(el.images.original.url);
+      });
+      document.querySelector(".grid").appendChild(gif);
+    });
+  });
+}).
+
+catch(function (e) {
+  console.log(e);
+});
+
+</script>
+<!-- <div class="gifs">
+  <img src="1.gif">
+  <img src="2.gif">
+  <img src="3.gif">
+  <img src="4.gif">
+  <img src="5.gif">
+  <img src="6.gif">
+  <img src="7.gif">
+  <img src="8.gif">
+  <img src="9.gif">
+  <img src="10.gif">
+  <img src="11.gif">
+  <img src="12.gif">
+  <img src="13.gif">
+  <img src="14.mp4">
+  <img src="15.mp4">
+  <img src="16.mp4">
+  <img src="17.mp4">
+  <img src="18.mp4">
+  <img src="19.mp4">
+  <img src="20.mp4">
+  <img src="21.mp4">
+  <img src="22.mp4">
+  <img src="23.mp4">
+  <img src="24.mp4">
+</div> -->
+<p>© DM 2022<br></p>
 </body>
 </html>
