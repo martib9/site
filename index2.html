@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome to Hell</title>
+  <style>
+    h1 {
+      font-weight: bold;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+    label, input[type="submit"] {
+      margin-top: 10px;
+    }
+    input[type="checkbox"] {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>WELCOME TO HELL</h1>
+  <form action="rickroll.php" method="post">
+    <label>
+      Email:
+      <input type="email" name="email" required>
+    </label>
+    <label>
+      <input type="checkbox" name="agreement" required>
+      I agree that you will send me spam to my email
+    </label>
+    <input type="submit" value="Register">
+  </form>
+  <div id="error" style="display: none;">
+    Check the box
+  </div>
+  <div id="rickroll" style="display: none;">
+    <p style="font-weight: bold;">YOU HAVE BEEN RICK ROLLED AND RECEIVED A SPAM MAIL</p>
+    <img src="rick-astley.gif" alt="Rick Astley - Never Gonna Give You Up">
+  </div>
+  <script>
+    document.querySelector("form").addEventListener("submit", function(event) {
+      event.preventDefault();
+      if (!document.querySelector("input[name='agreement']:checked")) {
+        document.querySelector("#error").style.display = "block";
+        return;
+      }
+      document.querySelector("#rickroll").style.display = "block";
+    });
+  </script>
+</body>
+</html>
