@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My Site</title>
+	<style>
+		body {
+			background-color: white;
+			text-align: center;
+			font-weight: bold;
+			color: black;
+			margin: 0;
+			padding: 0;
+		}
+
+		.popup {
+			display: none;
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background-color: black;
+			color: white;
+			padding: 20px;
+			border: 1px solid red;
+			z-index: 1;
+		}
+
+		.btn {
+			background-color: red;
+			color: white;
+			padding: 10px 20px;
+			border-radius: 5px;
+			cursor: pointer;
+			margin-top: 20px;
+		}
+	</style>
+</head>
+<body>
+	<h1>Welcome to my site</h1>
+	<button class="btn" onclick="document.querySelector('.popup').style.display='block'">Sign up</button>
+	<div class="popup">
+		<h1>YOU HAVE BEEN RICK ROLLED</h1>
+		<img src="rickroll.gif" alt="Rick Astley – Never gonna give you up">
+		<button onclick="document.querySelector('.popup').style.display='none'">Close</button>
+	</div>
+</body>
+</html>
