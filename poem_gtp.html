@@ -46,7 +46,7 @@
         margin: 60px auto;
         padding: 40px;
         width: 500px;
-    }
+      }
     </style>
   </head>
   <body>
@@ -61,28 +61,29 @@
     </div>
     
     <script>
-      function generatePoem() {
-        // Get the value of the input field
-        var inputWord = document.getElementById("wordInput").value;
-        
-        // Check if the input is empty or contains more than 20 characters
-        if (!inputWord || inputWord.length > 20) {
-          alert("Please enter a word with no more than 20 characters.");
-          return;
+        function generatePoem() {
+          // Get the input word
+          var inputWord = document.getElementById("inputWord").value;
+  
+          // Send the API request to OpenAI
+          var request = new XMLHttpRequest();
+          request.open("POST", "https://api.openai.com/v1/engines/text-davinci-002/jobs");
+          request.setRequestHeader("Content-Type", "application/json");
+          request.setRequestHeader("Authorization", "Bearer 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");
+          request.onload = function() {
+            var response = JSON.parse(request.responseText);
+            var poem = response.choices[0].text;
+            
+            // Display the generated poem
+            document.getElementById("poemTitle").innerHTML = "Here's your rhyming poem:";
+            document.getElementById("poemText").innerHTML = poem;
+            document.getElementById("poemContainer").style.display = "block";
+          };
+          var prompt = "Write a poem that rhymes with the word '" + inputWord + "'.";
+          var requestData = JSON.stringify({ "prompt": prompt, "max_tokens": 256 });
+          request.send(requestData);
         }
-        
-        // Generate a rhyming poem based on the input word
-        var poemTitle = "A Poem About " + inputWord;
-        var poemText = "A " + inputWord + " so bright and fair,<br>" +
-                       "It shines like the morning air.<br>" +
-                       "With beauty that cannot compare,<br>" +
-                       "It's a treasure beyond repair.";
-        
-        // Update the poem container with the generated poem
-        document.getElementById("poemTitle").innerHTML = poemTitle;
-        document.getElementById("poemText").innerHTML = poemText;
-        document.getElementById("poemContainer").style.display = "block";
-      }
-    </script>
-  </body>
-</html>
+      </script>
+    </body>
+  </html>
+  
