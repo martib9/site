@@ -50,39 +50,35 @@
     </style>
   </head>
   <body>
-    <div class="input-container">
-      <h2>Enter a word (20 characters max):</h2>
-      <input type="text" class="input-block" id="wordInput" maxlength="20">
-      <button class="submit-button" onclick="generatePoem()">Generate Poem</button>
+    <div id="input-block">
+      <input type="text" id="word-input" maxlength="20">
+      <button id="generate-button">Generate Poem</button>
     </div>
-    <div class="poem-container" id="poemContainer" style="display: none;">
-      <h2 id="poemTitle"></h2>
-      <p id="poemText"></p>
-    </div>
-    
+    <div id="poem-block"></div>
+
     <script>
-      function generatePoem() {
-        // Get the value of the input field
-        var inputWord = document.getElementById("wordInput").value;
-        
-        // Check if the input is empty or contains more than 20 characters
-        if (!inputWord || inputWord.length > 20) {
-          alert("Please enter a word with no more than 20 characters.");
+      const generateButton = document.getElementById('generate-button');
+      const wordInput = document.getElementById('word-input');
+      const poemBlock = document.getElementById('poem-block');
+
+      generateButton.addEventListener('click', async () => {
+        const word = wordInput.value;
+        if (!word) {
+          alert('Please enter a word');
           return;
         }
-        
-        // Generate a rhyming poem based on the input word
-        var poemTitle = "A Poem About " + inputWord;
-        var poemText = "A " + inputWord + " so bright and fair,<br>" +
-                       "It shines like the morning air.<br>" +
-                       "With beauty that cannot compare,<br>" +
-                       "It's a treasure beyond repair.";
-        
-        // Update the poem container with the generated poem
-        document.getElementById("poemTitle").innerHTML = poemTitle;
-        document.getElementById("poemText").innerHTML = poemText;
-        document.getElementById("poemContainer").style.display = "block";
-      }
+
+        const response = await fetch('https://api.amplifyapp.com/amplify.eu-west-2.amazonaws.com]', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ word }),
+        });
+
+        const poem = await response.text();
+        poemBlock.innerHTML = poem;
+      });
     </script>
   </body>
 </html>
