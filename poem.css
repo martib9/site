@@ -1,0 +1,79 @@
+body {
+	background-color: black;
+	color: white;
+	font-family: 'Montserrat', sans-serif;
+}
+
+.container {
+	width: 80%;
+	margin: auto;
+	padding: 50px;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+h1 {
+	font-size: 2rem;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+input[type="text"] {
+	padding: 10px;
+	font-size: 1.2rem;
+	margin-bottom: 10px;
+	background-color: transparent;
+	border: 1px solid white;
+	color: white;
+}
+
+.error-message {
+	color: red;
+	margin-bottom: 10px;
+}
+
+.input-description {
+	font-style: italic;
+	margin-bottom: 20px;
+}
+
+input[type="submit"] {
+	background-color: white;
+	color: black;
+	padding: 10px 20px;
+	border: none;
+	cursor: pointer;
+}
+
+.poem-container {
+	margin-top: 50px;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-bottom: 20px;
+}
+
+.share-buttons {
+	margin-top: 20px;
+	display: flex;
+	justify-content: center;
+}
+
+.share-buttons a {
+	display: inline-block;
+	padding: 10px;
+	background-color: white;
+	color: black;
+	margin-right: 10px;
+	text-decoration: none;
+}
+
+.share-buttons a:hover {
+	background-color: black;
+	color: white;
+}
