@@ -53,7 +53,7 @@ a {
   color: white;
   text-decoration: none;
   display: inline-block;
-  background-image: url(skull.png);
+  background-image: url(/images/skull.png);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: left center;
