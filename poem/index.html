@@ -57,7 +57,7 @@
 	</style>
 </head>
 <body>
-	<form id="wordForm" onsubmit="generatePoem(); return false;">
+	<form id="wordForm" onsubmit="generatePoem(event); return false;">
 		<input type="text" id="wordInput" placeholder="Enter one word to generate a poem" maxlength="15">
 		<div class="subline">Word no longer than 15 symbols</div>
 		<input type="submit" value="Generate">
@@ -70,7 +70,9 @@
 	</div>
 
 	<script>
-		function generatePoem() {
+		function generatePoem(event) {
+  event.preventDefault(); // Prevent the form from submitting
+
   const input = document.getElementById("wordInput").value.trim();
   const error = document.getElementById("error");
   if (input === "") {
