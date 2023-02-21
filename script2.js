@@ -13,7 +13,7 @@ function generatePoem() {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer <YOUR_OPENAI_API_KEY>'
+      'Authorization': 'Bearer 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'
     }
   })
   .then(response => response.json())
