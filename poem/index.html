@@ -1,113 +1,128 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Poem Generator</title>
-	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-	<style>
-		body {
-			background-color: black;
-			color: white;
-			font-family: 'Montserrat', sans-serif;
-			font-weight: 400;
-			font-size: 1.2em;
-		}
-		input[type=text] {
-			padding: 10px;
-			border-radius: 5px;
-			border: none;
-			background-color: white;
-			color: black;
-			width: 400px;
-			margin: 50px auto;
-			display: block;
-			text-align: center;
-			font-family: 'Montserrat', sans-serif;
-			font-size: 1.2em;
-			font-weight: 700;
-		}
-		input[type=submit] {
-			background-color: white;
-			color: black;
-			border: none;
-			border-radius: 5px;
-			padding: 10px;
-			margin: 20px 0;
-			display: block;
-			text-align: center;
-			font-family: 'Montserrat', sans-serif;
-			font-size: 1.2em;
-			font-weight: 700;
-			cursor: pointer;
-		}
-		input[type=text]:focus {
-			outline: none;
-		}
-		.error {
-			color: red;
-		}
-		.subline {
-			font-style: italic;
-			color: grey;
-		}
-		.poem {
-			margin-top: 50px;
-			font-style: italic;
-			line-height: 1.5em;
-		}
-	</style>
+  <title>Poem Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'Montserrat', sans-serif;
+    }
+    input[type=text] {
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      background-color: white;
+      color: black;
+      width: 400px;
+      margin: 50px auto;
+      display: block;
+      text-align: center;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.2em;
+      font-weight: 700;
+    }
+    input[type=submit] {
+      background-color: white;
+      color: black;
+      border: none;
+      border-radius: 5px;
+      padding: 10px;
+      margin: 20px 0;
+      display: block;
+      text-align: center;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.2em;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    input[type=text]:focus {
+      outline: none;
+    }
+    .error {
+      color: red;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.2em;
+      font-weight: 700;
+    }
+    .subline {
+      font-style: italic;
+      color: grey;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1em;
+    }
+    #poemContainer {
+      font-style: italic;
+      line-height: 1.5em;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.2em;
+      margin-top: 50px;
+    }
+    a {
+      text-decoration: none;
+      color: white;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.2em;
+      font-weight: 700;
+      margin-right: 20px;
+    }
+  </style>
 </head>
 <body>
-	<form id="wordForm" onsubmit="generatePoem(event); return false;">
-		<input type="text" id="wordInput" placeholder="Enter one word to generate a poem" maxlength="15">
-		<div class="subline">Word no longer than 15 symbols</div>
-		<input type="submit" value="Generate">
-		<div id="error"></div>
-	</form>
-	<div id="poemContainer"></div>
-	<div>
-		<a href="https://twitter.com/intent/tweet?url=[Insert URL]&text=[Insert text]">Share on Twitter</a>
-		<a href="https://t.me/share/url?url=[Insert URL]&text=[Insert text]">Share on Telegram</a>
-	</div>
+  <form id="wordForm">
+    <input type="text" id="wordInput" placeholder="Enter one word to generate a poem" maxlength="15">
+    <div class="subline">Word no longer than 15 symbols</div>
+    <input type="submit" value="Generate">
+    <div id="error"></div>
+  </form>
+  <div id="poemContainer"></div>
+  <div>
+    <a href="https://twitter.com/intent/tweet?url=[Insert URL]&text=[Insert text]">Share on Twitter</a>
+    <a href="https://t.me/share/url?url=[Insert URL]&text=[Insert text]">Share on Telegram</a>
+  </div>
 
-	<script>
-		function generatePoem(event) {
-  event.preventDefault(); // Prevent the form from submitting
-
-  const input = document.getElementById("wordInput").value.trim();
-  const error = document.getElementById("error");
-  if (input === "") {
-    error.innerHTML = "Add word";
-    return;
-  } else {
-    error.innerHTML = "";
-  }
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "https://api.openai.com/v1/engines/davinci-codex/completions");
-  xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.setRequestHeader("Authorization", "Bearer " + process.env.OPENAI_API_KEY);
-  xhr.onreadystatechange = function() {
-    if (this.readyState === 4 && this.status === 200) {
-      const response = JSON.parse(this.responseText);
-      const poem = response.choices[0].text;
-      document.getElementById("poemContainer").innerHTML = poem;
-      const shareUrl = encodeURIComponent(window.location.href);
-      const shareText = encodeURIComponent(`Check out this poem generated by the word "${input}":\n\n${poem}`);
-      document.querySelector("a[href*='twitter']").setAttribute("href", `https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareText}`);
-      document.querySelector("a[href*='telegram']").setAttribute("href", `https://t.me/share/url?url=${shareUrl}&text=${shareText}`);
+  <script>
+    function generatePoem(event) {
+      event.preventDefault();
+      const input = document.getElementById("wordInput").value.trim();
+      const error = document.getElementById("error");
+      if (input === "") {
+        error.innerHTML = "Add word";
+        return;
+      } else {
+        error.innerHTML = "";
+      }
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "https://api.openai.com/v1/engines/davinci-codex/completions");
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.setRequestHeader("Authorization", "Bearer " + process.env.OPENAI_API_KEY);
+      xhr.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+          const response = JSON.parse(this.responseText);
+          const poem = response.choices[0].text;
+          document.getElementById("poemContainer").innerHTML = poem;
+          const shareUrl = encodeURIComponent(window.location.href);
+          const shareText = encodeURIComponent(`Check out this poem generated by the word "${input}":\n\n${poem}`);
+          document.querySelector("a[href*='twitter']").setAttribute("href", `https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareText}`);
+          document.querySelector("a[href*='telegram']").setAttribute("href", `https://t.me/share/url?url=${shareUrl}&text=${shareText}`);
+        }
+      };
+      const data = JSON.stringify({
+        prompt: `Generate a poem to the rhythm of "${input}"`,
+        max_tokens: 60,
+        stop: ["\n", "Poem:"],
+        n: 1,
+        stream: false,
+        temperature: 0.7,
+        frequency_penalty: 0,
+        presence_penalty: 0
+      });
+      xhr.send(data);
     }
-  };
-  const data = JSON.stringify({
-    prompt: `Generate a poem to the rhythm of "${input}"`,
-    max_tokens: 60,
-    stop: ["\n", "Poem:"],
-    n: 1,
-    stream: false,
-    temperature: 0.7,
-    frequency_penalty: 0,
-    presence_penalty: 0
-  });
-  xhr.send(data);
-}
-	</script>
+  
+    const form = document.getElementById("wordForm");
+    form.addEventListener("submit", generatePoem);
+  </script>  
 </body>
 </html>
