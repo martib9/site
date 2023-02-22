@@ -107,7 +107,7 @@
     const data = JSON.stringify({
       prompt: `Generate a poem to the rhythm of "${input}"`,
       max_tokens: 4000,
-      stop: ["\n", "Poem:"].concat(Array(4).fill("\n")),
+      stop: "Poem:\n\n\n\n\n",
       n: 1,
       stream: true,
       temperature: 1,
