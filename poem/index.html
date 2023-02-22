@@ -104,18 +104,16 @@
         document.querySelector("a[href*='telegram']").setAttribute("href", `https://t.me/share/url?url=${shareUrl}&text=${shareText}`);
       }
     };
-    const data = JSON.stringify({
-      prompt: `Generate a poem to the rhythm of "${input}"`,
-      max_tokens: 4000,
-      stop: "Poem:\n\n\n\n\n",
-      n: 1,
-      stream: false,
-      temperature: 1,
-      frequency_penalty: 0.5,
-      presence_penalty: 0.5
-    });
-    xhr.send(data);
-  }
+const data = JSON.stringify({
+  prompt: `Generate a poem to the rhythm of "${input}"`,
+  max_tokens: 10000,
+  temperature: 0.7,
+  n: 1,
+  stream: false,
+  stop: "Poem:\n\n\n\n\n",
+  presence_penalty: 0,
+  frequency_penalty: 0
+});
 
   const form = document.getElementById("wordForm");
   form.addEventListener("submit", generatePoem);
