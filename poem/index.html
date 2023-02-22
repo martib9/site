@@ -106,13 +106,13 @@
     };
     const data = JSON.stringify({
       prompt: `Generate a poem to the rhythm of "${input}"`,
-      max_tokens: 60,
-      stop: ["\n", "Poem:"],
+      max_tokens: 10000,
+      stop: ["\n", "Poem:"].concat(Array(4).fill("\n")),
       n: 1,
-      stream: false,
-      temperature: 0.7,
-      frequency_penalty: 0,
-      presence_penalty: 0
+      stream: true,
+      temperature: 1,
+      frequency_penalty: 0.5,
+      presence_penalty: 0.5
     });
     xhr.send(data);
   }
