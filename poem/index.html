@@ -87,6 +87,7 @@
   event.preventDefault();
 
   const input = document.getElementById("wordInput").value.trim();
+  console.log(input);    
   const error = document.getElementById("error");
   if (input === "") {
     error.innerHTML = "Add word";
@@ -101,6 +102,7 @@
   xhr.onreadystatechange = function() {
     if (this.readyState === 4 && this.status === 200) {
       const response = JSON.parse(this.responseText);
+      console.log(response);
       const poem = response.choices[0].text;
       document.getElementById("poemContainer").innerHTML = poem;
       const shareUrl = encodeURIComponent(window.location.href);
