@@ -1,26 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Poem Generator</title>
-  <link rel="stylesheet" href="/poem/style.css">
-</head>
-<body>
-  <main>
-    <form>
-      <section>
-        <h2>Enter one word to generate a poem</h2>
-        <input type="text" id="input-word" placeholder="Enter word here">
-        <div class="input-subline">Word no longer than 15 symbols</div>
-        <button id="generate-button">Generate Poem</button>
-        <div id="error-message"></div>
-      </section>
-    </form>
-    <section>
-      <h2>Poem</h2>
-      <div id="poem"></div>
-    </section>
-  </main>
-  <script src="/poem/script.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Generate a Poem</title>
+    <link rel="stylesheet" href="/poem/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Generate a Poem</h1>
+      <p class="tagline">Enter one word to generate a poem</p>
+    </header>
+    <main>
+      <form id="poem-form">
+        <label for="poem-input">Word:</label>
+        <input type="text" id="poem-input" name="poem-input" maxlength="15" required />
+        <div class="form-error" id="error-message"></div>
+        <button type="submit">Generate</button>
+      </form>
+      <div id="poem-container"></div>
+      <div class="share-buttons">
+        <button id="share-twitter">Share on Twitter</button>
+        <button id="share-telegram">Share on Telegram</button>
+      </div>
+    </main>
+    <div class="popup" id="popup">
+      <div class="popup-content">
+        <h2>Poem Generated!</h2>
+        <img src="https://picsum.photos/400/300" alt="Poem Image" />
+        <button id="close-popup">Close</button>
+      </div>
+    </div>
+    <script src="/poem/script.js"></script>
+  </body>
 </html>

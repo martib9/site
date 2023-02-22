@@ -1,61 +1,58 @@
-const form = document.getElementById('poem-form');
-const input = document.getElementById('poem-input');
-const errorMessage = document.getElementById('error-message');
-const poemContainer = document.getElementById('poem-container');
-const shareTwitter = document.getElementById('share-twitter');
-const shareTelegram = document.getElementById('share-telegram');
+const form = document.querySelector('#poem-form');
+const input = document.querySelector('#poem-input');
+const errorMessage = document.querySelector('#error-message');
+const poemContainer = document.querySelector('#poem-container');
+const shareTwitterButton = document.querySelector('#share-twitter');
+const shareTelegramButton = document.querySelector('#share-telegram');
+const popup = document.querySelector('#popup');
+const popupContent = document.querySelector('.popup-content');
+const closePopupButton = document.querySelector('#close-popup');
 
-form.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  errorMessage.textContent = '';
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  errorMessage.innerHTML = '';
 
   const word = input.value.trim();
 
   if (word === '') {
-    errorMessage.textContent = 'Add word';
-    return;
-  }
-
-  if (word.includes(' ')) {
-    errorMessage.textContent = 'No spaces allowed';
+    errorMessage.innerHTML = 'Please enter a word.';
     return;
   }
 
   if (word.length > 15) {
-    errorMessage.textContent = 'Word longer than 15 symbols';
+    errorMessage.innerHTML = 'Word cannot be longer than 15 characters.';
     return;
   }
 
-  try {
-    const response = await fetch('/api/generate-poem', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ word }),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      poemContainer.textContent = data.poem;
-    } else {
-      errorMessage.textContent = data.error;
-    }
-  } catch (error) {
-    console.error(error);
-    errorMessage.textContent = 'Something went wrong';
+  if (word.indexOf(' ') >= 0) {
+    errorMessage.innerHTML = 'Word cannot contain spaces.';
+    return;
   }
+
+  const response = await fetch(`/api/generate-poem?word=${word}`);
+
+  if (!response.ok) {
+    errorMessage.innerHTML = 'An error occurred while generating the poem. Please try again later.';
+    return;
+  }
+
+  const data = await response.json();
+  poemContainer.innerHTML = data.poem;
+
+  popup.style.display = 'flex';
 });
 
-shareTwitter.addEventListener('click', () => {
-  const poem = poemContainer.textContent;
-  const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(poem)}`;
+closePopupButton.addEventListener('click', () => {
+  popup.style.display = 'none';
+  poemContainer.innerHTML = '';
+});
+
+shareTwitterButton.addEventListener('click', () => {
+  const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(poemContainer.textContent)}`;
   window.open(url, '_blank');
 });
 
-shareTelegram.addEventListener('click', () => {
-  const poem = poemContainer.textContent;
-  const url = `https://t.me/share/url?url=&text=${encodeURIComponent(poem)}`;
+shareTelegramButton.addEventListener('click', () => {
+  const url = `https://t.me/share/url?url=${encodeURIComponent(poemContainer.textContent)}`;
   window.open(url, '_blank');
 });
