@@ -1,6 +1,6 @@
 {
-    "name": "my-project",
-    "dependencies": {
-      "openai": "^4.0.0"
-    }
-  }  
+  "name": "my-project",
+  "dependencies": {
+    "openai": "^3.0.0"
+  }
+}
