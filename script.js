@@ -4,3 +4,8 @@ const textMeBtn = document.getElementById("text-me");
 
  textMeBtn.addEventListener("click", () => {
    popup.style.display = "flex";
+ });
+
+ closePopupBtn.addEventListener("click", () => {
+   popup.style.display = "none";
+});
