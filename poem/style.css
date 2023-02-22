@@ -1,0 +1,57 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
+
+body {
+  background-color: black;
+  color: white;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+main {
+  padding: 2rem;
+}
+
+section {
+  margin-bottom: 2rem;
+}
+
+section h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.input-subline {
+  font-style: italic;
+  color: gray;
+  margin-top: 0.5rem;
+}
+
+input[type="text"] {
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 0.5rem;
+  border: none;
+  margin-top: 0.5rem;
+}
+
+button {
+  background-color: white;
+  color: black;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+#error-message {
+  color: red;
+  margin-top: 0.5rem;
+}
