@@ -3,131 +3,156 @@
 <head>
   <title>Poem Generator</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@openai/api@0.5.1"></script>
+  <script src="config.js"></script>
   <style>
-    body {
-      font-family: 'Montserrat', sans-serif;
-      color: white;
-      background-color: black;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+    * {
       margin: 0;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    input {
-      padding: 10px;
-      font-size: 20px;
-      border: none;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      text-align: center;
-      width: 100%;
-      max-width: 400px;
+      padding: 0;
       box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
     }
-    input:focus {
-      outline: none;
-    }
-    #wordInput::placeholder {
+
+    body {
+      background-color: black;
       color: white;
+      max-width: 800px;
+      margin: 0 auto;
     }
-    #error {
-      font-style: italic;
-      color: red;
-      margin-bottom: 10px;
+
+    header {
+      text-align: left;
+      margin: 2rem 0;
     }
-    #poemContainer {
-      font-style: italic;
-      text-align: center;
-      margin-top: 20px;
+
+    header h1 {
+      font-size: 3rem;
     }
-    .share-link {
+
+    header p.tagline {
+      font-size: 1.5rem;
+      margin-top: 1rem;
+      line-height: 1.5;
+    }
+
+    main {
+      padding: 2rem;
+    }
+
+    section {
+      margin-bottom: 2rem;
+    }
+
+    section h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul li {
+      margin-bottom: 1rem;
+    }
+
+    a {
+      color: white;
+      text-decoration: none;
       display: inline-block;
-      margin: 10px;
+      background-image: url(/images/skull.png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: left center;
+      padding-left: 2rem;
     }
-    .share-icon {
-      vertical-align: middle;
-      margin-right: 5px;
+
+    a:hover {
+      color: #7e7e7e;
+    }
+
+    a:visited {
+      color: #bfbfbf;
+    }
+
+    a[target="_blank"]::after {
+      content: "↗";
+      margin-left: 0.2em;
+    }
+
+    button {
+      background-color: white;
+      color: black;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+
+    #poem {
+      font-size: 1.2rem;
+      line-height: 1.5;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2.5rem;
+      }
+
+      header p.tagline {
+        font-size: 1rem;
+      }
+
+      section h2 {
+        font-size: 1.5rem;
+      }
+
+      ul li {
+        margin-bottom: 0.5rem;
+      }
+
+      button {
+        font-size: 1rem;
+      }
     }
   </style>
+  <script>
+    async function generatePoem() {
+      const input = document.getElementById('input').value;
+      const model = await new OpenAI(apiKey);
+      const prompt = `Generate a poem about ${input}.`;
+      const completions = await model.complete({
+        engine: 'davinci',
+        prompt: prompt,
+        maxTokens: 1024,
+        n: 1,
+        stop: '\n',
+      });
+      const poem = completions.choices[0].text.trim();
+      document.getElementById('poem').innerHTML = poem;
+    }
+  </script>
 </head>
 <body>
-  <h1>Poem Generator</h1>
-  <form id="wordForm">
-    <input id="wordInput" type="text" placeholder="Enter one word to generate a poem" maxlength="15" required />
-    <div id="error"></div>
-    <button type="submit">Generate</button>
-  </form>
-  <div id="poemContainer"></div>
-  <div id="shareContainer">
-    <a class="share-link" href="#" target="_blank">
-      <img class="share-icon" src="" width="16" height="16" alt="Share on Twitter" />
-      Share on Twitter
-    </a>
-    <a class="share-link" href="#" target="_blank">
-      <img class="share-icon" src="" width="16" height="16" alt="Share on Telegram" />
-      Share on Telegram
-    </a>
-  </div>
-<script src="config.js"></script>
-<script>
-  let timeoutId = null;
-
-function generatePoem(event) {
-  event.preventDefault();
-
-  const input = document.getElementById("wordInput").value.trim();
-  const error = document.getElementById("error");
-  if (input === "") {
-    error.innerHTML = "Add word";
-    return;
-  } else {
-    error.innerHTML = "";
-  }
-
-  if (timeoutId) {
-    clearTimeout(timeoutId);
-  }
-
-  timeoutId = setTimeout(() => {
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "https://api.openai.com/v1/engines/davinci-codex/completions");
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.setRequestHeader("Authorization", "Bearer " + config.OPENAI_API_KEY);
-    xhr.onreadystatechange = function() {
-      if (this.readyState === 4 && this.status === 200) {
-        const response = JSON.parse(this.responseText);
-        const poem = response.choices[0].text;
-        document.getElementById("poemContainer").innerHTML = poem;
-        const shareUrl = encodeURIComponent(window.location.href);
-        const shareText = encodeURIComponent(`Check out this poem generated by the word "${input}":\n\n${poem}`);
-        document.querySelector("a[href*='twitter']").setAttribute("href", `https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareText}`);
-        document.querySelector("a[href*='telegram']").setAttribute("href", `https://t.me/share/url?url=${shareUrl}&text=${shareText}`);
-      }
-    };
-    const data = JSON.stringify({
-      prompt: `Generate a poem to the rhythm of "${input}"`,
-      max_tokens: 4000,
-      temperature: 0.7,
-      n: 1,
-      stream: false,
-      stop: "Poem:\n\n\n\n\n",
-      presence_penalty: 0,
-      frequency_penalty: 0
-    });
-
-    xhr.send(data);
-  }, 5000); // Wait for 5 seconds before sending the request.
-}
-  const form = document.getElementById("wordForm");
-  form.addEventListener("submit", generatePoem);
-</script>
+	<header>
+		<h1>Poetry Generator</h1>
+		<p class="tagline">Generate a poem about anything.</p>
+	</header>
+	<main>
+		<section>
+			<h2>Enter a word or phrase:</h2>
+			<div class="input-container">
+				<input type="text" id="input">
+				<button onclick="generatePoem()">Generate</button>
+			</div>
+			<div id="poem"></div>
+			<div class="share-buttons">
+				<a href="https://twitter.com/intent/tweet?text=Check+out+this+awesome+poem+generator%21&url=https%3A%2F%2Fexample.com" target="_blank">Share on Twitter</a>
+				<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fexample.com" target="_blank">Share on Facebook</a>
+			</div>
+		</section>
+	</main>
 </body>
 </html>
