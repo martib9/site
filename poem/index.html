@@ -115,8 +115,7 @@ function generatePoem(event) {
     frequency_penalty: 0
   });
 
-  const form = document.getElementById("wordForm");
-  form.addEventListener("submit", generatePoem);
+  xhr.send(data);
 }
 </script>
 </body>
