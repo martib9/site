@@ -100,9 +100,9 @@
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.setRequestHeader("Authorization", "Bearer " + process.env.OPENAI_API_KEY);
   xhr.onreadystatechange = function() {
+    console.log(this.readyState, this.status);
     if (this.readyState === 4 && this.status === 200) {
       const response = JSON.parse(this.responseText);
-      console.log(response);
       const poem = response.choices[0].text;
       document.getElementById("poemContainer").innerHTML = poem;
       const shareUrl = encodeURIComponent(window.location.href);
@@ -122,7 +122,11 @@
     presence_penalty: 0
   });
   xhr.send(data);
-}
+}  
+  const form = document.getElementById("wordForm");
+  console.log(form);
+  form.addEventListener("submit", generatePoem);
+  console.log("Event listener added");
   </script>  
 </body>
 </html>
