@@ -1,4 +1,4 @@
-const config = require('../../config');
+const config = require('../config');
 const { createApi } = require('openai');
 
 module.exports = async (req, res) => {
