@@ -30,8 +30,17 @@ body, html {
 
 .title {
     font-family: 'PicNic', sans-serif;
-    font-size: 4em;
-    color: white;
+    font-size: 6em;
+    color: #fff;
+    text-shadow: -4px 4px #ef3550,
+               -8px 8px #f48fb1,
+               -12px 12px #7e57c2,
+               -16px 16px #2196f3,
+               -20px 20px #26c6da,
+               -24px 24px #43a047,
+               -28px 28px #eeff41,
+               -32px 32px #f9a825,
+               -36px 36px #ff5722;
     text-align: center;
 }
 
@@ -55,13 +64,77 @@ body, html {
 @media (max-width: 768px) {
     /* Tablet */
     #screen1 {
-        background-image: url('/lera-bd-2/images/birthday.jpeg');
+        background-image: url('/lera-bd-2/images/birthday-tablet.jpeg');
     }
 }
 
 @media (max-width: 480px) {
     /* Mobile */
     #screen1 {
-        background-image: url('p/lera-bd-2/images/birthday.jpeg');
+        background-image: url('/lera-bd-2/images/birthday-mobile.jpeg');
+    }
+}
+
+#screen2 {
+    background: linear-gradient(to right, #a8edea, #fed6e3);
+    color: black;
+    text-align: center;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.row {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.image-container {
+    text-align: center;
+    animation: float 2s ease-in-out infinite;
+}
+
+.image-container img {
+    width: 190px; /* Adjust as needed */
+    height: 190px; /* Adjust as needed */
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.image-container:hover img {
+    transform: scale(1.1);
+}
+
+.image-container a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.name {
+    display: block;
+    font-family: 'Unbounded', sans-serif;
+    margin-top: 5px;
+}
+
+.image-container:hover .name {
+    text-decoration: underline;
+    background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Responsive Design for Screen 2 */
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column;
+    }
+    .image-container {
+        margin-bottom: 10px;
     }
 }
