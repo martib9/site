@@ -22,6 +22,14 @@ body, html {
     position: relative;
 }
 
+
+.content {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
 #screen1 {
     background: url('/lera-bd/images/birthday.jpeg') no-repeat center center fixed; 
     background-size: cover;
@@ -401,14 +409,16 @@ body, html {
     padding: 20px;
 }
 
-.left-panel {
+.left-panel, .right-panel {
     width: 50%;
-    position: relative;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .photo {
-    width: 100%;
-    display: block;
+    max-width: 100%;
+    height: auto;
+    max-height: 300px; /* Limiting photo size */
 }
 
 .photo-reflection {
@@ -423,13 +433,13 @@ body, html {
     transform: scaleY(-1);
 }
 
-.right-panel {
-    width: 50%;
-    padding: 20px;
+.sticky-button {
+    display: none; /* Hidden by default */
 }
 
-.sticky-button {
-    display: block; /* Ensure the button is displayed */
+#screen3 .sticky-button, #screen4 .sticky-button, /* and so on for subsequent screens */
+#screen5 .sticky-button {
+    display: block; /* Show the sticky button from screen 3 onwards */
     position: fixed;
     bottom: 20px;
     right: 20px;
