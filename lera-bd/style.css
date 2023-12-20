@@ -64,14 +64,332 @@ body, html {
     margin: 20px 0;
 }
 
-.image-link {
+.image-link-2 {
     display: block;
     text-align: center;
     text-decoration: none;
     color: black;
 }
 
-.image-link img {
-    width: 100px; /* Adjust size as needed */
+.image-link-3 {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+}
+
+.image-link-4 {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+}
+
+.image-link-5 {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+}
+
+.image-link-6 {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+}
+
+.image-link-7 {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+}
+
+.image-link-8 {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+}
+
+.image-link-9 {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+}
+
+.image-link-10 {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+}
+
+.image-link-11 {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+}
+
+.image-link-2 img {
+    width: 200px; /* Adjust size as needed */
     height: auto;
+}
+
+.image-link-3 img {
+    width: 200px; /* Adjust size as needed */
+    height: auto;
+}
+
+.image-link-4 img {
+    width: 200px; /* Adjust size as needed */
+    height: auto;
+}
+
+.image-link-5 img {
+    width: 200px; /* Adjust size as needed */
+    height: auto;
+}
+
+.image-link-6 img {
+    width: 200px; /* Adjust size as needed */
+    height: auto;
+}
+
+.image-link-7 img {
+    width: 200px; /* Adjust size as needed */
+    height: auto;
+}
+
+.image-link-8 img {
+    width: 200px; /* Adjust size as needed */
+    height: auto;
+}
+
+.image-link-9 img {
+    width: 200px; /* Adjust size as needed */
+    height: auto;
+}
+
+.image-link-10 img {
+    width: 200px; /* Adjust size as needed */
+    height: auto;
+}
+
+.image-link-11 img {
+    width: 200px; /* Adjust size as needed */
+    height: auto;
+}
+
+.image-link-2 img:hover {
+    content: url('/lera-bd/images/2-2.jpeg'); /* Unique hover image for the first image */
+}
+
+.image-link-3 img:hover {
+    content: url('/lera-bd/images/3-3.jpeg'); /* Unique hover image for the first image */
+}
+
+.image-link-4 img:hover {
+    content: url('/lera-bd/images/4-4.jpeg'); /* Unique hover image for the first image */
+}
+
+.image-link-5 img:hover {
+    content: url('/lera-bd/images/5-5.jpeg'); /* Unique hover image for the first image */
+}
+
+.image-link-6 img:hover {
+    content: url('/lera-bd/images/6-6.jpeg'); /* Unique hover image for the first image */
+}
+
+.image-link-7 img:hover {
+    content: url('/lera-bd/images/7-7.jpeg'); /* Unique hover image for the first image */
+}
+
+.image-link-8 img:hover {
+    content: url('/lera-bd/images/8-8.jpeg'); /* Unique hover image for the first image */
+}
+
+.image-link-9 img:hover {
+    content: url('/lera-bd/images/9-9.jpeg'); /* Unique hover image for the first image */
+}
+
+.image-link-10 img:hover {
+    content: url('/lera-bd/images/10-10.jpeg'); /* Unique hover image for the first image */
+}
+
+.image-link-11 img:hover {
+    content: url('/lera-bd/images/11-11.jpeg'); /* Unique hover image for the first image */
+}
+
+
+.image-link-2 span {
+    display: block;
+    text-decoration: none;
+    color: black;
+    transition: all 0.3s ease;
+}
+
+.image-link-3 span {
+    display: block;
+    text-decoration: none;
+    color: black;
+    transition: all 0.3s ease;
+}
+
+.image-link-4 span {
+    display: block;
+    text-decoration: none;
+    color: black;
+    transition: all 0.3s ease;
+}
+
+.image-link-5 span {
+    display: block;
+    text-decoration: none;
+    color: black;
+    transition: all 0.3s ease;
+}
+
+.image-link-6 span {
+    display: block;
+    text-decoration: none;
+    color: black;
+    transition: all 0.3s ease;
+}
+
+.image-link-7 span {
+    display: block;
+    text-decoration: none;
+    color: black;
+    transition: all 0.3s ease;
+}
+
+.image-link-8 span {
+    display: block;
+    text-decoration: none;
+    color: black;
+    transition: all 0.3s ease;
+}
+
+.image-link-9 span {
+    display: block;
+    text-decoration: none;
+    color: black;
+    transition: all 0.3s ease;
+}
+
+.image-link-10 span {
+    display: block;
+    text-decoration: none;
+    color: black;
+    transition: all 0.3s ease;
+}
+
+.image-link-11 span {
+    display: block;
+    text-decoration: none;
+    color: black;
+    transition: all 0.3s ease;
+}
+
+
+.image-link-2:hover span {
+    text-decoration: underline;
+    background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+}
+
+.image-link-3:hover span {
+    text-decoration: underline;
+    background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+}
+
+.image-link-4:hover span {
+    text-decoration: underline;
+    background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+}
+
+.image-link-5:hover span {
+    text-decoration: underline;
+    background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+}
+
+.image-link-6:hover span {
+    text-decoration: underline;
+    background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+}
+
+.image-link-7:hover span {
+    text-decoration: underline;
+    background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+}
+
+.image-link-8:hover span {
+    text-decoration: underline;
+    background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+}
+
+.image-link-9:hover span {
+    text-decoration: underline;
+    background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+}
+
+.image-link-10:hover span {
+    text-decoration: underline;
+    background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+}
+
+.image-link-11:hover span {
+    text-decoration: underline;
+    background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+}
+
+
+@media screen and (max-width: 600px) {
+    .row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .image-link-2 {
+        margin-bottom: 20px;
+    }
+
+    .image-link-3 {
+        margin-bottom: 20px;
+    }
+
+    .image-link-4 {
+        margin-bottom: 20px;
+    }
+
+    .image-link-5 {
+        margin-bottom: 20px;
+    }
+
+    .image-link-6 {
+        margin-bottom: 20px;
+    }
+
+    .image-link-7 {
+        margin-bottom: 20px;
+    }
+
+    .image-link-8 {
+        margin-bottom: 20px;
+    }
+
+    .image-link-9 {
+        margin-bottom: 20px;
+    }
+
+    .image-link-10 {
+        margin-bottom: 20px;
+    }
+
+    .image-link-11 {
+        margin-bottom: 20px;
+    }
 }
