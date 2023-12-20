@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@900&display=swap');
+
+@font-face {
+    font-family: Picnic;
+    src: url(/fonts/PicNic-Regular.woff2);
+}
 body, html {
     margin: 0;
     padding: 0;
@@ -23,7 +29,16 @@ body, html {
 .title {
     font-family: 'PicNic', sans-serif;
     font-size: 4em;
-    color: white;
+    color: #fff;
+    text-shadow: -4px 4px #ef3550,
+               -8px 8px #f48fb1,
+               -12px 12px #7e57c2,
+               -16px 16px #2196f3,
+               -20px 20px #26c6da,
+               -24px 24px #43a047,
+               -28px 28px #eeff41,
+               -32px 32px #f9a825,
+               -36px 36px #ff5722;
     text-align: center;
 }
 
@@ -88,6 +103,7 @@ body, html {
     text-decoration: underline;
     background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
     -webkit-background-clip: text;
+    background-clip: text;
     color: transparent;
 }
 
