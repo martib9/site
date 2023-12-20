@@ -1,10 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@900&display=swap');
-
-@font-face {
-    font-family: Picnic;
-    src: url(/fonts/PicNic-Regular.woff2);
-}
-
 body, html {
     margin: 0;
     padding: 0;
@@ -14,33 +7,23 @@ body, html {
 
 .screen {
     width: 100%;
-    height: 100%;
-    background-attachment: fixed;
-    background-size: cover;
+    height: 100vh; /* Adjusted to 100% viewport height */
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
 
-/* Screen 1 specific styles */
 #screen1 {
+    background-attachment: fixed;
+    background-size: cover;
     background-image: url('/lera-bd-2/images/birthday.jpeg');
 }
 
 .title {
     font-family: 'PicNic', sans-serif;
-    font-size: 6em;
-    color: #fff;
-    text-shadow: -4px 4px #ef3550,
-               -8px 8px #f48fb1,
-               -12px 12px #7e57c2,
-               -16px 16px #2196f3,
-               -20px 20px #26c6da,
-               -24px 24px #43a047,
-               -28px 28px #eeff41,
-               -32px 32px #f9a825,
-               -36px 36px #ff5722;
+    font-size: 4em;
+    color: white;
     text-align: center;
 }
 
@@ -53,26 +36,6 @@ body, html {
     background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
     color: white;
     animation: float 2s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    /* Tablet */
-    #screen1 {
-        background-image: url('/lera-bd-2/images/birthday-tablet.jpeg');
-    }
-}
-
-@media (max-width: 480px) {
-    /* Mobile */
-    #screen1 {
-        background-image: url('/lera-bd-2/images/birthday-mobile.jpeg');
-    }
 }
 
 #screen2 {
@@ -91,7 +54,7 @@ body, html {
 .row {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 20px;
+    width: 100%; /* Ensure full width */
 }
 
 .image-container {
@@ -100,8 +63,8 @@ body, html {
 }
 
 .image-container img {
-    width: 190px; /* Adjust as needed */
-    height: 190px; /* Adjust as needed */
+    width: 100px;
+    height: 100px;
     object-fit: cover;
     transition: transform 0.3s;
 }
@@ -125,16 +88,30 @@ body, html {
     text-decoration: underline;
     background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
     -webkit-background-clip: text;
-    background-clip: text;
     color: transparent;
 }
 
-/* Responsive Design for Screen 2 */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
     .row {
         flex-direction: column;
+        align-items: center;
     }
     .image-container {
         margin-bottom: 10px;
+    }
+    #screen1 {
+        background-image: url('/lera-bd-2/images/birthday-tablet.jpeg');
+    }
+}
+
+@media (max-width: 480px) {
+    #screen1 {
+        background-image: url('/lera-bd-2/images/birthday-mobile.jpeg');
     }
 }
