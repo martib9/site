@@ -15,7 +15,7 @@ body, html {
 }
 
 #screen1 {
-    background: url('/lera-bd/images/birthday.jpeg') no-repeat center center fixed; 
+    background: url('parallax-image.jpg') no-repeat center center fixed; 
     background-size: cover;
 }
 
@@ -55,7 +55,7 @@ body, html {
 }
 
 #screen2 {
-    background: pastel; /* Replace with actual pastel colors */
+    background: linear-gradient(203.77deg, #dcd7f7 10%, #edd7dd 60%, #fff7f9 100%);
 }
 
 .row {
