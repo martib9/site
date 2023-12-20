@@ -72,6 +72,9 @@ body, html {
 
 #screen3 {
     background: linear-gradient(203.77deg, #473a93 10%, #cf2452 60%, #0dcbbe 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .row {
@@ -388,6 +391,7 @@ body, html {
     background: linear-gradient(to right, #ef5350, #f48fb1, #7e57c2, #2196f3, #26c6da, #43a047, #eeff41, #f9a825, #ff5722);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .content {
@@ -398,21 +402,34 @@ body, html {
 }
 
 .left-panel {
-    flex: 1;
-    padding: 10px;
-}
-
-.right-panel {
-    flex: 2;
-    padding: 10px;
+    width: 50%;
+    position: relative;
 }
 
 .photo {
     width: 100%;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    display: block;
+}
+
+.photo-reflection {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: url('photo.jpg') no-repeat;
+    background-size: cover;
+    opacity: 0.5;
+    transform: scaleY(-1);
+}
+
+.right-panel {
+    width: 50%;
+    padding: 20px;
 }
 
 .sticky-button {
+    display: block; /* Ensure the button is displayed */
     position: fixed;
     bottom: 20px;
     right: 20px;
