@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@900&display=swap');
+
 @font-face {
     font-family: Picnic;
     src: url(/fonts/PicNic-Regular.woff2);
@@ -6,7 +8,7 @@
 body, html {
     margin: 0;
     padding: 0;
-    font-family: Rubik Scri;
+    font-family: 'Unbounded', sans-serif;
 }
 
 .screen {
