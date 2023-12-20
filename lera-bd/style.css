@@ -15,8 +15,9 @@ body, html {
 }
 
 #screen1 {
-    background: url('/lera-bd/images/birthday.jpeg') no-repeat center center fixed; 
+    background: url('parallax-image.jpg') no-repeat center center fixed; 
     background-size: cover;
+    background-attachment: scroll; /* Adjust for mobile parallax effect */
 }
 
 .title {
@@ -40,7 +41,7 @@ body, html {
     padding: 10px 20px;
     text-decoration: none;
     border-radius: 5px;
-    margin-top: 20px;
+    margin-top: 30px;
     animation: float 2s ease-in-out infinite;
 }
 
@@ -52,6 +53,18 @@ body, html {
 .arrow {
     display: inline-block;
     margin-left: 10px;
+}
+
+/* Responsive button and title spacing for mobile */
+@media screen and (max-width: 600px) {
+    .cta-button {
+        padding: 15px 30px;
+        font-size: 1.2em;
+    }
+
+    .title {
+        font-size: 3em; /* Adjust title size for mobile */
+    }
 }
 
 #screen2 {
@@ -72,6 +85,37 @@ body, html {
 }
 
 .image-link img {
-    width: 100px; /* Adjust size as needed */
-    height: auto;
+    width: 150px; /* Larger images */
+    height: 150px; /* Square shape */
+    transition: all 0.3s ease;
+}
+
+/* Hover effect for images */
+.image-link:hover img {
+    content: url('new-image.jpg'); /* Replace with the hover image */
+}
+
+/* Name styling and hover effect */
+.image-link span {
+    display: block;
+    text-decoration: none;
+    color: black;
+    transition: all 0.3s ease;
+}
+
+.image-link:hover span {
+    text-decoration: underline;
+    color: rainbow; /* Replace with actual CSS for rainbow effect */
+}
+
+/* Mobile layout for images */
+@media screen and (max-width: 600px) {
+    .row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .image-link {
+        margin-bottom: 20px;
+    }
 }
