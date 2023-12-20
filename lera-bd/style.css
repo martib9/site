@@ -381,22 +381,29 @@ body, html {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
     height: 100%;
     padding: 20px;
 }
 
-.image-section {
-    width: 50%;
-    text-align: center;
+.left-image .image-section, 
+.right-image .text-section {
+    order: 1;
+}
+
+.right-image .image-section, 
+.left-image .text-section {
+    order: 2;
+}
+
+.image-section, .text-section {
+    flex-basis: 50%;
+    max-width: 50%;
 }
 
 .image-section img {
     width: 80%;
     box-shadow: 20px 20px 40px rgba(0, 0, 0, 1);
-}
-
-.text-section {
-    width: 50%;
 }
 
 .text-section h1 {
@@ -430,14 +437,15 @@ body, html {
     display: block;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
     .image-section, .text-section {
         flex-basis: 100%;
         max-width: 100%;
+        order: unset;
     }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 600px) {
     .row {
         flex-direction: column;
         align-items: center;
