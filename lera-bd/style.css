@@ -319,51 +319,61 @@ body, html {
 .image-link-2:hover span {
     text-decoration: underline;
     background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+    padding: 10px;
 }
 
 .image-link-3:hover span {
     text-decoration: underline;
     background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+    padding: 10px;
 }
 
 .image-link-4:hover span {
     text-decoration: underline;
     background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+    padding: 10px;
 }
 
 .image-link-5:hover span {
     text-decoration: underline;
     background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+    padding: 10px;
 }
 
 .image-link-6:hover span {
     text-decoration: underline;
     background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+    padding: 10px;
 }
 
 .image-link-7:hover span {
     text-decoration: underline;
     background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+    padding: 10px;
 }
 
 .image-link-8:hover span {
     text-decoration: underline;
     background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+    padding: 10px;
 }
 
 .image-link-9:hover span {
     text-decoration: underline;
     background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+    padding: 10px;
 }
 
 .image-link-10:hover span {
     text-decoration: underline;
     background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+    padding: 10px;
 }
 
 .image-link-11:hover span {
     text-decoration: underline;
     background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
+    padding: 10px;
 }
 
 
@@ -374,42 +384,42 @@ body, html {
     }
 
     .image-link-2 {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
     .image-link-3 {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
     .image-link-4 {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
     .image-link-5 {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
     .image-link-6 {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
     .image-link-7 {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
     .image-link-8 {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
     .image-link-9 {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
     .image-link-10 {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
     .image-link-11 {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 }
