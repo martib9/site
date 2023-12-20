@@ -15,9 +15,9 @@ body, html {
 }
 
 #screen1 {
-    background: url('parallax-image.jpg') no-repeat center center fixed; 
+    background: url('/lera-bd/images/birthday.jpeg') no-repeat center center fixed; 
     background-size: cover;
-    background-attachment: scroll; /* Adjust for mobile parallax effect */
+    background-attachment: scroll; 
 }
 
 .title {
@@ -55,7 +55,6 @@ body, html {
     margin-left: 10px;
 }
 
-/* Responsive button and title spacing for mobile */
 @media screen and (max-width: 600px) {
     .cta-button {
         padding: 15px 30px;
@@ -63,12 +62,12 @@ body, html {
     }
 
     .title {
-        font-size: 3em; /* Adjust title size for mobile */
+        font-size: 3em; 
     }
 }
 
 #screen2 {
-    background: pastel; /* Replace with actual pastel colors */
+    background: linear-gradient(203.77deg, #dcd7f7 10%, #edd7dd 60%, #fff7f9 100%);
 }
 
 .row {
@@ -85,17 +84,52 @@ body, html {
 }
 
 .image-link img {
-    width: 150px; /* Larger images */
-    height: 150px; /* Square shape */
+    width: 150px; 
+    height: 150px;
     transition: all 0.3s ease;
 }
 
 /* Hover effect for images */
-.image-link:hover img {
-    content: url('new-image.jpg'); /* Replace with the hover image */
+.image-link-2 img:hover {
+    content: url('/lera-bd/images/2-2.jpeg'); /* Unique hover image for the first image */
 }
 
-/* Name styling and hover effect */
+.image-link-3 img:hover {
+    content: url('/lera-bd/images/3-3.jpeg'); /* Unique hover image for the first image */
+}
+
+.image-link-4 img:hover {
+    content: url('/lera-bd/images/4-4.jpeg'); /* Unique hover image for the first image */
+}
+
+.image-link-5 img:hover {
+    content: url('/lera-bd/images/5-5.jpeg'); /* Unique hover image for the first image */
+}
+
+.image-link-6 img:hover {
+    content: url('/lera-bd/images/6-6.jpeg'); /* Unique hover image for the first image */
+}
+
+.image-link-7 img:hover {
+    content: url('/lera-bd/images/7-7.jpeg'); /* Unique hover image for the first image */
+}
+
+.image-link-8 img:hover {
+    content: url('/lera-bd/images/8-8.jpeg'); /* Unique hover image for the first image */
+}
+
+.image-link-9 img:hover {
+    content: url('/lera-bd/images/9-9.jpeg'); /* Unique hover image for the first image */
+}
+
+.image-link-10 img:hover {
+    content: url('/lera-bd/images/10-10.jpeg'); /* Unique hover image for the first image */
+}
+
+.image-link-11 img:hover {
+    content: url('/lera-bd/images/11-11.jpeg'); /* Unique hover image for the first image */
+}
+
 .image-link span {
     display: block;
     text-decoration: none;
@@ -105,10 +139,9 @@ body, html {
 
 .image-link:hover span {
     text-decoration: underline;
-    color: rainbow; /* Replace with actual CSS for rainbow effect */
+    background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
 }
 
-/* Mobile layout for images */
 @media screen and (max-width: 600px) {
     .row {
         flex-direction: column;
