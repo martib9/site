@@ -17,9 +17,6 @@ body, html {
 #screen1 {
     background: url('/lera-bd/images/birthday.jpeg') no-repeat center center fixed; 
     background-size: cover;
-    background-attachment: scroll; 
-    width: 100%;
-    height: 100%;
 }
 
 .title {
@@ -70,149 +67,66 @@ body, html {
 
 #screen2 {
     background: linear-gradient(203.77deg, #dcd7f7 10%, #edd7dd 60%, #fff7f9 100%);
-    width: 100%;
-    height: 100%;
 }
 
 .row {
     display: flex;
     justify-content: space-around;
     margin: 20px 0;
-    flex-wrap: wrap;
 }
 
 .image-link {
-    position: relative;
-    width: 150px;
-    height: 150px;
-    margin: 10px;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: black;
 }
 
 .image-link img {
-    width: 100%;
-    height: 100%;
+    width: 150px; 
+    height: 150px;
     transition: all 0.3s ease;
 }
 
 /* Hover effect for images */
 .image-link-2 img:hover {
     content: url('/lera-bd/images/2-2.jpeg'); /* Unique hover image for the first image */
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 1.2em;
-    text-transform: uppercase;
 }
 
 .image-link-3 img:hover {
     content: url('/lera-bd/images/3-3.jpeg'); /* Unique hover image for the first image */
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 1.2em;
-    text-transform: uppercase;
 }
 
 .image-link-4 img:hover {
     content: url('/lera-bd/images/4-4.jpeg'); /* Unique hover image for the first image */
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 1.2em;
-    text-transform: uppercase;
 }
 
 .image-link-5 img:hover {
     content: url('/lera-bd/images/5-5.jpeg'); /* Unique hover image for the first image */
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 1.2em;
-    text-transform: uppercase;
 }
 
 .image-link-6 img:hover {
     content: url('/lera-bd/images/6-6.jpeg'); /* Unique hover image for the first image */
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 1.2em;
-    text-transform: uppercase;
 }
 
 .image-link-7 img:hover {
     content: url('/lera-bd/images/7-7.jpeg'); /* Unique hover image for the first image */
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 1.2em;
-    text-transform: uppercase;
 }
 
 .image-link-8 img:hover {
     content: url('/lera-bd/images/8-8.jpeg'); /* Unique hover image for the first image */
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 1.2em;
-    text-transform: uppercase;
 }
 
 .image-link-9 img:hover {
     content: url('/lera-bd/images/9-9.jpeg'); /* Unique hover image for the first image */
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 1.2em;
-    text-transform: uppercase;
 }
 
 .image-link-10 img:hover {
     content: url('/lera-bd/images/10-10.jpeg'); /* Unique hover image for the first image */
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 1.2em;
-    text-transform: uppercase;
 }
 
-.image-link-11 img:hover {
+.image-link-110 img:hover {
     content: url('/lera-bd/images/11-11.jpeg'); /* Unique hover image for the first image */
-    display: block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 1.2em;
-    text-transform: uppercase;
 }
 
 .image-link span {
