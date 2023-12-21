@@ -224,7 +224,6 @@ body, html {
 }
 
 .image-section {
-    flex-basis: 50%;
     width: 120px;
     height: auto;
 }
@@ -278,7 +277,7 @@ body, html {
     .content {
         flex-direction: column-reverse;
     }
-    .text-section, .image-section {
+    .text-section {
         flex-basis: 100%;
     }
 
