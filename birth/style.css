@@ -276,6 +276,7 @@ body, html {
 }
 
 .sticky-button {
+    font-family: 'Unbounded', sans-serif;
     display: none;
     position: fixed;
     bottom: 20px;
