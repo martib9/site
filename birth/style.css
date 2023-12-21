@@ -222,11 +222,11 @@ body, html {
 
 .text-section {
     flex-basis: 50%;
+    font-family: 'Unbounded', sans-serif;
 }
 
 .image-section {
     flex-basis: 50%;
-    font-family: 'Unbounded', sans-serif;
 }
 
 .image-section img {
