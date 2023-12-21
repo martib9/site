@@ -292,7 +292,7 @@ body, html {
     font-family: 'Unbounded', sans-serif;
 }
 
-#screen3 .sticky-button, #screen4 .sticky-button, #screen5 .sticky-button, #screen6 .sticky-button, #screen7 .sticky-button, #screen8 .sticky-button, #screen9 .sticky-button, #screen10 .sticky-button, #screen11 .sticky-button, #screen12 .sticky-button {
+#screen3 .sticky-button, #screen4 .sticky-button {
     display: block;
 }
 
