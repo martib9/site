@@ -31,17 +31,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const stickyButton = document.querySelector('.sticky-button');
     const screen3 = document.querySelector('#screen3');
     
-    window.addEventListener('scroll', function() {
-        const screen3Top = screen3.offsetTop;
+    function toggleStickyButton() {
+        const screen3Top = screen3.getBoundingClientRect().top + window.pageYOffset;
+        const screenHeight = window.innerHeight;
         const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
 
-        if (scrollPosition >= screen3Top) {
+        if (scrollPosition >= screen3Top - screenHeight) {
             stickyButton.style.display = 'block'; // Show the button
             stickyButton.style.opacity = 1; // Fade in
         } else {
             stickyButton.style.opacity = 0; // Fade out
             setTimeout(() => { stickyButton.style.display = 'none'; }, 500); // Hide after fade out
         }
-    });
+    }
+
+    // Check button visibility on scroll and on load
+    window.addEventListener('scroll', toggleStickyButton);
+    toggleStickyButton();
 });
 

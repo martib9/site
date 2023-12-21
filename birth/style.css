@@ -283,8 +283,8 @@ body, html {
     bottom: 20px;
     right: 20px;
     padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
+    background: linear-gradient(203.77deg, #2e17ab 10%, #ff02e1 60%, #ff9500 100%);
+    color: black;
     text-decoration: none;
     border-radius: 5px;
     z-index: 1000; /* Ensure it's above other elements */
