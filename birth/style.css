@@ -55,6 +55,7 @@ body, html {
 }
 
 .title {
+    font-family: 'PicNic', sans-serif;
     display: inline-block;
     font-size: 4em;
     color: #fff;
@@ -85,6 +86,7 @@ body, html {
 }
 
 .scroll-button {
+    font-family: 'Unbounded', sans-serif;
     display: inline-block;
     margin-top: 20px;
     padding: 10px 20px;
@@ -96,11 +98,81 @@ body, html {
     /* Add floating animation style */
 }
 
+.screen {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    background: linear-gradient(45deg, #fabea7, #fdd9a5, #c0ebc7, #a9def9); /* Pastel gradient */
+}
+
+.screen-title {
+    font-size: 3em;
+    text-transform: uppercase;
+    color: black;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0);
+}
+
+.picture-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.cta-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    color: white;
+    background-color: black;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    /* Add floating arrow style */
+}
+
+.picture {
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    background-position: center;
+    margin: 5px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 5px; /* Optional: for rounded corners */
+}
+
+.picture::after {
+    content: attr(data-name);
+    display: none;
+    background: rgba(255, 255, 255, 0.7); /* Semi-transparent background for readability */
+    color: #000;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+}
+
+.picture:hover::after {
+    display: block;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .parallax-background {
         background-attachment: scroll; /* Disable parallax for mobile */
         background-image: url('/birth/images/birthday-tablet.jpeg'); /* Tablet image */
+    }
+    .picture {
+        width: 80px;
+        height: 80px;
     }
 }
 
@@ -110,5 +182,12 @@ body, html {
     }
     .title {
         font-size: 2em;
+    }
+    .screen-title {
+        font-size: 2em;
+    }
+    .picture {
+        width: 60px;
+        height: 60px;
     }
 }
