@@ -172,6 +172,8 @@ body, html {
     text-decoration: none;
     border-radius: 15px; /* Optional: for rounded corners */
     font-family: 'Unbounded', sans-serif;
+    box-shadow:  -2px 2px #86540a,
+                  -4px 4px #5d9c1d;
 }
 
 .picture::after {
