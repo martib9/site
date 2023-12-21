@@ -95,6 +95,7 @@ body, html {
     border: none;
     border-radius: 5px;
     text-decoration: none;
+    animation: float 2s ease-in-out infinite;
     /* Add floating animation style */
 }
 
@@ -110,11 +111,14 @@ body, html {
 }
 
 .screen-title {
-    font-family: 'PicNic', sans-serif;
+    font-family: 'Unbounded', sans-serif;
     font-size: 3em;
     text-transform: uppercase;
-    color: black;
-    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0);
+    color: #fff;
+    text-shadow: -4px 4px #1a32b8,
+               -8px 8px #17b68e,
+               -12px 12px #c74710,
+    text-shadow: 20px 20px 0 rgba(10, 10, 10, 10);
 }
 
 .picture-gallery {
@@ -129,11 +133,22 @@ body, html {
     margin-top: 20px;
     padding: 10px 20px;
     color: white;
-    background-color: black;
+    background: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red);
     border: none;
     border-radius: 5px;
     text-decoration: none;
+    animation: float 2s ease-in-out infinite;
     /* Add floating arrow style */
+}
+
+.arrow {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
 }
 
 .picture {
