@@ -223,7 +223,6 @@ body, html {
 .text-section {
     flex-basis: 50%;
     font-family: 'Unbounded', sans-serif;
-    background: linear-gradient(45deg, #d04711, #3e3cb3, #2f9741, #ad1e3f);
 }
 
 .image-section {
@@ -297,6 +296,10 @@ body, html {
         flex-basis: 100%;
     }
 
+    .text-section {
+        font-size: 1em;
+    }
+
     .image-section img {
         flex-basis: 100%;
         width: 80px;
@@ -326,5 +329,9 @@ body, html {
     .image-section img {
         width: 60px;
         height: auto;
+    }
+
+    .text-section {
+        font-size: 0.6em;
     }
 }
