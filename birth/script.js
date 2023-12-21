@@ -30,13 +30,13 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     const stickyButton = document.querySelector('.sticky-button');
     const screen3 = document.querySelector('#screen3');
-    
-    function toggleStickyButton() {
-        const screen3Top = screen3.getBoundingClientRect().top + window.pageYOffset;
-        const screenHeight = window.innerHeight;
-        const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+    const screen2 = document.querySelector('#screen2');
 
-        if (scrollPosition >= screen3Top - screenHeight) {
+    function toggleStickyButton() {
+        const screen3Top = screen3.offsetTop;
+        const scrollPosition = window.pageYOffset;
+
+        if (scrollPosition >= screen3Top) {
             stickyButton.style.display = 'block'; // Show the button
             stickyButton.style.opacity = 1; // Fade in
         } else {
@@ -48,5 +48,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Check button visibility on scroll and on load
     window.addEventListener('scroll', toggleStickyButton);
     toggleStickyButton();
+
+    // Smooth scroll to Screen 2
+    stickyButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        screen2.scrollIntoView({ behavior: 'smooth' });
+    });
 });
+
 
