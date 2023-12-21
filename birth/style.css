@@ -302,7 +302,7 @@ body, html {
 #screen9 { background: linear-gradient(45deg, #ff00ff, #fffd00, #00ff00, #00ffff); } /* Crazy acid trip gradient */
 #screen10 { background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4); } /* Sunset pastel colors */
 #screen11 { background: linear-gradient(45deg, #ff00ff, #fffd00, #00ff00, #00ffff); } /* Crazy acid trip gradient */
-#screen12 { background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4); } /* Sunset pastel colors */
+#screen12 { background: linear-gradient(45deg, #ff9a9e, #135bc0, #fad0c4); } /* Sunset pastel colors */
 
 /* Responsive Design */
 @media (max-width: 768px) {
