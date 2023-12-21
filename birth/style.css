@@ -122,6 +122,15 @@ body, html {
   background-clip: text;
 }
 
+.sub-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 1em;
+    text-transform: uppercase;
+    color: cadetblue;
+    text-shadow: -4px 4px #03b473,
+               -8px 8px #5c1d9c,
+}
+
 .picture-gallery {
     display: flex;
     flex-wrap: wrap;
@@ -201,6 +210,7 @@ body, html {
     }
     .title {
         font-size: 3.5em;
+        display: inline-block;
     }
     .screen-title {
         font-size: 1.5em;
