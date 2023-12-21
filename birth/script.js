@@ -28,17 +28,12 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    var stickyButton = document.querySelector('.sticky-button');
-    var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-            if (entry.isIntersecting) {
-                stickyButton.style.opacity = '1';
-            } else {
-                stickyButton.style.opacity = '0';
-            }
+    document.querySelectorAll('.sticky-button').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = this.getAttribute('href');
+            document.querySelector(target).scrollIntoView({ behavior: 'smooth' });
         });
-    }, {threshold: 0.5});
-    
-    var targetScreen = document.getElementById('screen3');
-    observer.observe(targetScreen);
+    });
 });
+
