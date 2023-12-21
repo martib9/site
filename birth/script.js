@@ -16,3 +16,13 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector(target).scrollIntoView({ behavior: 'smooth' });
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.next-button').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = this.getAttribute('href');
+            document.querySelector(target).scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+});
