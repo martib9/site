@@ -286,6 +286,7 @@ body, html {
     text-decoration: none;
     border-radius: 5px;
     transition: opacity 0.5s;
+    font-family: 'Unbounded', sans-serif;
 }
 
 #screen3 .sticky-button, #screen4 .sticky-button, #screen5 .sticky-button, #screen6 .sticky-button, #screen7 .sticky-button, #screen8 .sticky-button, #screen9 .sticky-button, #screen10 .sticky-button, #screen11 .sticky-button, #screen12 .sticky-button {
@@ -294,6 +295,14 @@ body, html {
 
 #screen3 { background: linear-gradient(45deg, #ff00ff, #fffd00, #00ff00, #00ffff); } /* Crazy acid trip gradient */
 #screen4 { background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4); } /* Sunset pastel colors */
+#screen5 { background: linear-gradient(45deg, #ff00ff, #fffd00, #00ff00, #00ffff); } /* Crazy acid trip gradient */
+#screen6 { background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4); } /* Sunset pastel colors */
+#screen7 { background: linear-gradient(45deg, #ff00ff, #fffd00, #00ff00, #00ffff); } /* Crazy acid trip gradient */
+#screen8 { background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4); } /* Sunset pastel colors */
+#screen9 { background: linear-gradient(45deg, #ff00ff, #fffd00, #00ff00, #00ffff); } /* Crazy acid trip gradient */
+#screen10 { background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4); } /* Sunset pastel colors */
+#screen11 { background: linear-gradient(45deg, #ff00ff, #fffd00, #00ff00, #00ffff); } /* Crazy acid trip gradient */
+#screen12 { background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4); } /* Sunset pastel colors */
 
 /* Responsive Design */
 @media (max-width: 768px) {
