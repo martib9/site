@@ -125,9 +125,9 @@ body, html {
     font-family: 'Unbounded', sans-serif;
     font-size: 1em;
     text-transform: uppercase;
-    color: cadetblue;
-    text-shadow: -4px 4px #03b473,
-               -8px 8px #5c1d9c,
+    color: rgb(182, 235, 237);
+    text-shadow: -2px 2px #03b473,
+               8px -8px #5c1d9c,
 }
 
 .picture-gallery {
