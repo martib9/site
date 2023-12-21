@@ -224,10 +224,13 @@ body, html {
 }
 
 .image-section {
+    flex-basis: 50%;
+}
+
+.image-section img {
     width: 120px;
     height: auto;
 }
-
 
 .screen3-title {
     background: linear-gradient(45deg, #fabea7, #fdd9a5, #c0ebc7, #a9def9);
@@ -236,13 +239,15 @@ body, html {
 }
 
 .next-button {
+    font-family: 'Unbounded', sans-serif;
     margin-top: 20px;
     padding: 10px 20px;
-    background-color: black;
+    background-image: linear-gradient(to left, #dcd7f7 10%, #edd7dd 60%, #fff7f9);
     color: white;
     border: none;
     border-radius: 5px;
     text-decoration: none;
+    animation: float 2s ease-in-out infinite;
 }
 
 @keyframes rainbowShadow {
