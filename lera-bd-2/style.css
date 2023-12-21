@@ -29,7 +29,7 @@ body, html {
 
 .title {
     font-family: 'PicNic', sans-serif;
-    font-size: 4em;
+    font-size: 5em;
     margin-bottom: 50px;
     color: #fff;
     text-shadow: -4px 4px #ef3550,
@@ -105,7 +105,7 @@ body, html {
 .image-container {
     text-align: center;
     margin: 10px;
-    animation: floatChaotic 3s ease-in-out infinite;
+ /*   animation: floatChaotic 3s ease-in-out infinite; */
     position: relative;
 }
 
@@ -116,8 +116,8 @@ body, html {
 .image-container:nth-child(5) { animation-duration: 4.1s; }
 
 .image-container img {
-    width: 150px;
-    height: 150px;
+    width: 190px;
+    height: 190px;
     object-fit: cover;
     transition: transform 0.3s, opacity 0.3s;
     backface-visibility: hidden;
@@ -126,8 +126,8 @@ body, html {
 .image-container::after {
     content: '';
     position: absolute;
-    width: 150px;
-    height: 150px;
+    width: 190px;
+    height: 190px;
     transform: rotateY(180deg);
     backface-visibility: hidden;
     opacity: 0;
@@ -156,6 +156,8 @@ body, html {
     display: block;
     font-family: 'Unbounded', sans-serif;
     margin-top: 5px;
+    color: black;
+    text-transform: uppercase;
 }
 
 .image-container:hover .name {
@@ -195,10 +197,18 @@ body, html {
     #screen1 {
         background-image: url('/lera-bd-2/images/birthday-tablet.jpeg');
     }
+    .image-container img, .image-container::after {
+        width: 140px; /* NEW: Smaller size for tablet */
+        height: 140px; /* NEW: Smaller size for tablet */
+    }
 }
 
 @media (max-width: 480px) {
     #screen1 {
         background-image: url('/lera-bd-2/images/birthday-mobile.jpeg');
+    }
+    .image-container img, .image-container::after {
+        width: 100px; /* NEW: Smaller size for mobile */
+        height: 100px; /* NEW: Smaller size for mobile */
     }
 }
