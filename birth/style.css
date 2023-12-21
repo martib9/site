@@ -334,6 +334,10 @@ body, html {
         width: 200px;
         height: auto;
     }
+
+    .sticky-button {
+        flex-basis: 100%;
+    }
 }
 
 
@@ -362,5 +366,8 @@ body, html {
 
     .text-section {
         font-size: 0.6em;
+    }
+    .sticky-button {
+        flex-basis: 100%;
     }
 }
