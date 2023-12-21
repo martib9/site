@@ -55,9 +55,9 @@ body, html {
 }
 
 .title {
-    font-family: 'PicNic', sans-serif;
+    font-family: 'Unbounded', sans-serif;
     display: inline-block;
-    font-size: 7em;
+    font-size: 5.5em;
     color: #fff;
     text-shadow: -4px 4px #ef3550,
                -8px 8px #f48fb1,
