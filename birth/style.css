@@ -55,7 +55,7 @@ body, html {
 }
 
 .title {
-    font-family: 'Unbounded', sans-serif;
+    font-family: 'PicNic', sans-serif;
     display: inline-block;
     font-size: 5.5em;
     color: #fff;
@@ -130,7 +130,7 @@ body, html {
 }
 
 .cta-button {
-    font-family: 'PicNic', sans-serif;
+    font-family: 'Unbounded', sans-serif;
     margin-top: 20px;
     padding: 10px 20px;
     color: white;
@@ -163,7 +163,7 @@ body, html {
     align-items: center;
     text-decoration: none;
     border-radius: 15px; /* Optional: for rounded corners */
-    font-family: 'PicNic', sans-serif;
+    font-family: 'Unbounded', sans-serif;
 }
 
 .picture::after {
