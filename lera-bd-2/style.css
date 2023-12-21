@@ -4,6 +4,7 @@
     font-family: Picnic;
     src: url(/fonts/PicNic-Regular.woff2);
 }
+
 body, html {
     margin: 0;
     padding: 0;
@@ -13,7 +14,7 @@ body, html {
 
 .screen {
     width: 100%;
-    height: 100vh; /* Adjusted to 100% viewport height */
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -48,9 +49,9 @@ body, html {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    background-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+    background-image: linear-gradient(to right, grey, blue, yellow);
     color: white;
-    animation: float 2s ease-in-out infinite;
+    animation: none;
 }
 
 #screen2 {
@@ -69,29 +70,58 @@ body, html {
 .row {
     display: flex;
     justify-content: space-around;
-    width: 100%; /* Ensure full width */
+    width: 100%;
 }
 
 .image-container {
     text-align: center;
-    animation: float 2s ease-in-out infinite;
+    margin: 10px;
+    animation: floatChaotic 3s ease-in-out infinite;
+    position: relative;
 }
+
+.image-container:nth-child(1) { animation-duration: 3.5s; }
+.image-container:nth-child(2) { animation-duration: 4s; }
+.image-container:nth-child(3) { animation-duration: 3.2s; }
+.image-container:nth-child(4) { animation-duration: 3.8s; }
+.image-container:nth-child(5) { animation-duration: 4.1s; }
 
 .image-container img {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
     object-fit: cover;
-    transition: transform 0.3s;
+    transition: transform 0.3s, opacity 0.3s;
+    backface-visibility: hidden;
 }
 
-.image-container:hover img {
-    transform: scale(1.1);
+.image-container::after {
+    content: '';
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.3s;
 }
 
-.image-container a {
-    text-decoration: none;
-    color: inherit;
+.image-container:hover::after {
+    opacity: 1;
+    transform: rotateY(360deg);
 }
+
+.image-1:hover::after { background-image: url('/lera-bd-2/images/2-2.jpeg'); }
+.image-2:hover::after { background-image: url('/lera-bd-2/images/3-3.jpeg'); }
+.image-3:hover::after { background-image: url('/lera-bd-2/images/4-4.jpeg'); }
+.image-4:hover::after { background-image: url('/lera-bd-2/images/5-5.jpeg'); }
+.image-5:hover::after { background-image: url('/lera-bd-2/images/6-6.jpeg'); }
+.image-6:hover::after { background-image: url('/lera-bd-2/images/7-7.jpeg'); }
+.image-6:hover::after { background-image: url('/lera-bd-2/images/8-8.jpeg'); }
+.image-8:hover::after { background-image: url('/lera-bd-2/images/9-9.jpeg'); }
+.image-9:hover::after { background-image: url('/lera-bd-2/images/10-10.jpeg'); }
+.image-10:hover::after { background-image: url('/lera-bd-2/images/11-11.jpeg'); }
+
+/* Repeat for image-3 to image-10 with their respective hover images */
 
 .name {
     display: block;
@@ -107,9 +137,11 @@ body, html {
     color: transparent;
 }
 
-@keyframes float {
+@keyframes floatChaotic {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
+    25% { transform: translateY(-10px); }
+    50% { transform: translateY(10px); }
+    75% { transform: translateY(-5px); }
 }
 
 /* Responsive Design */
