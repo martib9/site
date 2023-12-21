@@ -225,6 +225,8 @@ body, html {
 
 .image-section {
     flex-basis: 50%;
+    width: 120px;
+    height: auto;
 }
 
 
@@ -279,6 +281,11 @@ body, html {
     .text-section, .image-section {
         flex-basis: 100%;
     }
+
+    .image-section {
+        width: 80px;
+        height: auto;
+    }
 }
 
 
@@ -299,5 +306,9 @@ body, html {
     }
     .screen-title {
         font-size: 2em;
+    }
+    .image-section {
+        width: 60px;
+        height: auto;
     }
 }
