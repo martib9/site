@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@900&display=swap');
 
 @font-face {
-    font-family: Picnic;
+    font-family: PicNic;
     src: url(/fonts/PicNic-Regular.woff2);
 }
 
@@ -96,7 +96,6 @@ body, html {
     border-radius: 5px;
     text-decoration: none;
     animation: float 2s ease-in-out infinite;
-    /* Add floating animation style */
 }
 
 .screen {
@@ -131,16 +130,15 @@ body, html {
 }
 
 .cta-button {
-    font-family: 'Unbounded', sans-serif;
+    font-family: 'PicNic', sans-serif;
     margin-top: 20px;
     padding: 10px 20px;
     color: white;
-    background: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red);
+    background: linear-gradient(203.77deg, #2e17ab 10%, #ff02e1 60%, #ff9500 100%);
     border: none;
     border-radius: 5px;
     text-decoration: none;
     animation: float 2s ease-in-out infinite;
-    /* Add floating arrow style */
 }
 
 .arrow {
@@ -165,7 +163,7 @@ body, html {
     align-items: center;
     text-decoration: none;
     border-radius: 15px; /* Optional: for rounded corners */
-    font-family: 'Picnic', sans-serif;
+    font-family: 'PicNic', sans-serif;
 }
 
 .picture::after {
