@@ -107,7 +107,7 @@ body, html {
     align-items: center;
     text-align: center;
     padding: 20px;
-    background: linear-gradient(45deg, #fabea7, #fdd9a5, #c0ebc7, #a9def9); /* Pastel gradient */
+    background: linear-gradient(203.77deg, #dcd7f7 10%, #edd7dd 60%, #fff7f9 100%);
 }
 
 .screen-title {
@@ -164,8 +164,8 @@ body, html {
     justify-content: center;
     align-items: center;
     text-decoration: none;
-    border-radius: 5px; /* Optional: for rounded corners */
-    font-family: 'Unbounded', sans-serif;
+    border-radius: 15px; /* Optional: for rounded corners */
+    font-family: 'Picnic', sans-serif;
 }
 
 .picture::after {
