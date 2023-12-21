@@ -288,6 +288,10 @@ body, html {
     transition: opacity 0.5s;
 }
 
+#screen3 .sticky-button, #screen4 .sticky-button, #screen5 .sticky-button, #screen6 .sticky-button, #screen7 .sticky-button, #screen8 .sticky-button, #screen9 .sticky-button, #screen10 .sticky-button, #screen11 .sticky-button, #screen12 .sticky-button {
+    display: block;
+}
+
 #screen3 { background: linear-gradient(45deg, #ff00ff, #fffd00, #00ff00, #00ffff); } /* Crazy acid trip gradient */
 #screen4 { background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4); } /* Sunset pastel colors */
 
