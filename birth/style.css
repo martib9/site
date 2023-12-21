@@ -292,10 +292,6 @@ body, html {
     font-family: 'Unbounded', sans-serif;
 }
 
-#screen3 .sticky-button, #screen4 .sticky-button {
-    display: block;
-}
-
 #screen3 { background: linear-gradient(45deg, #ff00ff, #fffd00, #00ff00, #00ffff); } /* Crazy acid trip gradient */
 #screen4 { background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4); } /* Sunset pastel colors */
 #screen5 { background: linear-gradient(45deg, #ff00ff, #fffd00, #00ff00, #00ffff); } /* Crazy acid trip gradient */
