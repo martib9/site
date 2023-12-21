@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400&display=swap');
 
 @font-face {
     font-family: PicNic;
@@ -223,6 +224,7 @@ body, html {
 .text-section {
     flex-basis: 50%;
     font-family: 'Unbounded', sans-serif;
+    font-weight: 400;
 }
 
 .image-section {
