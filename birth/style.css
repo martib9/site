@@ -57,15 +57,18 @@ body, html {
 .title {
     font-family: 'Unbound', sans-serif;
     display: inline-block;
-    font-size: 6em;
+    font-size: 5.5em;
     color: #fff;
-    text-shadow: -4px 4px #ef3550,
-               -8px 8px #f48fb1,
-               -24px 24px #43a047,
-               -28px 28px #eeff41,
-               -36px 36px #ff5722;
+    text-shadow: -2px 2px #ef3550,
+               -4px 4px #f48fb1,
+               -6px 6px #7e57c2,
+               -8px 8px #2196f3,
+               -10px 10px #26c6da,
+               -12px 12px #43a047,
+               -14px 14px #eeff41,
+               -16px 16px #f9a825,
+               -18px 18px #ff5722;
     animation: waveAnimation 3s ease-in-out infinite;
-    /* Add wave animation style */
 }
 
 .title span {
