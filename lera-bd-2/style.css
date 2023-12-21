@@ -19,6 +19,7 @@ body, html {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    overflow: hidden;
 }
 
 #screen1 {
@@ -191,6 +192,11 @@ body, html {
 @media (max-width: 768px) {
     .screen {
         min-height: auto; /* NEW: Allow screens to fit content */
+        padding: 15px;
+    }
+
+    #screen2 {
+        padding-bottom: 30px;
     }
     
     .row {
@@ -212,7 +218,7 @@ body, html {
 @media (max-width: 480px) {
     .screen {
         min-height: auto; /* NEW: Allow screens to fit content */
-        padding: 20px;
+        padding: 15px;
     }
     
     #screen1 {
@@ -235,12 +241,12 @@ body, html {
     }
 
     .image-container {
-        width: 100%; /* Full width */
+        width: auto; /* Full width */
         margin: 10px 0; /* Space out images */
     }
 
     .image-container img, .image-container::after {
-        width: 100%; /* NEW: Smaller size for mobile */
+        width: 90%; /* NEW: Smaller size for mobile */
         height: auto; /* NEW: Smaller size for mobile */
     }
 }
