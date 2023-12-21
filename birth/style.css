@@ -125,9 +125,9 @@ body, html {
     font-family: 'Unbounded', sans-serif;
     font-size: 1em;
     text-transform: uppercase;
-    color: rgb(182, 235, 237);
+    color: rgb(64, 217, 222);
     text-shadow: -2px 2px #03b473,
-               8px -8px #5c1d9c,
+               8px -8px #5c1d9c;
 }
 
 .picture-gallery {
@@ -179,12 +179,13 @@ body, html {
     display: none;
     background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);
     padding: 10px;
-    color: #000;
+    color: #ffffff;
     position: absolute;
     bottom: 0;
     width: 100%;
     text-align: center;
     padding: 5px;
+    text-decoration: underline;
 }
 
 .picture:hover::after {
