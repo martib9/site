@@ -12,3 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add any additional JavaScript functionality here
     // This can include handling other events, animations, etc.
 });
+function scrollToScreen3() {
+    // Scroll smoothly to the third screen
+    document.querySelector('#screen3').scrollIntoView({ behavior: 'smooth' });
+}

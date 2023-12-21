@@ -50,6 +50,13 @@ body, html {
     animation: wave 2s ease-in-out infinite;
 }
 
+.title2 {
+    font-size: 2em;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2); /* Drop shadow */
+    margin-bottom: 20px;
+}
+
 .title span:nth-child(1) { animation-delay: 0s; }
 .title span:nth-child(2) { animation-delay: 0.1s; }
 .title span:nth-child(3) { animation-delay: 0.2s; }
@@ -85,11 +92,12 @@ body, html {
 }
 
 #screen2 {
-    background: linear-gradient(to right, #a8edea, #fed6e3);
-    color: black;
+    background: linear-gradient(to right, #a8edea, #fed6e3, #ffe5d9, #ffc3a0); /* Pastel gradient */
     text-align: center;
     padding: 20px;
 }
+
+
 
 .content {
     display: flex;
@@ -106,10 +114,9 @@ body, html {
 }
 
 .image-container {
-    text-align: center;
-    margin: 10px;
- /*   animation: floatChaotic 3s ease-in-out infinite; */
     position: relative;
+    width: 190px;
+    height: 190px;
 }
 
 .image-container:nth-child(1) { animation-duration: 3.5s; }
@@ -119,14 +126,27 @@ body, html {
 .image-container:nth-child(5) { animation-duration: 4.1s; }
 
 .image-container img {
-    width: 190px;
-    height: 190px;
-    object-fit: cover;
-    transition: transform 0.3s, opacity 0.3s;
-    backface-visibility: hidden;
+    width: 100%;
+    height: 100%;
 }
 
-.image-container::after {
+.image-container .name {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+    opacity: 0;
+    transition: opacity 0.3s;
+    color: white;
+    padding: 5px;
+}
+
+.image-container:hover .name {
+    opacity: 1;
+}
+
+/*.image-container::after {
     content: '';
     position: absolute;
     width: 190px;
@@ -153,7 +173,7 @@ body, html {
 .image-9:hover::after { background-image: url('/lera-bd-2/images/10-10.jpeg'); }
 .image-10:hover::after { background-image: url('/lera-bd-2/images/11-11.jpeg'); }
 
-/* Repeat for image-3 to image-10 with their respective hover images */
+/* Repeat for image-3 to image-10 with their respective hover images 
 
 .name {
     display: block;
@@ -169,7 +189,7 @@ body, html {
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-}
+}*/
 
 @keyframes floatChaotic {
     0%, 100% { transform: translateY(0); }
@@ -204,15 +224,16 @@ body, html {
         align-items: center;
     }
     .image-container {
-        margin-bottom: 10px;
+        width: 140px; /* Tablet size */
+        height: 140px;
     }
     #screen1 {
         background-image: url('/lera-bd-2/images/birthday-tablet.jpeg');
     }
-    .image-container img, .image-container::after {
-        width: 140px; /* NEW: Smaller size for tablet */
-        height: 140px; /* NEW: Smaller size for tablet */
-    }
+    /*.image-container img, .image-container::after {
+        width: 140px; /* NEW: Smaller size for tablet 
+        height: 140px; /* NEW: Smaller size for tablet 
+    } */
 }
 
 @media (max-width: 480px) {
@@ -241,12 +262,8 @@ body, html {
     }
 
     .image-container {
-        width: auto; /* Full width */
-        margin: 10px 0; /* Space out images */
+        width: 100px; /* Mobile size */
+        height: 100px;
     }
 
-    .image-container img, .image-container::after {
-        width: 90%; /* NEW: Smaller size for mobile */
-        height: auto; /* NEW: Smaller size for mobile */
-    }
 }
