@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@900&display=swap');
+
+@font-face {
+    font-family: Picnic;
+    src: url(/fonts/PicNic-Regular.woff2);
+}
+
+/* Base Styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: sans-serif;
+}
+
+.parallax-container {
+    height: 100vh; /* Full viewport height */
+    overflow: hidden;
+    position: relative;
+}
+
+.parallax-background {
+    background-image: url('/birth/images/birthday.jpeg'); /* Replace with your image path */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+}
+
+.content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+@keyframes waveAnimation {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    25% {
+        transform: translateY(-20px);
+    }
+    50% {
+        transform: translateY(0);
+    }
+    75% {
+        transform: translateY(20px);
+    }
+}
+
+.title {
+    display: inline-block;
+    font-size: 4em;
+    color: #fff;
+    text-shadow: -4px 4px #ef3550,
+               -8px 8px #f48fb1,
+               -12px 12px #7e57c2,
+               -16px 16px #2196f3,
+               -20px 20px #26c6da,
+               -24px 24px #43a047,
+               -28px 28px #eeff41,
+               -32px 32px #f9a825,
+               -36px 36px #ff5722;
+    animation: waveAnimation 3s ease-in-out infinite;
+    /* Add wave animation style */
+}
+
+.title span {
+    display: inline-block;
+    animation: waveAnimation 3s ease-in-out infinite;
+}
+
+.title span:nth-child(odd) {
+    animation-delay: 0.1s;
+}
+
+.title span:nth-child(even) {
+    animation-delay: 0.2s;
+}
+
+.scroll-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    color: white;
+    background: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red);
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    /* Add floating animation style */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .parallax-background {
+        background-attachment: scroll; /* Disable parallax for mobile */
+        background-image: url('/birth/images/birthday-tablet.jpeg'); /* Tablet image */
+    }
+}
+
+@media (max-width: 480px) {
+    .parallax-background {
+        background-image: url('/birth/images/birthday-mobile.jpeg'); /* Mobile image */
+    }
+    .title {
+        font-size: 2em;
+    }
+}
