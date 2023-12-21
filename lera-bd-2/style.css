@@ -87,6 +87,7 @@ body, html {
     background: linear-gradient(to right, #a8edea, #fed6e3);
     color: black;
     text-align: center;
+    padding: 20px;
 }
 
 .content {
@@ -94,6 +95,7 @@ body, html {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: 20px 0;
 }
 
 .row {
@@ -187,6 +189,10 @@ body, html {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .screen {
+        min-height: auto; /* NEW: Allow screens to fit content */
+    }
+    
     .row {
         flex-direction: column;
         align-items: center;
@@ -204,6 +210,10 @@ body, html {
 }
 
 @media (max-width: 480px) {
+    .screen {
+        min-height: auto; /* NEW: Allow screens to fit content */
+    }
+    
     #screen1 {
         background-image: url('/lera-bd-2/images/birthday-mobile.jpeg');
     }
