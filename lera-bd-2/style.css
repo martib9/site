@@ -212,13 +212,35 @@ body, html {
 @media (max-width: 480px) {
     .screen {
         min-height: auto; /* NEW: Allow screens to fit content */
+        padding: 20px;
     }
     
     #screen1 {
         background-image: url('/lera-bd-2/images/birthday-mobile.jpeg');
     }
+
+    #screen2 {
+        /* Adjustments specific to screen 2 for mobile */
+        padding-bottom: 30px; /* NEW: Additional padding at the bottom */
+    }
+
+    .content {
+        /* Adjust content layout for mobile */
+        flex-direction: column; /* Stack elements vertically */
+    }
+
+    .row {
+        flex-direction: column; /* Stack images vertically */
+        align-items: center; /* Center align items */
+    }
+
+    .image-container {
+        width: 100%; /* Full width */
+        margin: 10px 0; /* Space out images */
+    }
+
     .image-container img, .image-container::after {
-        width: 100px; /* NEW: Smaller size for mobile */
-        height: 100px; /* NEW: Smaller size for mobile */
+        width: 100%; /* NEW: Smaller size for mobile */
+        height: auto; /* NEW: Smaller size for mobile */
     }
 }
