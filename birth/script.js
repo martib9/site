@@ -31,12 +31,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const screen3 = document.querySelector('#screen3');
     const screen14 = document.querySelector('#screen14');
 
-    function toggleStickyButton() {
+    function checkButtonVisibility() {
         const screen3Top = screen3.offsetTop;
         const screen12Bottom = screen14.offsetTop + screen14.offsetHeight;
         const scrollPosition = window.pageYOffset;
 
-        // Show the button if the user is between the top of Screen 3 and the bottom of Screen 14
         if (scrollPosition >= screen3Top && scrollPosition <= screen12Bottom) {
             stickyButton.style.display = 'block';
             stickyButton.style.opacity = 1;
@@ -46,9 +45,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    window.addEventListener('scroll', toggleStickyButton);
-    toggleStickyButton();
+    // Check visibility on scroll
+    window.addEventListener('scroll', checkButtonVisibility);
+
+    // Check visibility after navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            setTimeout(checkButtonVisibility, 500); // Adjust timing if needed
+        });
+    });
+
+    // Initial check
+    checkButtonVisibility();
 });
+
 
 document.addEventListener('DOMContentLoaded', function() {
     const pictureLinks = document.querySelectorAll('.picture-gallery .picture');
