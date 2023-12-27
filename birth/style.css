@@ -364,29 +364,61 @@ body, html {
     .parallax-background {
         background-image: url('/birth/images/birthday-mobile.jpeg'); /* Mobile image */
     }
+
     .title {
         font-size: 3.5em;
         display: inline-block;
         padding-left: 18px;
     }
+
     .screen-title {
         font-size: 1.5em;
     }
+
     .picture {
         width: 60px;
         height: 60px;
     }
+
     .screen3-title {
         font-size: 2em;
     }
+
     .image-section img {
-        width: 120px;
+        width: 120px; /* Adjusted from 120px for better mobile layout */
         height: auto;
+        max-width: 100%; /* Ensure image scales within the container */
     }
 
     .text-section {
         font-size: 0.6em;
-        
     }
 
+    /* New styles for content3 layout */
+    .content3 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .image-section {
+        order: 1; /* Picture first */
+        width: 100%; /* Ensure full width */
+    }
+
+    .screen3-title {
+        order: 2; /* Then title */
+        text-align: center;
+    }
+
+    .text-section {
+        order: 3; /* Text after title */
+        text-align: center;
+    }
+
+    .next-button {
+        order: 4; /* Button last */
+    }
 }
+
