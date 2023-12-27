@@ -275,34 +275,34 @@ body, a, button {
 }
 
 ::-webkit-scrollbar-track {
-    background: #c0c0c0; /* Light gray track */
+    background: #d11414; /* Light gray track */
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #808080; /* Dark gray thumb */
-    border: 4px solid #c0c0c0; /* Light gray border */
+    background: #3214cb; /* Dark gray thumb */
+    border: 4px solid #30b71e; /* Light gray border */
     border-radius: 0; /* Square corners */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #696969; /* Darker gray on hover */
+    background: #e20f0f; /* Darker gray on hover */
 }
 
 /* For Firefox */
 * {
     scrollbar-width: auto;
-    scrollbar-color: #808080 #c0c0c0; /* Thumb and track color */
+    scrollbar-color: #db2828 #000000; /* Thumb and track color */
 }
 
 /* For Internet Explorer and Edge */
 body {
-    scrollbar-face-color: #808080;
+    scrollbar-face-color: #ff28bb;
     scrollbar-track-color: #c0c0c0;
-    scrollbar-arrow-color: #000000;
+    scrollbar-arrow-color: #0d00ff;
     scrollbar-shadow-color: #c0c0c0;
-    scrollbar-highlight-color: #c0c0c0;
-    scrollbar-3dlight-color: #c0c0c0;
-    scrollbar-darkshadow-color: #c0c0c0;
+    scrollbar-highlight-color: #00ff95;
+    scrollbar-3dlight-color: #c23333;
+    scrollbar-darkshadow-color: #65c933;
 }
 
 @keyframes animatedImageShadow {
@@ -352,17 +352,6 @@ body {
     background-size: 100% 1000%;
     background-attachment: fixed;
 }
-/*
-#screen3 { background: linear-gradient(45deg, #ff00ff, #fffd00, #00ff00, #00ffff); } 
-#screen4 { background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4); } 
-#screen5 { background: linear-gradient(45deg, #ff6ec4, #7873f5, #fffc00, #ff00ab);} 
-#screen6 { background: linear-gradient(45deg, #32ccbc, #90f7ec, #fff6f6, #f6b0c4);} 
-#screen7 { background: linear-gradient(45deg, #0ff0b3, #036ed9, #fbab7e, #f7ce68);} 
-#screen8 { background: linear-gradient(45deg, #e94057, #8a2387, #e94057, #f27121);} 
-#screen9 { background: linear-gradient(45deg, #f6d365, #fda085, #fbc2eb, #a6c1ee);} 
-#screen10 { background: linear-gradient(45deg, #a1ffce, #faffd1, #ff9a9e, #fecfef);} 
-#screen11 { background: linear-gradient(45deg, #6a11cb, #2575fc, #12c2e9, #c471ed);} 
-#screen12 { background: linear-gradient(45deg, #ff9a9e, #135bc0, #fad0c4); } */
 
 /* Responsive Design */
 @media (max-width: 768px) {
