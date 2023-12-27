@@ -29,14 +29,14 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     const stickyButton = document.querySelector('.sticky-button');
     const screen3 = document.querySelector('#screen3');
-    const screen12 = document.querySelector('#screen12');
+    const screen14 = document.querySelector('#screen14');
 
     function toggleStickyButton() {
         const screen3Top = screen3.offsetTop;
-        const screen12Bottom = screen12.offsetTop + screen12.offsetHeight;
+        const screen12Bottom = screen14.offsetTop + screen14.offsetHeight;
         const scrollPosition = window.pageYOffset;
 
-        // Show the button if the user is between the top of Screen 3 and the bottom of Screen 12
+        // Show the button if the user is between the top of Screen 3 and the bottom of Screen 14
         if (scrollPosition >= screen3Top && scrollPosition <= screen12Bottom) {
             stickyButton.style.display = 'block';
             stickyButton.style.opacity = 1;
