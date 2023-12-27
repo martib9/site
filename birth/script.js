@@ -26,34 +26,28 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
 document.addEventListener('DOMContentLoaded', function() {
     const stickyButton = document.querySelector('.sticky-button');
     const screen3 = document.querySelector('#screen3');
-    const screen2 = document.querySelector('#screen2');
+    const screen12 = document.querySelector('#screen12');
 
     function toggleStickyButton() {
         const screen3Top = screen3.offsetTop;
+        const screen12Bottom = screen12.offsetTop + screen12.offsetHeight;
         const scrollPosition = window.pageYOffset;
 
-        if (scrollPosition >= screen3Top) {
-            stickyButton.style.display = 'block'; // Show the button
-            stickyButton.style.opacity = 1; // Fade in
+        // Show the button if the user is between the top of Screen 3 and the bottom of Screen 12
+        if (scrollPosition >= screen3Top && scrollPosition <= screen12Bottom) {
+            stickyButton.style.display = 'block';
+            stickyButton.style.opacity = 1;
         } else {
-            stickyButton.style.opacity = 0; // Fade out
-            setTimeout(() => { stickyButton.style.display = 'none'; }, 500); // Hide after fade out
+            stickyButton.style.opacity = 0;
+            setTimeout(() => { stickyButton.style.display = 'none'; }, 500);
         }
     }
 
-    // Check button visibility on scroll and on load
     window.addEventListener('scroll', toggleStickyButton);
     toggleStickyButton();
-
-    // Smooth scroll to Screen 2
-    stickyButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        screen2.scrollIntoView({ behavior: 'smooth' });
-    });
 });
 
 document.addEventListener('DOMContentLoaded', function() {
