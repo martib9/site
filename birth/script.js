@@ -26,17 +26,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
 document.addEventListener('DOMContentLoaded', function() {
     const stickyButton = document.querySelector('.sticky-button');
     const screen3 = document.querySelector('#screen3');
-    const screen14 = document.querySelector('#screen14');
+    const screen12 = document.querySelector('#screen12');
 
     function checkButtonVisibility() {
         const screen3Top = screen3.offsetTop;
-        const screen12Bottom = screen14.offsetTop + screen14.offsetHeight;
+        const screen12Bottom = screen12.offsetTop + screen12.offsetHeight;
         const scrollPosition = window.pageYOffset;
 
-        if (scrollPosition >= screen3Top && scrollPosition <= screen12Bottom) {
+        if (scrollPosition >= screen3Top && scrollPosition < screen12Bottom) {
             stickyButton.style.display = 'block';
             stickyButton.style.opacity = 1;
         } else {
@@ -45,22 +46,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Check visibility on scroll
-    window.addEventListener('scroll', checkButtonVisibility);
+    function smoothScroll(target, callback) {
+        document.querySelector(target).scrollIntoView({ behavior: 'smooth' });
+        setTimeout(callback, 600); // Timeout should be slightly longer than the smooth scroll duration
+    }
 
-    // Check visibility after navigation
+    // Modify anchor link click event
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-            setTimeout(checkButtonVisibility, 500); // Adjust timing if needed
+            const target = this.getAttribute('href');
+            smoothScroll(target, checkButtonVisibility);
         });
     });
 
-    // Initial check
+    window.addEventListener('scroll', checkButtonVisibility);
     checkButtonVisibility();
 });
-
 
 document.addEventListener('DOMContentLoaded', function() {
     const pictureLinks = document.querySelectorAll('.picture-gallery .picture');
