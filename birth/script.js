@@ -80,3 +80,15 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+function mobileParallax() {
+    const parallaxBackground = document.querySelector('.parallax-background');
+    if (!parallaxBackground) return;
+
+    window.addEventListener('scroll', () => {
+        const offset = window.pageYOffset;
+        parallaxBackground.style.backgroundPositionY = offset * 0.5 + 'px';
+    });
+}
+
+// Initialize the parallax effect
+document.addEventListener('DOMContentLoaded', mobileParallax);
