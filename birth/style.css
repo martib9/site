@@ -369,6 +369,28 @@ body, html {
         display: inline-block;
         padding-left: 18px;
     }
+
+    .screen3 {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .image-section {
+        order: 1; /* Photo first */
+    }
+
+    .screen-title {
+        order: 2; /* Then title */
+    }
+
+    .text-section p {
+        order: 3; /* Text after title */
+    }
+
+    .next-button {
+        order: 4; /* Button last */
+    }
+
     .screen-title {
         font-size: 1.5em;
     }
@@ -386,6 +408,8 @@ body, html {
 
     .text-section {
         font-size: 0.6em;
+        display: flex;
+        flex-direction: column;
     }
 
 }
