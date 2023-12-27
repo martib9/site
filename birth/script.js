@@ -30,11 +30,11 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     const stickyButton = document.querySelector('.sticky-button');
     const screen3 = document.querySelector('#screen3');
-    const screen12 = document.querySelector('#screen12');
+    const screen14 = document.querySelector('#screen42');
 
     function checkButtonVisibility() {
         const screen3Top = screen3.offsetTop;
-        const screen12Bottom = screen12.offsetTop + screen12.offsetHeight;
+        const screen12Bottom = screen14.offsetTop + screen14.offsetHeight;
         const scrollPosition = window.pageYOffset;
 
         if (scrollPosition >= screen3Top && scrollPosition < screen12Bottom) {
