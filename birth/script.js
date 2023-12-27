@@ -80,15 +80,26 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+function throttle(fn, wait) {
+    let lastTime = 0;
+    return function (...args) {
+        const now = new Date().getTime();
+        if (now - lastTime < wait) return;
+        lastTime = now;
+        return fn(...args);
+    };
+}
+
 function mobileParallax() {
     const parallaxBackground = document.querySelector('.parallax-background');
     if (!parallaxBackground) return;
 
-    window.addEventListener('scroll', () => {
+    const updateBackgroundPosition = () => {
         const offset = window.pageYOffset;
         parallaxBackground.style.backgroundPositionY = offset * 0.5 + 'px';
-    });
+    };
+
+    window.addEventListener('scroll', throttle(updateBackgroundPosition, 10));
 }
 
-// Initialize the parallax effect
 document.addEventListener('DOMContentLoaded', mobileParallax);

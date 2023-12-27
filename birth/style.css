@@ -29,6 +29,7 @@ body, html {
     height: 100%;
     background-size: cover;
     background-position: center;
+    transition: background-position 0.1s linear;
 }
 
 .content {
