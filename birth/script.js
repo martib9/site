@@ -121,8 +121,8 @@ function isElementInViewport(el) {
 
 let countdownStarted = false;
 function onScroll() {
-    const screen15 = document.getElementById('screen16');
-    if (isElementInViewport(screen15) && !countdownStarted) {
+    const screen16 = document.getElementById('screen16');
+    if (isElementInViewport(screen16) && !countdownStarted) {
         countdownStarted = true;
         startCountdown('countdown', 2); // Replace 15 with your chosen number
     }
