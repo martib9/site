@@ -102,9 +102,9 @@ function startCountdown(elementId, finalNumber) {
             currentNumber++;
             document.getElementById(elementId).textContent = currentNumber + '€';
         }
-    }, 100); // Adjust the speed as needed
+    }, 10000); // Adjust the speed as needed
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    startCountdown('countdown', 400); // Replace 15 with your chosen number
+    startCountdown('countdown', 500); // Replace 15 with your chosen number
 });
