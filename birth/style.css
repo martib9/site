@@ -393,10 +393,23 @@ body {
     font-family: 'Unbounded', sans-serif;
     font-size: 8em;
     text-transform: uppercase;
+    color: rgb(0, 34, 255);
     text-shadow: -4px 4px #ef3550,
                -8px 8px #f48fb1,
                -12px 12px #7e57c2;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.screen16-subtitle {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 6em;
+    text-transform: uppercase;
     color: yellow;
+    text-shadow: -4px 4px #ef3550,
+               -8px 8px #f48fb1,
+               -12px 12px #7e57c2;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

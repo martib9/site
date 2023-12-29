@@ -102,7 +102,7 @@ function startCountdown(elementId, finalNumber) {
             currentNumber++;
             document.getElementById(elementId).textContent = currentNumber + '€';
         }
-    }, 10000); // Adjust the speed as needed
+    }, 10); // Adjust the speed as needed
 }
 
 document.addEventListener('DOMContentLoaded', () => {
