@@ -234,6 +234,10 @@ body, a, button {
     font-weight: 400;
 }
 
+.text-section p {
+    background: linear-gradient(45deg, #fabea7, #fdd9a5, #c0ebc7, #a9def9);
+}
+
 .image-section {
     flex-basis: 50%;
 }
