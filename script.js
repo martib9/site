@@ -103,38 +103,16 @@ function startCountup(elementId, finalNumber) {
             element.textContent = currentNumber + ' € +';
             currentNumber++;
         }
-    }, 6); // Adjust the speed as needed
+    }, 10); // Adjust the speed as needed
 }
 
-function isElementSignificantlyInViewPort(el) {
-    const rect = el.getBoundingClientRect();
-    const elemTop = rect.top;
-    const elemBottom = rect.bottom;
-
-    // Check if more than 50% of the element is visible
-    const isVisible = elemTop < window.innerHeight && elemBottom >= window.innerHeight / 2;
-    return isVisible;
-}
-
-let countupStarted = false;
-function onScroll() {
-    const screen16 = document.getElementById('screen16');
-    if (isElementSignificantlyInViewPort(screen16) && !countupStarted) {
-        countupStarted = true;
-        startCountup('countdown', 500); // Ends countup at 500
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    window.addEventListener('scroll', onScroll);
-});
 function createFireworkParticle() {
     const particle = document.createElement('div');
     particle.classList.add('firework-particle');
     particle.style.left = `${Math.random() * 100}%`;
     particle.style.top = `${Math.random() * 100}%`;
     particle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-    particle.style.width = particle.style.height = `${Math.random() * 50 + 25}px`; // Bigger size
+    particle.style.width = particle.style.height = `${Math.random() * 50 + 25}px`; // Larger size
     document.getElementById('fireworks').appendChild(particle);
 
     setTimeout(() => particle.remove(), 1000);
@@ -145,6 +123,31 @@ function startFireworks() {
     setTimeout(() => clearInterval(interval), 10000); // Run fireworks for 10 seconds
 }
 
+function isElementSignificantlyInViewPort(el) {
+    const rect = el.getBoundingClientRect();
+    const elemTop = rect.top;
+    const elemBottom = rect.bottom;
+
+    const isVisible = elemTop < window.innerHeight && elemBottom >= window.innerHeight / 2;
+    return isVisible;
+}
+
+let countupStarted = false;
+let fireworksStarted = false;
+function onScroll() {
+    const screen16 = document.getElementById('screen16');
+    if (isElementSignificantlyInViewPort(screen16)) {
+        if (!countupStarted) {
+            countupStarted = true;
+            startCountup('countdown', 500); // Starts countdown from 500
+        }
+        if (!fireworksStarted) {
+            fireworksStarted = true;
+            startFireworks();
+        }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    startFireworks();
+    window.addEventListener('scroll', onScroll);
 });
