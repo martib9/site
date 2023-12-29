@@ -29,15 +29,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.addEventListener('DOMContentLoaded', function() {
     const stickyButton = document.querySelector('.sticky-button');
-    const screen3 = document.querySelector('#screen3');
+    const screen2 = document.querySelector('#screen2');
     const screen15 = document.querySelector('#screen15');
 
     function checkButtonVisibility() {
-        const screen3Top = screen3.offsetTop;
+        const screen2Top = screen2.offsetTop;
         const screen15Bottom = screen15.offsetTop + screen15.offsetHeight;
         const scrollPosition = window.pageYOffset;
 
-        if (scrollPosition >= screen3Top && scrollPosition < screen15Bottom) {
+        if (scrollPosition >= screen2Top && scrollPosition < screen15Bottom) {
             stickyButton.style.display = 'block';
             stickyButton.style.opacity = 1;
         } else {
