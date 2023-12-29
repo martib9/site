@@ -102,9 +102,29 @@ function startCountdown(elementId, finalNumber) {
             currentNumber++;
             document.getElementById(elementId).textContent = currentNumber + '€+';
         }
-    }, 4); // Adjust the speed as needed
+    }, 6); // Adjust the speed as needed
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     startCountdown('countdown', 500); // Replace 15 with your chosen number
+});
+
+function createFireworkParticle() {
+    const particle = document.createElement('div');
+    particle.classList.add('firework-particle');
+    particle.style.left = `${Math.random() * 100}%`;
+    particle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+    particle.style.width = particle.style.height = `${Math.random() * 15 + 5}px`;
+    document.getElementById('fireworks').appendChild(particle);
+
+    setTimeout(() => particle.remove(), 1000);
+}
+
+function startFireworks() {
+    const interval = setInterval(createFireworkParticle, 200);
+    setTimeout(() => clearInterval(interval), 10000); // Run fireworks for 10 seconds
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    startFireworks();
 });

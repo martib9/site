@@ -401,7 +401,7 @@ body {
     width: 100%;
     margin: 0 auto;
     text-align: center;
-    font-size: 7.5em;
+    font-size: 9.5em;
     color: #fff;
     text-shadow: -2px 2px #ef3550,
                -4px 4px #f48fb1,
@@ -416,18 +416,17 @@ body {
 }
 
 .screen16-subtitle {
-    font-family: 'PicNic', sans-serif;
+    font-family: 'Unbounded', sans-serif;
     display: block;
     width: 100%;
     margin: 0 auto;
     text-align: center;
-    font-size: 4.5em;
+    font-size: 3em;
     color: #000000;
     text-shadow: -2px 2px #ef3550,
                -4px 4px #f48fb1,
                -6px 6px #7e57c2,
                -8px 8px #2196f3;
-    animation: waveAnimation 3s ease-in-out infinite;
 }
 
 .crazy-button {
