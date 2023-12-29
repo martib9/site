@@ -93,44 +93,43 @@ function mobileParallax() {
 // Initialize the parallax effect
 document.addEventListener('DOMContentLoaded', mobileParallax);
 
-function startCountdown(elementId, finalNumber) {
+function startCountup(elementId, finalNumber) {
     let currentNumber = 0;
     const element = document.getElementById(elementId);
     const interval = setInterval(() => {
         if (currentNumber >= finalNumber) {
             clearInterval(interval);
         } else {
+            element.textContent = currentNumber + '€ +';
             currentNumber++;
-            element.textContent = currentNumber + '€+';
         }
-    }, 6); // Adjust the speed as needed
+    }, 10); // Adjust the speed as needed
 }
-document.addEventListener('DOMContentLoaded', () => {
-    startCountdown('countdown', 500); // Replace 15 with your chosen number
-});
 
-function isElementInViewport(el) {
+function isElementSignificantlyInViewPort(el) {
     const rect = el.getBoundingClientRect();
-    return (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
+    const elemTop = rect.top;
+    const elemBottom = rect.bottom;
+
+    // Check if more than 50% of the element is visible
+    const isVisible = elemTop < window.innerHeight && elemBottom >= window.innerHeight / 2;
+    return isVisible;
 }
 
-let countdownStarted = false;
+let countupStarted = false;
 function onScroll() {
     const screen16 = document.getElementById('screen16');
-    if (isElementInViewport(screen16) && !countdownStarted) {
-        countdownStarted = true;
-        startCountdown('countdown', 2); // Replace 15 with your chosen number
+    if (isElementSignificantlyInViewPort(screen16) && !countupStarted) {
+        countupStarted = true;
+        startCountup('countdown', 500); // Ends countup at 500
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('scroll', onScroll);
 });
+
+
 
 function createFireworkParticle() {
     const particle = document.createElement('div');
