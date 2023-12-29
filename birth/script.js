@@ -113,15 +113,16 @@ function createFireworkParticle() {
     const particle = document.createElement('div');
     particle.classList.add('firework-particle');
     particle.style.left = `${Math.random() * 100}%`;
+    particle.style.top = `${Math.random() * 100}%`;
     particle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-    particle.style.width = particle.style.height = `${Math.random() * 15 + 5}px`;
+    particle.style.width = particle.style.height = `${Math.random() * 30 + 10}px`; // Bigger size
     document.getElementById('fireworks').appendChild(particle);
 
     setTimeout(() => particle.remove(), 1000);
 }
 
 function startFireworks() {
-    const interval = setInterval(createFireworkParticle, 200);
+    const interval = setInterval(createFireworkParticle, 100); // More frequent particles
     setTimeout(() => clearInterval(interval), 10000); // Run fireworks for 10 seconds
 }
 
