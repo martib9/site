@@ -95,18 +95,41 @@ document.addEventListener('DOMContentLoaded', mobileParallax);
 
 function startCountdown(elementId, finalNumber) {
     let currentNumber = 0;
+    const element = document.getElementById(elementId);
     const interval = setInterval(() => {
         if (currentNumber >= finalNumber) {
             clearInterval(interval);
         } else {
             currentNumber++;
-            document.getElementById(elementId).textContent = currentNumber + '€+';
+            element.textContent = currentNumber + '€+';
         }
     }, 6); // Adjust the speed as needed
 }
-
 document.addEventListener('DOMContentLoaded', () => {
     startCountdown('countdown', 500); // Replace 15 with your chosen number
+});
+
+function isElementInViewport(el) {
+    const rect = el.getBoundingClientRect();
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+}
+
+let countdownStarted = false;
+function onScroll() {
+    const screen15 = document.getElementById('screen16');
+    if (isElementInViewport(screen15) && !countdownStarted) {
+        countdownStarted = true;
+        startCountdown('countdown', 2); // Replace 15 with your chosen number
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('scroll', onScroll);
 });
 
 function createFireworkParticle() {
