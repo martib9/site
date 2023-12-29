@@ -134,7 +134,7 @@ function createFireworkParticle() {
     particle.style.left = `${Math.random() * 100}%`;
     particle.style.top = `${Math.random() * 100}%`;
     particle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-    particle.style.width = particle.style.height = `${Math.random() * 300 + 100}px`; // Bigger size
+    particle.style.width = particle.style.height = `${Math.random() * 100 + 50}px`; // Bigger size
     document.getElementById('fireworks').appendChild(particle);
 
     setTimeout(() => particle.remove(), 1000);
