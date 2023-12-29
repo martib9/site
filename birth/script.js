@@ -97,13 +97,13 @@ function startCountup(elementId, finalNumber) {
     let currentNumber = 0;
     const element = document.getElementById(elementId);
     const interval = setInterval(() => {
-        if (currentNumber >= finalNumber) {
+        if (currentNumber > finalNumber) {
             clearInterval(interval);
         } else {
-            element.textContent = currentNumber + '€ +';
+            element.textContent = currentNumber + ' € +';
             currentNumber++;
         }
-    }, 10); // Adjust the speed as needed
+    }, 6); // Adjust the speed as needed
 }
 
 function isElementSignificantlyInViewPort(el) {
@@ -128,9 +128,6 @@ function onScroll() {
 document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('scroll', onScroll);
 });
-
-
-
 function createFireworkParticle() {
     const particle = document.createElement('div');
     particle.classList.add('firework-particle');
