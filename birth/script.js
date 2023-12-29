@@ -100,9 +100,9 @@ function startCountdown(elementId, finalNumber) {
             clearInterval(interval);
         } else {
             currentNumber++;
-            document.getElementById(elementId).textContent = currentNumber + '€';
+            document.getElementById(elementId).textContent = currentNumber + '€+';
         }
-    }, 10); // Adjust the speed as needed
+    }, 4); // Adjust the speed as needed
 }
 
 document.addEventListener('DOMContentLoaded', () => {

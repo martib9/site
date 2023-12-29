@@ -378,41 +378,56 @@ body {
 
 #screen16 {
     animation: pulseBackground 3s linear infinite;
+    position: relative;
+    height: 100vh;
 }
 
-#fireworks {
+@keyframes firework {
+    from { transform: scale(0.2); opacity: 1; }
+    to { transform: scale(1); opacity: 0; }
+}
+
+.firework-particle {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 50%; /* Adjust as needed */
-    /* Additional styling as required */
+    bottom: 10px;
+    border-radius: 50%;
+    background-color: white;
+    animation: firework 1s ease-out;
 }
 
 .screen16-title {
-    font-family: 'Unbounded', sans-serif;
-    font-size: 8em;
-    text-transform: uppercase;
-    color: rgb(0, 34, 255);
-    text-shadow: -4px 4px #ef3550,
-               -8px 8px #f48fb1,
-               -12px 12px #7e57c2;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+    font-family: 'PicNic', sans-serif;
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 7.5em;
+    color: #fff;
+    text-shadow: -2px 2px #ef3550,
+               -4px 4px #f48fb1,
+               -6px 6px #7e57c2,
+               -8px 8px #2196f3,
+               -10px 10px #26c6da,
+               -12px 12px #43a047,
+               -14px 14px #eeff41,
+               -16px 16px #f9a825,
+               -18px 18px #ff5722;
+    animation: waveAnimation 3s ease-in-out infinite;
 }
 
 .screen16-subtitle {
-    font-family: 'Unbounded', sans-serif;
-    font-size: 6em;
-    text-transform: uppercase;
-    color: yellow;
-    text-shadow: -4px 4px #ef3550,
-               -8px 8px #f48fb1,
-               -12px 12px #7e57c2;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+    font-family: 'PicNic', sans-serif;
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 4.5em;
+    color: #000000;
+    text-shadow: -2px 2px #ef3550,
+               -4px 4px #f48fb1,
+               -6px 6px #7e57c2,
+               -8px 8px #2196f3;
+    animation: waveAnimation 3s ease-in-out infinite;
 }
 
 .crazy-button {
@@ -474,6 +489,16 @@ body {
         font-size: 3.5em;
         display: inline-block;
         padding-left: 18px;
+    }
+
+    .screen16-title {
+        font-size: 3.5em;
+        display: inline-block;
+        padding-left: 18px;
+    }
+
+    .screen16-subtitle {
+        font-size: 1.5em;
     }
 
     .screen-title {
