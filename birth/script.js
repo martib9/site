@@ -30,14 +30,14 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     const stickyButton = document.querySelector('.sticky-button');
     const screen3 = document.querySelector('#screen3');
-    const screen14 = document.querySelector('#screen14');
+    const screen15 = document.querySelector('#screen15');
 
     function checkButtonVisibility() {
         const screen3Top = screen3.offsetTop;
-        const screen14Bottom = screen14.offsetTop + screen14.offsetHeight;
+        const screen15Bottom = screen15.offsetTop + screen15.offsetHeight;
         const scrollPosition = window.pageYOffset;
 
-        if (scrollPosition >= screen3Top && scrollPosition < screen14Bottom) {
+        if (scrollPosition >= screen3Top && scrollPosition < screen15Bottom) {
             stickyButton.style.display = 'block';
             stickyButton.style.opacity = 1;
         } else {
@@ -92,3 +92,19 @@ function mobileParallax() {
 
 // Initialize the parallax effect
 document.addEventListener('DOMContentLoaded', mobileParallax);
+
+function startCountdown(elementId, finalNumber) {
+    let currentNumber = 0;
+    const interval = setInterval(() => {
+        if (currentNumber >= finalNumber) {
+            clearInterval(interval);
+        } else {
+            currentNumber++;
+            document.getElementById(elementId).textContent = currentNumber + '€';
+        }
+    }, 100); // Adjust the speed as needed
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    startCountdown('countdown', 400); // Replace 15 with your chosen number
+});
