@@ -139,7 +139,7 @@ function onScroll() {
     if (isElementSignificantlyInViewPort(screen16)) {
         if (!countupStarted) {
             countupStarted = true;
-            startCountup('countdown', 500); // Starts countdown from 500
+            startCountup('countdown', 600); // Starts countdown from 500
         }
         if (!fireworksStarted) {
             fireworksStarted = true;
