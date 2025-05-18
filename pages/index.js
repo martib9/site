@@ -14,21 +14,6 @@ export default function Home() {
   const [spendInput, setSpendInput] = useState('');
   const [overflowMessage, setOverflowMessage] = useState('');
 
-  // Fetch and populate budget state from Firestore
-  const fetchBudget = async (enteredPin) => {
-    const refDoc = doc(db, 'budgets', enteredPin);
-    const snap = await getDoc(refDoc);
-    if (snap.exists()) {
-      const d = snap.data();
-      setTotal(String(d.total));
-      setInitialDays(d.initialDays);
-      setStartDate(d.startDate);
-      setHistory(d.history || []);
-      setStep(d.total ? 'daily' : 'intro');
-    } else {
-      setStep('intro');
-    }
-  };
 
   // On mount, check for saved PIN and auto-login
   useEffect(() => {
