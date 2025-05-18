@@ -1,55 +1,12 @@
-import '../styles/globals.css';
-import Head from 'next/head';
-export default function MyApp({ Component, pageProps }) {
-  return (
-    <>
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-        <title>LxD Budget</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <Component {...pageProps} />
-    </>
-  );
-}
-
-// File: pages/index.js
 import { useState, useEffect } from 'react';
 import InputNumeric from '../components/InputNumeric';
 import { db } from '../firebase';
 import {
   doc,
-  getDoc,
   setDoc,
   updateDoc,
   onSnapshot
-} from 'firebase/firestore';
-
-export default function Home() {
-  const [step, setStep] = useState('auth');
-  const [pin, setPin] = useState('');
-  const [total, setTotal] = useState('');
-  const [initialDays, setInitialDays] = useState(1);
-  const [startDate, setStartDate] = useState(null);
-  const [history, setHistory] = useState([]);
-  const [spendInput, setSpendInput] = useState('');
-
-  // Derived state
-  const today = new Date();
-  const daysElapsed = startDate
-    ? Math.floor((today - new Date(startDate)) / (1000 * 60 * 60 * 24))
-    : 0;
-  const daysLeft = Math.max(initialDays - daysElapsed, 0);
-  const used = history.reduce((sum, e) => sum + e.amount, 0);
-  const remTotal = (parseFloat(total || 0) - used).toFixed(2);
-  const remDaily = daysLeft > 0 ? (remTotal / daysLeft).toFixed(2) : '0.00';
-
-  // Sync with Firestore
-  useEffect(() => {
-    if (pin.length === 4) {
-      const ref = doc(db, 'budgets', pin);
-      // Subscribe
-      const unsub = onSnapshot(ref, async snap => {
+} from 'firebase/firestore';(ref, async snap => {
         if (snap.exists()) {
           const data = snap.data();
           setTotal(data.total);
