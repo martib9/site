@@ -119,13 +119,25 @@ export default function Home() {
   const handleSpend = async () => {
     const amt = parseFloat(spendInput);
     if (!amt || amt <= 0) return;
+
     const newHist = [...history, { amount: amt, timestamp: new Date().toISOString() }];
     const refDoc = doc(db, 'budgets', pin);
     await updateDoc(refDoc, { history: newHist });
+
+    // Update local history and clear input
     setHistory(newHist);
     setSpendInput('');
-    if (amt > parseFloat(remDaily)) {
-      const newDaily = ((parseFloat(remTotal) - amt) / daysLeft).toFixed(2);
+
+    // Calculate today's total spend
+    const sumNewToday = newHist.reduce((sum, e) => {
+      const d = new Date(e.timestamp);
+      return d.toDateString() === new Date().toDateString() ? sum + e.amount : sum;
+    }, 0);
+
+    // Recalculate today's remaining
+    const remainingAfter = parseFloat(remDaily) - sumNewToday;
+    if (remainingAfter < 0) {
+      const newDaily = ((parseFloat(remTotal) - sumNewToday) / daysLeft).toFixed(2);
       setOverflowMessage(`You spent all money for today! New daily budget is ${newDaily}`);
     } else {
       setOverflowMessage('');
