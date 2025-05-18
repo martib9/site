@@ -188,19 +188,3 @@ export default function Home() {
 
   return null;
 }
-// File: pages/_app.js
-import Head from 'next/head';
-
-export default function MyApp({ Component, pageProps }) {
-  return (
-    <div className="min-h-screen bg-black text-white flex justify-center">
-      <Head>
-        <title>LxD Budget App</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-      <div className="w-full max-w-sm">
-        <Component {...pageProps} />
-      </div>
-    </div>
-  );
-}
