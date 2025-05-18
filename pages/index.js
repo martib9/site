@@ -48,10 +48,9 @@ useEffect(() => {
       <button onClick={handleSpend} className="mt-2 bg-green-600 text-white p-2 rounded-2xl w-full">OK</button>
       <div className="w-full bg-gray-300 rounded-full h-2.5 mt-2">
         <div
-          className="bg-green-600 h-2.5 rounded-full"
-          style={{ width: `${Math.min((budget.todaySpend / budget.dailyLimit) * 100, 100)}%` }}
-        ></div>
-      </div>
+  className="bg-green-600 h-2.5 rounded-full"
+  style={{ width: `${budget ? Math.min((budget.todaySpend / budget.dailyLimit) * 100, 100) : 0}%` }}
+></div>
       <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg flex justify-around py-3">
         <button className="text-gray-600">Budget</button>
         <button className="text-gray-600">Edit</button>
