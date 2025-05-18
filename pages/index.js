@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import InputNumeric from '../components/InputNumeric';
 import { db } from '../firebase';
-import { doc, setDoc, updateDoc, onSnapshot } from 'firebase/firestore';
+import { doc, setDoc, updateDoc, onSnapshot, getDoc } from 'firebase/firestore';
 
 export default function Home() {
   const [step, setStep] = useState('auth');
@@ -17,9 +17,9 @@ export default function Home() {
   // On mount, check for saved PIN and auto-login
   useEffect(() => {
     const savedPin = localStorage.getItem('budget_pin');
-    if (savedPin) {
+    if (savedPin === '6699') {
       setPin(savedPin);
-      handleAuth(); // auto-fetch
+      fetchBudget(savedPin);
     }
   }, []);
 
@@ -58,16 +58,42 @@ export default function Home() {
   }, 0);
   // Today's remaining budget
   const numTodayRem = parseFloat(remDaily) - sumToday;
-  const displayToday = (numTodayRem < 0 ? 0 : numTodayRem).toFixed(2);
+  const displayToday = Math.max(numTodayRem, 0).toFixed(2);
+
+  const fmt = ts => {
+    const d = new Date(ts);
+    const dd = String(d.getDate()).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const yy = d.getFullYear();
+    const hh = String(d.getHours()).padStart(2, '0');
+    const mi = String(d.getMinutes()).padStart(2, '0');
+    return `${dd}.${mm}.${yy}, ${hh}:${mi}`;
+  };
+
+  // Fetch and populate budget state from Firestore
+  const fetchBudget = async (enteredPin) => {
+    const refDoc = doc(db, 'budgets', enteredPin);
+    const snap = await getDoc(refDoc);
+    if (snap.exists()) {
+      const d = snap.data();
+      setTotal(String(d.total));
+      setInitialDays(d.initialDays);
+      setStartDate(d.startDate);
+      setHistory(d.history || []);
+      setStep(d.total ? 'daily' : 'intro');
+    } else {
+      setStep('intro');
+    }
+  };
 
   const handleAuth = async () => {
-    if (pin === '6699') {
-      // Persist PIN for reloads
-      localStorage.setItem('budget_pin', pin);
-      setStep('intro');
-    } else {
+    if (pin !== '6699') {
       alert('Invalid PIN');
+      return;
     }
+    // Persist PIN and load budget
+    localStorage.setItem('budget_pin', pin);
+    await fetchBudget(pin);
   };
 
   const saveIntro = async () => {
@@ -97,16 +123,6 @@ export default function Home() {
     } else {
       setOverflowMessage('');
     }
-  };
-
-  const fmt = ts => {
-    const d = new Date(ts);
-    const dd = String(d.getDate()).padStart(2, '0');
-    const mm = String(d.getMonth() + 1).padStart(2, '0');
-    const yy = d.getFullYear();
-    const hh = String(d.getHours()).padStart(2, '0');
-    const mi = String(d.getMinutes()).padStart(2, '0');
-    return `${dd}.${mm}.${yy}, ${hh}:${mi}`;
   };
 
   // Screens
