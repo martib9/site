@@ -14,6 +14,22 @@ export default function Home() {
   const [spendInput, setSpendInput] = useState('');
   const [overflowMessage, setOverflowMessage] = useState('');
 
+  // Fetch and populate budget state from Firestore
+  const fetchBudget = async (enteredPin) => {
+    const refDoc = doc(db, 'budgets', enteredPin);
+    const snap = await getDoc(refDoc);
+    if (snap.exists()) {
+      const d = snap.data();
+      setTotal(String(d.total));
+      setInitialDays(d.initialDays);
+      setStartDate(d.startDate);
+      setHistory(d.history || []);
+      setStep(d.total ? 'daily' : 'intro');
+    } else {
+      setStep('intro');
+    }
+  };
+
   // On mount, check for saved PIN and auto-login
   useEffect(() => {
     const savedPin = localStorage.getItem('budget_pin');
@@ -87,13 +103,19 @@ export default function Home() {
   };
 
   const handleAuth = async () => {
-    if (pin !== '6699') {
-      alert('Invalid PIN');
-      return;
+    console.log('Unlock clicked, pin=', pin);
+    try {
+      if (pin !== '6699') {
+        alert('Invalid PIN');
+        return;
+      }
+      // Persist PIN and load budget
+      localStorage.setItem('budget_pin', pin);
+      await fetchBudget(pin);
+    } catch (err) {
+      console.error('handleAuth error', err);
+      alert('Error unlocking, see console');
     }
-    // Persist PIN and load budget
-    localStorage.setItem('budget_pin', pin);
-    await fetchBudget(pin);
   };
 
   const saveIntro = async () => {
