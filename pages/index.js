@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import InputNumeric from '../components/InputNumeric';
 import { db } from '../firebase';
-import { doc, setDoc, updateDoc, onSnapshot } from 'firebase/firestore';
+import { doc, setDoc, updateDoc, onSnapshot, getDoc } from 'firebase/firestore';
 
 export default function Home() {
   const [step, setStep] = useState('auth');
@@ -49,9 +49,20 @@ export default function Home() {
   // Today's remaining budget
   const todayRemaining = (parseFloat(remDaily) - sumToday).toFixed(2);
 
-  const handleAuth = () => {
+  const handleAuth = async () => {
     if (pin === '6699') {
-      setStep('intro');
+      const refDoc = doc(db, 'budgets', pin);
+      const snap = await getDoc(refDoc);
+      if (snap.exists()) {
+        const data = snap.data();
+        setTotal(String(data.total));
+        setInitialDays(data.initialDays);
+        setStartDate(data.startDate);
+        setHistory(data.history || []);
+        setStep('daily');
+      } else {
+        setStep('intro');
+      }
     } else {
       alert('Invalid PIN');
     }
