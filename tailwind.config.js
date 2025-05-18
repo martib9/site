@@ -1,8 +1,8 @@
 module.exports = {
-  content: [
-    './pages/**/*.{js,jsx}',
-    './components/**/*.{js,jsx}'
-  ],
-  theme: { extend: {} },
-  plugins: []
+  darkMode: 'class', // Enable dark mode
+  content: ["./pages/**/*.js", "./components/**/*.js"],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
 };
