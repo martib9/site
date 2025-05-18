@@ -10,7 +10,8 @@
   "dependencies": {
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "firebase": "^9.22.1"
   },
   "devDependencies": {
     "tailwindcss": "^3.0.0",

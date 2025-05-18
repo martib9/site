@@ -1,78 +1,104 @@
+import '../styles/globals.css';
+import Head from 'next/head';
+export default function MyApp({ Component, pageProps }) {
+  return (
+    <>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <title>LxD Budget</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Component {...pageProps} />
+    </>
+  );
+}
+
+// File: pages/index.js
 import { useState, useEffect } from 'react';
 import InputNumeric from '../components/InputNumeric';
+import { db } from '../firebase';
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  onSnapshot
+} from 'firebase/firestore';
 
 export default function Home() {
   const [step, setStep] = useState('auth');
   const [pin, setPin] = useState('');
   const [total, setTotal] = useState('');
-  const [days, setDays] = useState(1);
+  const [initialDays, setInitialDays] = useState(1);
+  const [startDate, setStartDate] = useState(null);
   const [history, setHistory] = useState([]);
   const [spendInput, setSpendInput] = useState('');
 
-  // Load saved data
+  // Derived state
+  const today = new Date();
+  const daysElapsed = startDate
+    ? Math.floor((today - new Date(startDate)) / (1000 * 60 * 60 * 24))
+    : 0;
+  const daysLeft = Math.max(initialDays - daysElapsed, 0);
+  const used = history.reduce((sum, e) => sum + e.amount, 0);
+  const remTotal = (parseFloat(total || 0) - used).toFixed(2);
+  const remDaily = daysLeft > 0 ? (remTotal / daysLeft).toFixed(2) : '0.00';
+
+  // Sync with Firestore
   useEffect(() => {
-    const savedPin = localStorage.getItem('budget_pin');
-    const savedTotal = localStorage.getItem('budget_total');
-    const savedDays = localStorage.getItem('budget_days');
-    const savedHist = JSON.parse(localStorage.getItem('budget_history') || '[]');
-    // filter out entries older than 72h
-    const cutoff = Date.now() - 72 * 3600 * 1000;
-    const filtered = savedHist.filter(e => e.timestamp >= cutoff);
-    if (filtered.length !== savedHist.length) {
-      localStorage.setItem('budget_history', JSON.stringify(filtered));
+    if (pin.length === 4) {
+      const ref = doc(db, 'budgets', pin);
+      // Subscribe
+      const unsub = onSnapshot(ref, async snap => {
+        if (snap.exists()) {
+          const data = snap.data();
+          setTotal(data.total);
+          setInitialDays(data.initialDays);
+          setStartDate(data.startDate);
+          setHistory(data.history || []);
+          // Move to correct screen
+          setStep(data.total ? 'daily' : 'intro');
+        }
+      });
+      return unsub;
     }
-    setHistory(filtered);
-    if (savedTotal && savedDays) {
-      setTotal(savedTotal);
-      setDays(Number(savedDays));
-      // if PIN already entered, go to daily
-      setStep(savedPin === 'true' ? 'daily' : 'auth');
-    }
-  }, []);
+  }, [pin]);
 
   const handleAuth = () => {
     if (pin === '6699') {
-      localStorage.setItem('budget_pin', 'true');
-      setStep(total ? 'daily' : 'intro');
+      setStep('intro');
     } else alert('Invalid PIN');
   };
 
-  const saveIntro = () => {
-    localStorage.setItem('budget_total', total);
-    localStorage.setItem('budget_days', days);
+  const saveIntro = async () => {
+    const ref = doc(db, 'budgets', pin);
+    const now = new Date().toISOString();
+    await setDoc(ref, {
+      total: parseFloat(total),
+      initialDays,
+      startDate: now,
+      history: []
+    });
+    setStartDate(now);
     setStep('daily');
   };
 
-  // Compute budgets
-  const used = history.reduce((sum, e) => sum + e.amount, 0);
-  const remTotal = parseFloat(total || 0) - used;
-  const remDaily = parseFloat((remTotal / days || 0).toFixed(2));
-  const todayOver = spendInput && Number(spendInput) > remDaily;
-
-  const handleSpend = () => {
+  const handleSpend = async () => {
     const amt = parseFloat(spendInput);
     if (!amt || amt <= 0) return;
-    const newTotal = remTotal - amt;
-    const newRemDaily = parseFloat((newTotal / days || 0).toFixed(2));
-    const entry = { amount: amt, timestamp: Date.now() };
-    const newHist = [...history, entry];
-    setHistory(newHist);
-    localStorage.setItem('budget_history', JSON.stringify(newHist));
+    const newHist = [...history, { amount: amt, timestamp: new Date().toISOString() }];
+    const ref = doc(db, 'budgets', pin);
+    await updateDoc(ref, { history: newHist });
     setSpendInput('');
-    if (amt > remDaily) {
-      alert(`You spent all money for today! New daily budget is ${newRemDaily}`);
+    if (amt > parseFloat(remDaily)) {
+      const newDaily = (parseFloat(remTotal) - amt) / daysLeft;
+      alert(`You spent all money for today! New daily budget is ${newDaily.toFixed(2)}`);
     }
   };
 
-  // Format timestamp
   const fmt = ts => {
     const d = new Date(ts);
-    const dd = String(d.getDate()).padStart(2, '0');
-    const mm = String(d.getMonth()+1).padStart(2, '0');
-    const yy = d.getFullYear();
-    const hh = String(d.getHours()).padStart(2, '0');
-    const mi = String(d.getMinutes()).padStart(2, '0');
-    return `${dd}.${mm}.${yy}, ${hh}:${mi}`;
+    return `${String(d.getDate()).padStart(2,'0')}.${String(d.getMonth()+1).padStart(2,'0')}.${d.getFullYear()}, ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
   };
 
   // Screens
@@ -89,11 +115,11 @@ export default function Home() {
       <h1 className="text-3xl font-semibold">Welcome to LxD budget app</h1>
       <InputNumeric value={total} onChange={setTotal} placeholder="0.00" />
       <label>Select days (1-40):</label>
-      <select value={days} onChange={e => setDays(Number(e.target.value))} className="w-full p-4 border rounded-2xl">
+      <select value={initialDays} onChange={e => setInitialDays(Number(e.target.value))} className="w-full p-4 border rounded-2xl">
         {Array.from({length:40},(_,i)=><option key={i} value={i+1}>{i+1}</option>)}
       </select>
-      <p>Days left: {days}</p>
-      <p>Money per day: {(parseFloat(total||0)/days).toFixed(2)}</p>
+      <p>Days: {initialDays}</p>
+      <p>Initial daily: {(parseFloat(total||0)/initialDays).toFixed(2)}</p>
       <div className="flex space-x-4">
         <button onClick={() => setStep('auth')} className="flex-1 bg-gray-300 p-3 rounded-2xl">BACK</button>
         <button onClick={saveIntro} className="flex-1 bg-blue-600 text-white p-3 rounded-2xl">SAVE</button>
@@ -104,8 +130,8 @@ export default function Home() {
   if (step === 'daily') return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-semibold">FOR TODAY YOU HAVE: <span className={remDaily<0||todayOver?'text-red-600':''}>{Math.max(remDaily,0).toFixed(2)}</span></h1>
-        <span className="text-sm">You have {remTotal.toFixed(2)} for {days} days</span>
+        <h1 className="text-2xl font-semibold">FOR TODAY YOU HAVE: <span className={parseFloat(remDaily)<0?'text-red-600':''}>{(parseFloat(remDaily)-parseFloat(spendInput||0)).toFixed(2)}</span></h1>
+        <span className="text-sm">Remaining {remTotal} over {daysLeft} days</span>
       </div>
       <InputNumeric value={spendInput} onChange={setSpendInput} placeholder="0.00" />
       <button onClick={handleSpend} className="mt-2 bg-green-600 text-white p-2 rounded-2xl">OK</button>
@@ -120,9 +146,7 @@ export default function Home() {
     <div className="p-8">
       <h1 className="text-2xl font-semibold mb-4">History (last 72h)</h1>
       <ul className="list-disc pl-5 space-y-2">
-        {history.map((e,i)=>(
-          <li key={i}>{e.amount.toFixed(2)} ({fmt(e.timestamp)})</li>
-        ))}
+        {history.map((e,i)=>(<li key={i}>{parseFloat(e.amount).toFixed(2)} ({fmt(e.timestamp)})</li>))}
       </ul>
       <button onClick={() => setStep('daily')} className="mt-4 bg-gray-300 p-3 rounded-2xl">BACK</button>
     </div>
