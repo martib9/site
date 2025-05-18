@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  basePath: '/budget',
-  assetPrefix: '/budget/',
+  reactStrictMode: true
 };
-
 module.exports = nextConfig;
