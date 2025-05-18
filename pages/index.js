@@ -5,7 +5,14 @@ import { db } from '../firebase';
 import { doc, setDoc, updateDoc } from 'firebase/firestore';
 
 export default function Home() {
-  const [pin, setPin] = useState(localStorage.getItem('budget_pin') || '');
+  const [pin, setPin] = useState('');
+
+useEffect(() => {
+  const savedPin = typeof window !== 'undefined' ? localStorage.getItem('budget_pin') : '';
+  if (savedPin) {
+    setPin(savedPin);
+  }
+}, []);
   const [step, setStep] = useState(pin ? 'daily' : 'auth');
   const budget = useBudget(pin);
   const [spendInput, setSpendInput] = useState('');
