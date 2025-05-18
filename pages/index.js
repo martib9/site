@@ -41,6 +41,14 @@ export default function Home() {
   const remTotal = (parseFloat(total || 0) - used).toFixed(2);
   const remDaily = daysLeft > 0 ? (remTotal / daysLeft).toFixed(2) : '0.00';
 
+  // Sum of today’s spends
+  const sumToday = history.reduce((sum, e) => {
+    const d = new Date(e.timestamp);
+    return d.toDateString() === new Date().toDateString() ? sum + e.amount : sum;
+  }, 0);
+  // Today's remaining budget
+  const todayRemaining = (parseFloat(remDaily) - sumToday).toFixed(2);
+
   const handleAuth = () => {
     if (pin === '6699') {
       setStep('intro');
@@ -68,6 +76,7 @@ export default function Home() {
     const newHist = [...history, { amount: amt, timestamp: new Date().toISOString() }];
     const refDoc = doc(db, 'budgets', pin);
     await updateDoc(refDoc, { history: newHist });
+    setHistory(newHist);
     setSpendInput('');
     if (amt > parseFloat(remDaily)) {
       const newDaily = ((parseFloat(remTotal) - amt) / daysLeft).toFixed(2);
@@ -127,8 +136,8 @@ export default function Home() {
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-semibold">
             FOR TODAY YOU HAVE: {' '}
-            <span className={parseFloat(remDaily) < 0 ? 'text-red-600' : ''}>
-              {(parseFloat(remDaily) - parseFloat(spendInput || 0)).toFixed(2)}
+            <span className={parseFloat(todayRemaining) < 0 ? 'text-red-600' : ''}>
+              {todayRemaining}
             </span>
           </h1>
           <span className="text-sm">Remaining {remTotal} over {daysLeft} days</span>
