@@ -52,6 +52,7 @@ export default function Home() {
   const handleAuth = async () => {
     if (pin === '6699') {
       const refDoc = doc(db, 'budgets', pin);
+      // 1. Immediately fetch existing budget data
       const snap = await getDoc(refDoc);
       if (snap.exists()) {
         const data = snap.data();
@@ -61,6 +62,7 @@ export default function Home() {
         setHistory(data.history || []);
         setStep('daily');
       } else {
+        // No existing doc: first time
         setStep('intro');
       }
     } else {
