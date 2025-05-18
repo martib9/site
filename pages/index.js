@@ -12,6 +12,16 @@ export default function Home() {
   const [startDate, setStartDate] = useState(null);
   const [history, setHistory] = useState([]);
   const [spendInput, setSpendInput] = useState('');
+  const [overflowMessage, setOverflowMessage] = useState('');
+
+  // On mount, check for saved PIN and auto-login
+  useEffect(() => {
+    const savedPin = localStorage.getItem('budget_pin');
+    if (savedPin) {
+      setPin(savedPin);
+      handleAuth(); // auto-fetch
+    }
+  }, []);
 
   // Sync Firestore on PIN entry
   useEffect(() => {
@@ -47,10 +57,13 @@ export default function Home() {
     return d.toDateString() === new Date().toDateString() ? sum + e.amount : sum;
   }, 0);
   // Today's remaining budget
-  const todayRemaining = (parseFloat(remDaily) - sumToday).toFixed(2);
+  const numTodayRem = parseFloat(remDaily) - sumToday;
+  const displayToday = (numTodayRem < 0 ? 0 : numTodayRem).toFixed(2);
 
-  const handleAuth = () => {
+  const handleAuth = async () => {
     if (pin === '6699') {
+      // Persist PIN for reloads
+      localStorage.setItem('budget_pin', pin);
       setStep('intro');
     } else {
       alert('Invalid PIN');
@@ -80,7 +93,9 @@ export default function Home() {
     setSpendInput('');
     if (amt > parseFloat(remDaily)) {
       const newDaily = ((parseFloat(remTotal) - amt) / daysLeft).toFixed(2);
-      alert(`You spent all money for today! New daily budget is ${newDaily}`);
+      setOverflowMessage(`You spent all money for today! New daily budget is ${newDaily}`);
+    } else {
+      setOverflowMessage('');
     }
   };
 
@@ -136,14 +151,19 @@ export default function Home() {
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-semibold">
             FOR TODAY YOU HAVE: {' '}
-            <span className={parseFloat(todayRemaining) < 0 ? 'text-red-600' : ''}>
-              {todayRemaining}
+            <span className={numTodayRem < 0 ? 'text-red-600' : ''}>
+              {displayToday}
             </span>
           </h1>
           <span className="text-sm">Remaining {remTotal} over {daysLeft} days</span>
         </div>
         <InputNumeric value={spendInput} onChange={setSpendInput} placeholder="0.00" />
-        <button onClick={handleSpend} className="mt-2 bg-green-600 text-white p-2 rounded-2xl">OK</button>
+        <button onClick={handleSpend} className="mt-2 bg-green-600 text-white p-2 rounded-2xl w-full">OK</button>
+        {overflowMessage && (
+          <div className="text-red-600 mt-2">
+            {overflowMessage}
+          </div>
+        )}
         <div className="fixed bottom-0 left-0 right-0 flex justify-between p-4 bg-white">
           <button onClick={() => setStep('intro')} className="bg-gray-300 p-3 rounded-2xl">EDIT</button>
           <button onClick={() => setStep('history')} className="bg-gray-300 p-3 rounded-2xl">HISTORY</button>
@@ -167,4 +187,20 @@ export default function Home() {
   }
 
   return null;
+}
+// File: pages/_app.js
+import Head from 'next/head';
+
+export default function MyApp({ Component, pageProps }) {
+  return (
+    <div className="min-h-screen bg-black text-white flex justify-center">
+      <Head>
+        <title>LxD Budget App</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
+      <div className="w-full max-w-sm">
+        <Component {...pageProps} />
+      </div>
+    </div>
+  );
 }
