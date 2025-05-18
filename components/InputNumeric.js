@@ -8,7 +8,7 @@ export default function InputNumeric({ value, onChange, placeholder }) {
       value={value}
       onChange={e => onChange(e.target.value)}
       placeholder={placeholder}
-      className="border rounded-2xl p-4 text-xl w-full"
+      className="w-full p-4 text-xl border rounded-2xl"
     />
   );
 }
