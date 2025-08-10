@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LxD 5 Years In A Nutshell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --line:#000; --dot:#fff; --popup:#fff;
+    --m-lineX:34%; --m-lineThickness:4px; --m-lineHalf: calc(var(--m-lineThickness)/2);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Press Start 2P', monospace; color:#000;
+    background:linear-gradient(135deg,#ff3b3b 0%,#ff8a00 16%,#ffe600 32%,#34d058 48%,#00d0ff 64%,#0061ff 80%,#7a00ff 100%) fixed;
+    background-size:cover; overflow-x:hidden;
+  }
+  header{
+    position:sticky; top:0; z-index:3000;
+    background:rgba(255,255,255,.92); backdrop-filter:blur(3px);
+    padding:22px 24px; border-bottom:4px solid #000;
+    display:flex; align-items:center; justify-content:center; text-align:center;
+  }
+  header.mobile-hidden{display:none}
+  header h1{font-size:20px; line-height:1.15}
+  .stage{position:relative;height:70vh;overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth}
+  .track{position:relative;height:100%;min-width:max-content;padding:0 10vw;display:flex;align-items:center}
+  .centerline{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:4px;background:var(--line)}
+  .ticks{position:relative;display:flex;gap:160px;align-items:center;width:max-content;margin:0 auto}
+  .tick{position:relative;display:flex;flex-direction:column;align-items:center;min-width:120px}
+  .tick .dot{position:absolute;top:50%;transform:translateY(-50%);width:18px;height:18px;border-radius:50%;background:var(--dot);border:4px solid var(--line);z-index:1;cursor:pointer}
+  .tick .label{font-size:12px;text-decoration:underline;text-underline-offset:4px;cursor:pointer;white-space:nowrap}
+  .tick.above .label{order:-1;margin-bottom:64px}
+  .tick.below .label{margin-top:64px}
+  .popup{position:absolute;width:320px;background:var(--popup);border:4px solid #000;border-radius:6px;padding:16px;opacity:0;pointer-events:none;transform:translateY(0);transition:opacity .25s ease,transform .25s ease;box-shadow:6px 6px 0 #000;z-index:2000}
+  .popup.visible{opacity:1;pointer-events:auto}
+  .tick.above .popup{bottom:36px;transform:translateY(8px)}
+  .tick.above .popup.visible{transform:translateY(0)}
+  .tick.below .popup{top:36px;transform:translateY(-8px)}
+  .tick.below .popup.visible{transform:translateY(0)}
+  .popup-title{font-size:11px;margin-bottom:8px}
+  .popup img{width:100%;display:block;border:4px solid #000;margin:8px 0}
+  .close{position:absolute;top:6px;right:8px;background:none;border:none;font-family:inherit;font-size:22px;font-weight:700;cursor:pointer}
+  body.popup-open{overflow:hidden}
+  #toStartBtn{position:fixed;right:20px;bottom:20px;z-index:2500;width:44px;height:44px;background:#fff;border:4px solid #000;font-family:'Press Start 2P',monospace;font-size:18px;line-height:36px;cursor:pointer;box-shadow:4px 4px 0 #000}
+  #toStartBtn.hidden{display:none}
+  @media (max-width:768px){
+    .stage{height:auto;overflow-x:hidden;overflow-y:visible}
+    .track{flex-direction:column;align-items:stretch;padding:28px 0 44px;min-width:100%}
+    .centerline{left:var(--m-lineX);right:auto;transform:none;width:var(--m-lineThickness);height:100%;top:0}
+    .ticks{flex-direction:column;gap:200px;align-items:stretch;width:100%}
+    .tick{flex-direction:row;align-items:center;min-height:56px;position:relative;width:100%}
+    .tick .dot{left:calc(var(--m-lineX) + var(--m-lineHalf));top:50%;transform:translate(-50%,-50%)}
+    .tick .label{white-space:nowrap;line-height:1;display:block;max-width:calc(100% - var(--m-lineX) - 40px);text-align:left;margin-left:calc(var(--m-lineX) + 20px);padding-left:10px}
+    .popup{position:fixed;inset:0;width:auto;height:auto;border-radius:0;border-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;transform:none;padding:24px;background:#fff;box-shadow:none}
+  }
+  @media (max-width:560px){
+    :root{ --m-lineX:32%; }
+    .tick .label{max-width:calc(100% - var(--m-lineX) - 30px); margin-left:calc(var(--m-lineX) + 15px)}
+  }
+</style>
+</head>
+<body>
+<header><h1>LxD 5 Years in a nutshell</h1></header>
+<button id="toStartBtn" title="Go to beginning" aria-label="Go to beginning">←</button>
+<section class="stage" id="stage">
+  <div class="track">
+    <div class="centerline"></div>
+    <div class="ticks" id="ticks"></div>
+  </div>
+</section>
+<script>
+(function(){
+  const data=[{m:7,y:2016},{m:8,y:2016},{m:9,y:2018},{m:5,y:2019},{m:1,y:2020},{m:3,y:2020},{m:5,y:2020},{m:6,y:2020},{m:8,y:2020},{m:9,y:2020},{m:10,y:2020},{m:1,y:2021},{m:6,y:2021},{m:12,y:2021},{m:3,y:2022},{m:6,y:2022},{m:8,y:2022},{m:9,y:2022},{m:12,y:2022},{m:4,y:2023},{m:5,y:2023},{m:11,y:2023},{m:2,y:2024},{m:6,y:2024},{m:10,y:2024},{m:1,y:2025},{m:3,y:2025},{m:6,y:2025},{m:8,y:2025}].sort((a,b)=>a.y-b.y||a.m-b.m);
+  const monthName=m=>new Date(2000,m-1,1).toLocaleString('en-US',{month:'long'});
+  const ticksEl=document.getElementById('ticks');
+  const headerEl=document.querySelector('header');
+  const toStartBtn=document.getElementById('toStartBtn');
+  const stageEl=document.getElementById('stage');
+  let openPopup=null;
+  const isMobile=()=>window.matchMedia('(max-width:768px)').matches;
+  function build(){
+    ticksEl.innerHTML='';
+    const mobile=isMobile();
+    toStartBtn.textContent = mobile ? '↑' : '←';
+    data.forEach((d,i)=>{
+      const tick=document.createElement('div');
+      tick.className = 'tick ' + (mobile ? 'right' : (i%2===0?'below':'above'));
+      const dot=document.createElement('div'); dot.className='dot';
+      dot.setAttribute('role','button'); dot.setAttribute('aria-label',`${monthName(d.m)}, ${d.y}`);
+      const label=document.createElement('div'); label.className='label';
+      label.textContent=`${monthName(d.m)}, ${d.y}`;
+      const popup=document.createElement('div'); popup.className='popup';
+      const title=document.createElement('div'); title.className='popup-title'; title.textContent=`${monthName(d.m)}, ${d.y}`;
+      const img=document.createElement('img'); img.alt=`${monthName(d.m)} ${d.y}`; img.src=`https://via.placeholder.com/640x360?text=${encodeURIComponent(monthName(d.m)+' '+d.y)}`;
+      const close=document.createElement('button'); close.className='close'; close.innerHTML='&times;';
+      popup.appendChild(title); popup.appendChild(img); popup.appendChild(close);
+      const open=()=>{
+        if(openPopup&&openPopup!==popup){ closePopup(openPopup); }
+        popup.classList.add('visible'); openPopup=popup;
+        document.body.classList.add('popup-open');
+        if (isMobile()) { headerEl.classList.add('mobile-hidden'); toStartBtn.classList.add('hidden'); }
+      };
+      const closePopup=p=>{
+        p.classList.remove('visible');
+        if(openPopup===p) openPopup=null;
+        document.body.classList.remove('popup-open');
+        headerEl.classList.remove('mobile-hidden'); toStartBtn.classList.remove('hidden');
+      };
+      dot.addEventListener('click',open);
+      label.addEventListener('click',open);
+      close.addEventListener('click',()=>closePopup(popup));
+      document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&openPopup){ closePopup(openPopup); }});
+      tick.appendChild(dot); tick.appendChild(label); tick.appendChild(popup);
+      ticksEl.appendChild(tick);
+    });
+  }
+  document.addEventListener('click',e=>{
+    if(openPopup && !openPopup.contains(e.target) && !e.target.classList.contains('dot') && !e.target.classList.contains('label')){
+      openPopup.classList.remove('visible'); openPopup=null;
+      document.body.classList.remove('popup-open');
+      headerEl.classList.remove('mobile-hidden'); toStartBtn.classList.remove('hidden');
+    }
+  });
+  toStartBtn.addEventListener('click',()=>{
+    if(isMobile()){ window.scrollTo({top:0,behavior:'smooth'}); }
+    else { stageEl.scrollTo({left:0,behavior:'smooth'}); }
+  });
+  build();
+  window.addEventListener('resize', build);
+})();
+</script>
+</body>
+</html>
