@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>LxD 5 Years In A Nutshell</title>
+<title>LxD 5 Years in a nutshell</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -75,7 +75,38 @@
 </section>
 <script>
 (function(){
-  const data=[{m:7,y:2016},{m:8,y:2016},{m:9,y:2018},{m:5,y:2019},{m:1,y:2020},{m:3,y:2020},{m:5,y:2020},{m:6,y:2020},{m:8,y:2020},{m:9,y:2020},{m:10,y:2020},{m:1,y:2021},{m:6,y:2021},{m:12,y:2021},{m:3,y:2022},{m:6,y:2022},{m:8,y:2022},{m:9,y:2022},{m:12,y:2022},{m:4,y:2023},{m:5,y:2023},{m:11,y:2023},{m:2,y:2024},{m:6,y:2024},{m:10,y:2024},{m:1,y:2025},{m:3,y:2025},{m:6,y:2025},{m:8,y:2025}].sort((a,b)=>a.y-b.y||a.m-b.m);
+  const data=[
+    {m:7,y:2016,title:'TODO: Your popup title for July 2016',img:'/images/2016-07.jpg'},
+    {m:8,y:2016,title:'TODO: Your popup title for August 2016',img:'/images/2016-08.jpg'},
+    {m:9,y:2018,title:'TODO: Your popup title for September 2018',img:'/images/2018-09.jpg'},
+    {m:5,y:2019,title:'TODO: Your popup title for May 2019',img:'/images/2019-05.jpg'},
+    {m:1,y:2020,title:'TODO: Your popup title for January 2020',img:'/images/2020-01.jpg'},
+    {m:3,y:2020,title:'TODO: Your popup title for March 2020',img:'/images/2020-03.jpg'},
+    {m:5,y:2020,title:'TODO: Your popup title for May 2020',img:'/images/2020-05.jpg'},
+    {m:6,y:2020,title:'TODO: Your popup title for June 2020',img:'/images/2020-06.jpg'},
+    {m:8,y:2020,title:'TODO: Your popup title for August 2020',img:'/images/2020-08.jpg'},
+    {m:9,y:2020,title:'TODO: Your popup title for September 2020',img:'/images/2020-09.jpg'},
+    {m:10,y:2020,title:'TODO: Your popup title for October 2020',img:'/images/2020-10.jpg'},
+    {m:1,y:2021,title:'TODO: Your popup title for January 2021',img:'/images/2021-01.jpg'},
+    {m:6,y:2021,title:'TODO: Your popup title for June 2021',img:'/images/2021-06.jpg'},
+    {m:12,y:2021,title:'TODO: Your popup title for December 2021',img:'/images/2021-12.jpg'},
+    {m:3,y:2022,title:'TODO: Your popup title for March 2022',img:'/images/2022-03.jpg'},
+    {m:6,y:2022,title:'TODO: Your popup title for June 2022',img:'/images/2022-06.jpg'},
+    {m:8,y:2022,title:'TODO: Your popup title for August 2022',img:'/images/2022-08.jpg'},
+    {m:9,y:2022,title:'TODO: Your popup title for September 2022',img:'/images/2022-09.jpg'},
+    {m:12,y:2022,title:'TODO: Your popup title for December 2022',img:'/images/2022-12.jpg'},
+    {m:4,y:2023,title:'TODO: Your popup title for April 2023',img:'/images/2023-04.jpg'},
+    {m:5,y:2023,title:'TODO: Your popup title for May 2023',img:'/images/2023-05.jpg'},
+    {m:11,y:2023,title:'TODO: Your popup title for November 2023',img:'/images/2023-11.jpg'},
+    {m:2,y:2024,title:'TODO: Your popup title for February 2024',img:'/images/2024-02.jpg'},
+    {m:6,y:2024,title:'TODO: Your popup title for June 2024',img:'/images/2024-06.jpg'},
+    {m:10,y:2024,title:'TODO: Your popup title for October 2024',img:'/images/2024-10.jpg'},
+    {m:1,y:2025,title:'TODO: Your popup title for January 2025',img:'/images/2025-01.jpg'},
+    {m:3,y:2025,title:'TODO: Your popup title for March 2025',img:'/images/2025-03.jpg'},
+    {m:6,y:2025,title:'TODO: Your popup title for June 2025',img:'/images/2025-06.jpg'},
+    {m:8,y:2025,title:'TODO: Your popup title for August 2025',img:'/images/2025-08.jpg'}
+  ].sort((a,b)=>a.y-b.y||a.m-b.m);
+
   const monthName=m=>new Date(2000,m-1,1).toLocaleString('en-US',{month:'long'});
   const ticksEl=document.getElementById('ticks');
   const headerEl=document.querySelector('header');
@@ -83,22 +114,33 @@
   const stageEl=document.getElementById('stage');
   let openPopup=null;
   const isMobile=()=>window.matchMedia('(max-width:768px)').matches;
+
   function build(){
     ticksEl.innerHTML='';
     const mobile=isMobile();
     toStartBtn.textContent = mobile ? '↑' : '←';
-    data.forEach((d,i)=>{
+
+    data.forEach((item,i)=>{
       const tick=document.createElement('div');
       tick.className = 'tick ' + (mobile ? 'right' : (i%2===0?'below':'above'));
+
       const dot=document.createElement('div'); dot.className='dot';
-      dot.setAttribute('role','button'); dot.setAttribute('aria-label',`${monthName(d.m)}, ${d.y}`);
+      dot.setAttribute('role','button'); dot.setAttribute('aria-label', `${monthName(item.m)}, ${item.y}`);
+
       const label=document.createElement('div'); label.className='label';
-      label.textContent=`${monthName(d.m)}, ${d.y}`;
+      label.textContent=`${monthName(item.m)}, ${item.y}`;
+
       const popup=document.createElement('div'); popup.className='popup';
-      const title=document.createElement('div'); title.className='popup-title'; title.textContent=`${monthName(d.m)}, ${d.y}`;
-      const img=document.createElement('img'); img.alt=`${monthName(d.m)} ${d.y}`; img.src=`https://via.placeholder.com/640x360?text=${encodeURIComponent(monthName(d.m)+' '+d.y)}`;
+      const title=document.createElement('div'); title.className='popup-title';
+      title.textContent = item.title || `${monthName(item.m)}, ${item.y}`;
+
+      const img=document.createElement('img'); img.alt=`${monthName(item.m)} ${item.y}`;
+      img.src = item.img || `https://via.placeholder.com/640x360?text=${encodeURIComponent(monthName(item.m)+' '+item.y)}`;
+
       const close=document.createElement('button'); close.className='close'; close.innerHTML='&times;';
+
       popup.appendChild(title); popup.appendChild(img); popup.appendChild(close);
+
       const open=()=>{
         if(openPopup&&openPopup!==popup){ closePopup(openPopup); }
         popup.classList.add('visible'); openPopup=popup;
@@ -111,14 +153,17 @@
         document.body.classList.remove('popup-open');
         headerEl.classList.remove('mobile-hidden'); toStartBtn.classList.remove('hidden');
       };
+
       dot.addEventListener('click',open);
       label.addEventListener('click',open);
       close.addEventListener('click',()=>closePopup(popup));
       document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&openPopup){ closePopup(openPopup); }});
+
       tick.appendChild(dot); tick.appendChild(label); tick.appendChild(popup);
       ticksEl.appendChild(tick);
     });
   }
+
   document.addEventListener('click',e=>{
     if(openPopup && !openPopup.contains(e.target) && !e.target.classList.contains('dot') && !e.target.classList.contains('label')){
       openPopup.classList.remove('visible'); openPopup=null;
@@ -126,10 +171,12 @@
       headerEl.classList.remove('mobile-hidden'); toStartBtn.classList.remove('hidden');
     }
   });
+
   toStartBtn.addEventListener('click',()=>{
     if(isMobile()){ window.scrollTo({top:0,behavior:'smooth'}); }
     else { stageEl.scrollTo({left:0,behavior:'smooth'}); }
   });
+
   build();
   window.addEventListener('resize', build);
 })();
