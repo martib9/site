@@ -1,5 +1,6 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/" }
+    { "source": "/budget", "destination": "https://fam-budget-pal.lovable.app/budget" },
+    { "source": "/budget/:path*", "destination": "https://fam-budget-pal.lovable.app/budget/:path*" }
   ]
 }
