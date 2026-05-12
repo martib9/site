@@ -1,6 +1,6 @@
 {
-  "rewrites": [
-    { "source": "/budget", "destination": "https://fam-budget-pal.lovable.app/budget" },
-    { "source": "/budget/:path*", "destination": "https://fam-budget-pal.lovable.app/budget/:path*" }
+  "redirects": [
+    { "source": "/budget", "destination": "https://budget.martib.app", "permanent": false },
+    { "source": "/budget/:path*", "destination": "https://budget.martib.app/:path*", "permanent": false }
   ]
 }
