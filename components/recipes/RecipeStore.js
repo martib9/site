@@ -1,11 +1,24 @@
 import { useEffect, useMemo, useState } from 'react';
-import { INITIAL_WEEK_PLAN, MEAL_TYPES, SECTION_ORDER, SEED_RECIPES, STORAGE_KEYS } from '../../data/recipes';
+import { INITIAL_WEEK_PLAN, MEAL_TYPES, SEED_RECIPES, STORAGE_KEYS } from '../../data/recipes';
 
-const customSectionByMeal = {
-  breakfast: 'Added Recipes: Breakfast',
-  lunch: 'Added Recipes: Lunch',
-  dinner: 'Added Recipes: Dinner',
+export const COOKED_FILTERS = [
+  { id: 'all', label: 'Show all' },
+  { id: 'uncooked', label: 'Show uncooked' },
+  { id: 'cooked', label: 'Show all cooked' },
+];
+
+const mealLabels = Object.fromEntries(MEAL_TYPES.map((meal) => [meal.id, meal.label]));
+const extraStorageKeys = {
+  recipeEdits: 'martib_recipes_edits',
+  deletedRecipes: 'martib_recipes_deleted',
 };
+
+const tagRules = [
+  { tag: 'soup', words: ['soup', 'суп', 'рассольник', 'матбуха', 'lohikeitto'] },
+  { tag: 'salad', words: ['salad', 'салат'] },
+  { tag: 'fish', words: ['fish', 'salmon', 'shrimp', 'tuna', 'seafood', 'рыб', 'лосос', 'семг', 'кревет', 'тунец', 'дорада', 'сардин'] },
+  { tag: 'meat', words: ['chicken', 'beef', 'turkey', 'meat', 'shawarma', 'kebab', 'котлет', 'куриц', 'индей', 'говяд', 'мяс', 'фарш', 'кебаб', 'гуляш', 'тефтел', 'митбол', 'бефстроганов'] },
+];
 
 const fallbackWeekPlan = () => ({
   breakfast: [...INITIAL_WEEK_PLAN.breakfast],
@@ -53,6 +66,28 @@ const makeCustomId = (name) => {
   return `custom-${slug}-${Date.now()}`;
 };
 
+const customTimestamp = (recipe) => Number(String(recipe.id).split('-').pop()) || 0;
+
+const normalizeTags = (tags) => {
+  const rawTags = Array.isArray(tags) ? tags : String(tags || '').split(',');
+  return [...new Set(rawTags
+    .map((tag) => tag.trim().replace(/^#/, '').toLowerCase())
+    .filter(Boolean))];
+};
+
+export function inferRecipeTags(recipe) {
+  const haystack = `${recipe.name || ''} ${recipe.section || ''}`.toLowerCase();
+  const tags = tagRules
+    .filter((rule) => rule.words.some((word) => haystack.includes(word)))
+    .map((rule) => rule.tag);
+
+  return normalizeTags(tags);
+}
+
+export function getRecipeTags(recipe) {
+  return normalizeTags([...(inferRecipeTags(recipe)), ...(recipe.tags || [])]);
+}
+
 export function validateRecipeLink(value) {
   return Boolean(normalizeRecipeLink(value));
 }
@@ -83,17 +118,50 @@ export function getDomain(url) {
 export function useRecipeStore() {
   const [hydrated, setHydrated] = useState(false);
   const [customRecipes, setCustomRecipes] = useState([]);
+  const [recipeEdits, setRecipeEdits] = useState({});
+  const [deletedRecipeIds, setDeletedRecipeIds] = useState([]);
   const [cookedOverrides, setCookedOverrides] = useState({});
   const [weekPlan, setWeekPlan] = useState(fallbackWeekPlan);
 
   useEffect(() => {
     setCustomRecipes(readJson(STORAGE_KEYS.customRecipes, []));
+    setRecipeEdits(readJson(extraStorageKeys.recipeEdits, {}));
+    setDeletedRecipeIds(readJson(extraStorageKeys.deletedRecipes, []));
     setCookedOverrides(readJson(STORAGE_KEYS.cookedRecipes, {}));
     setWeekPlan(normalizeWeekPlan(readJson(STORAGE_KEYS.weekPlan, null)));
     setHydrated(true);
   }, []);
 
-  const recipes = useMemo(() => [...SEED_RECIPES, ...customRecipes], [customRecipes]);
+  const recipes = useMemo(() => {
+    const deletedSet = new Set(deletedRecipeIds);
+    const normalizedSeeds = SEED_RECIPES
+      .filter((recipe) => !deletedSet.has(recipe.id))
+      .map((recipe) => {
+        const editedRecipe = { ...recipe, ...(recipeEdits[recipe.id] || {}) };
+
+        return {
+          ...editedRecipe,
+          mealType: editedRecipe.mealType || editedRecipe.defaultMealType,
+          defaultMealType: editedRecipe.mealType || editedRecipe.defaultMealType,
+          tags: getRecipeTags(editedRecipe),
+          isCustom: false,
+          isNew: false,
+        };
+      });
+
+    const normalizedCustom = customRecipes.map((recipe) => ({
+      ...recipe,
+      mealType: recipe.mealType || recipe.defaultMealType || 'lunch',
+      defaultMealType: recipe.mealType || recipe.defaultMealType || 'lunch',
+      section: recipe.section || mealLabels[recipe.mealType || recipe.defaultMealType || 'lunch'],
+      tags: getRecipeTags(recipe),
+      cooked: Boolean(recipe.cooked),
+      isCustom: true,
+      isNew: true,
+    }));
+
+    return [...normalizedSeeds, ...normalizedCustom];
+  }, [customRecipes, deletedRecipeIds, recipeEdits]);
 
   const recipesById = useMemo(() => {
     return Object.fromEntries(recipes.map((recipe) => [recipe.id, recipe]));
@@ -117,23 +185,107 @@ export function useRecipeStore() {
     });
   };
 
-  const addCustomRecipe = ({ name, mealType, url }) => {
+  const persistCustomRecipes = (updater) => {
+    setCustomRecipes((current) => {
+      const next = updater(current);
+      writeJson(STORAGE_KEYS.customRecipes, next);
+      return next;
+    });
+  };
+
+  const persistRecipeEdits = (updater) => {
+    setRecipeEdits((current) => {
+      const next = updater(current);
+      writeJson(extraStorageKeys.recipeEdits, next);
+      return next;
+    });
+  };
+
+  const persistDeletedRecipes = (updater) => {
+    setDeletedRecipeIds((current) => {
+      const next = updater(current);
+      writeJson(extraStorageKeys.deletedRecipes, next);
+      return next;
+    });
+  };
+
+  const addCustomRecipe = ({ name, mealType, url, tags = [] }) => {
     const recipe = {
       id: makeCustomId(name),
       name: name.trim(),
       url: url.trim(),
-      section: customSectionByMeal[mealType],
+      section: mealLabels[mealType],
+      mealType,
       defaultMealType: mealType,
+      tags: normalizeTags(tags),
       cooked: false,
+      isNew: true,
     };
 
-    setCustomRecipes((current) => {
-      const next = [...current, recipe];
-      writeJson(STORAGE_KEYS.customRecipes, next);
-      return next;
-    });
+    persistCustomRecipes((current) => [recipe, ...current]);
 
     return recipe;
+  };
+
+  const updateRecipe = (recipeId, changes) => {
+    const normalizedUrl = normalizeRecipeLink(changes.url || '');
+    if (!normalizedUrl) return null;
+
+    const recipe = recipesById[recipeId];
+    if (!recipe) return null;
+
+    const nextRecipe = {
+      name: changes.name.trim(),
+      url: normalizedUrl,
+      mealType: changes.mealType,
+      defaultMealType: changes.mealType,
+      section: mealLabels[changes.mealType],
+      tags: normalizeTags(changes.tags),
+    };
+
+    if (recipe.isCustom) {
+      persistCustomRecipes((current) => current.map((customRecipe) => (
+        customRecipe.id === recipeId ? { ...customRecipe, ...nextRecipe } : customRecipe
+      )));
+    } else {
+      persistRecipeEdits((current) => ({
+        ...current,
+        [recipeId]: nextRecipe,
+      }));
+    }
+
+    return nextRecipe;
+  };
+
+  const deleteRecipe = (recipeId) => {
+    const recipe = recipesById[recipeId];
+    if (!recipe) return;
+
+    if (recipe.isCustom) {
+      persistCustomRecipes((current) => current.filter((customRecipe) => customRecipe.id !== recipeId));
+    } else {
+      persistDeletedRecipes((current) => [...new Set([...current, recipeId])]);
+      persistRecipeEdits((current) => {
+        const next = { ...current };
+        delete next[recipeId];
+        return next;
+      });
+    }
+
+    setWeekPlan((current) => {
+      const next = normalizeWeekPlan(current);
+      MEAL_TYPES.forEach(({ id }) => {
+        next[id] = next[id].filter((plannedId) => plannedId !== recipeId);
+      });
+      writeJson(STORAGE_KEYS.weekPlan, next);
+      return next;
+    });
+    setCookedOverrides((current) => {
+      const next = { ...current };
+      delete next[recipeId];
+      writeJson(STORAGE_KEYS.cookedRecipes, next);
+      return next;
+    });
   };
 
   const addToWeek = (recipeId, mealType) => {
@@ -157,19 +309,17 @@ export function useRecipeStore() {
   };
 
   const groupedRecipes = useMemo(() => {
-    const groups = new Map();
-    recipes.forEach((recipe) => {
-      if (!groups.has(recipe.section)) groups.set(recipe.section, []);
-      groups.get(recipe.section).push(recipe);
-    });
-
-    const customSections = [...groups.keys()].filter((section) => !SECTION_ORDER.includes(section));
-    return [...SECTION_ORDER, ...customSections]
-      .filter((section) => groups.has(section))
-      .map((section) => ({
-        section,
-        recipes: groups.get(section),
-      }));
+    return MEAL_TYPES.map((meal) => ({
+      id: meal.id,
+      section: meal.label,
+      recipes: recipes
+        .filter((recipe) => recipe.defaultMealType === meal.id || recipe.mealType === meal.id)
+        .sort((a, b) => (
+          Number(b.isCustom) - Number(a.isCustom) ||
+          customTimestamp(b) - customTimestamp(a) ||
+          a.name.localeCompare(b.name)
+        )),
+    }));
   }, [recipes]);
 
   return {
@@ -181,6 +331,8 @@ export function useRecipeStore() {
     getCooked,
     setCooked,
     addCustomRecipe,
+    updateRecipe,
+    deleteRecipe,
     addToWeek,
     removeFromWeek,
   };
