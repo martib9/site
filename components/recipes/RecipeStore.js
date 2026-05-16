@@ -21,6 +21,24 @@ const tagRules = [
   { tag: 'salad', words: ['salad', 'салат'] },
   { tag: 'fish', words: ['fish', 'salmon', 'shrimp', 'tuna', 'seafood', 'рыб', 'лосос', 'семг', 'кревет', 'тунец', 'дорада', 'сардин'] },
   { tag: 'meat', words: ['chicken', 'beef', 'turkey', 'meat', 'shawarma', 'kebab', 'котлет', 'куриц', 'индей', 'говяд', 'мяс', 'фарш', 'кебаб', 'гуляш', 'тефтел', 'митбол', 'бефстроганов'] },
+  { tag: 'pasta', words: ['pasta', 'spaghetti', 'noodle', 'orzo', 'rice', 'паста', 'лапш', 'рис', 'орзо', 'удон'] },
+  { tag: 'breakfast', words: ['breakfast', 'egg', 'oats', 'pancake', 'завтрак', 'яйц', 'овсян', 'сырник', 'олад'] },
+  { tag: 'dessert', words: ['dessert', 'crumble', 'cookie', 'cake', 'brulee', 'дессерт', 'десерт', 'печенье', 'пирог', 'булоч', 'муравейник'] },
+];
+
+const tagEmojiRules = [
+  { emoji: '🐟', words: ['fish', 'seafood', 'salmon', 'tuna', 'рыб', 'лосос', 'семг', 'тунец', 'дорада'] },
+  { emoji: '🍤', words: ['shrimp', 'кревет'] },
+  { emoji: '🍲', words: ['soup', 'суп', 'stew', 'рассольник', 'lohikeitto'] },
+  { emoji: '🥗', words: ['salad', 'салат'] },
+  { emoji: '🍖', words: ['meat', 'beef', 'chicken', 'turkey', 'kebab', 'shawarma', 'мяс', 'говяд', 'куриц', 'индей', 'фарш', 'котлет', 'кебаб'] },
+  { emoji: '🍝', words: ['pasta', 'spaghetti', 'noodle', 'orzo', 'паста', 'лапш', 'орзо', 'удон'] },
+  { emoji: '🍚', words: ['rice', 'рис'] },
+  { emoji: '🍳', words: ['breakfast', 'egg', 'завтрак', 'яйц'] },
+  { emoji: '🍰', words: ['dessert', 'cake', 'cookie', 'crumble', 'sweet', 'десерт', 'дессерт', 'печенье', 'пирог'] },
+  { emoji: '🥔', words: ['potato', 'карто'] },
+  { emoji: '🧀', words: ['cheese', 'halloumi', 'feta', 'сыр', 'халуми', 'фет'] },
+  { emoji: '⚡', words: ['quick', 'easy', 'lazy', 'быстр', 'легк', 'ленив'] },
 ];
 
 const fallbackWeekPlan = () => ({
@@ -89,6 +107,12 @@ export function inferRecipeTags(recipe) {
 
 export function getRecipeTags(recipe) {
   return normalizeTags([...(inferRecipeTags(recipe)), ...(recipe.tags || [])]);
+}
+
+export function getTagEmoji(tag) {
+  const normalizedTag = String(tag || '').toLowerCase();
+  const match = tagEmojiRules.find((rule) => rule.words.some((word) => normalizedTag.includes(word)));
+  return match?.emoji || '🏷️';
 }
 
 export function isNewRecipe(recipe) {
@@ -243,7 +267,7 @@ export function useRecipeStore() {
     const recipe = {
       id: makeCustomId(name),
       name: name.trim(),
-      url: url.trim(),
+      url: normalizeRecipeLink(url) || url.trim(),
       section: mealLabels[mealType],
       mealType,
       defaultMealType: mealType,
