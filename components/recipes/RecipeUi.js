@@ -1,50 +1,55 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MEAL_TYPES } from '../../data/recipes';
-import { getDomain, normalizeRecipeLink } from './RecipeStore';
+import { getDomain, getRecipeTags, normalizeRecipeLink } from './RecipeStore';
+
+const glassPanel = 'border border-white/55 bg-white/60 shadow-[0_18px_60px_rgba(15,23,42,0.10)] backdrop-blur-2xl';
 
 export function RecipeShell({ activePage, children, onAddRecipe }) {
   return (
-    <main className="min-h-screen bg-stone-50 text-stone-950">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-5 sm:px-6 lg:px-8">
-        <header className="flex flex-col gap-4 border-b border-stone-200 pb-5 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-sm font-medium uppercase tracking-[0.16em] text-stone-500">Recipe planner</p>
-            <h1 className="mt-1 text-3xl font-semibold tracking-normal text-stone-950 sm:text-4xl">
-              {activePage === 'box' ? 'Recipe box' : 'Plan for the week'}
-            </h1>
-          </div>
-
-          <nav className="flex flex-wrap items-center gap-2">
-            <a
-              href="/recipes"
-              className={`rounded-md px-3 py-2 text-sm font-medium ${
-                activePage === 'week' ? 'bg-stone-950 text-white' : 'border border-stone-300 bg-white text-stone-700'
-              }`}
-            >
-              Week
-            </a>
-            <a
-              href="/recipes/box"
-              className={`rounded-md px-3 py-2 text-sm font-medium ${
-                activePage === 'box' ? 'bg-stone-950 text-white' : 'border border-stone-300 bg-white text-stone-700'
-              }`}
-            >
-              Recipe Box
-            </a>
-            <button
-              type="button"
-              onClick={onAddRecipe}
-              className="rounded-md bg-emerald-700 px-3 py-2 text-sm font-medium text-white"
-            >
-              Add Recipe
-            </button>
-          </nav>
+    <main className="min-h-screen bg-[radial-gradient(circle_at_top_left,#f8fafc_0,#f0fdf4_34%,#eef2ff_68%,#fafaf9_100%)] pb-28 text-stone-950">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-5 px-4 py-5 sm:px-6 lg:px-8">
+        <header className={`${glassPanel} rounded-[28px] px-5 py-5`}>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">Recipe planner</p>
+          <h1 className="mt-1 text-3xl font-semibold tracking-normal text-stone-950 sm:text-4xl">
+            {activePage === 'box' ? 'Recipe box' : 'Plan for the week'}
+          </h1>
         </header>
 
         {children}
       </div>
+
+      <nav className="fixed inset-x-0 bottom-0 z-40 px-4 pb-4">
+        <div className={`${glassPanel} mx-auto grid max-w-md grid-cols-3 gap-2 rounded-[28px] p-2`}>
+          <BottomNavItem active={activePage === 'week'} href="/recipes" label="Week" />
+          <BottomNavItem active={activePage === 'box'} href="/recipes/box" label="Recipe Box" />
+          <button
+            type="button"
+            onClick={onAddRecipe}
+            className="rounded-[20px] px-3 py-3 text-sm font-semibold text-emerald-900"
+          >
+            Add Recipe
+          </button>
+        </div>
+      </nav>
     </main>
   );
+}
+
+function BottomNavItem({ active, href, label }) {
+  return (
+    <a
+      href={href}
+      className={`rounded-[20px] px-3 py-3 text-center text-sm font-semibold ${
+        active ? 'bg-stone-950/90 text-white shadow-lg shadow-stone-950/15' : 'text-stone-700'
+      }`}
+    >
+      {label}
+    </a>
+  );
+}
+
+export function GlassSection({ children, className = '', ...props }) {
+  return <section className={`${glassPanel} rounded-[28px] ${className}`} {...props}>{children}</section>;
 }
 
 export function Favicon({ url }) {
@@ -52,7 +57,7 @@ export function Favicon({ url }) {
   const domain = getDomain(url);
 
   if (!domain) {
-    return <span className="grid h-7 w-7 place-items-center rounded-md bg-stone-200 text-xs font-semibold text-stone-600">?</span>;
+    return <span className="grid h-8 w-8 shrink-0 place-items-center rounded-2xl bg-white/70 text-xs font-semibold text-stone-500">?</span>;
   }
 
   const directIcon = `https://${domain}/favicon.ico`;
@@ -60,7 +65,7 @@ export function Favicon({ url }) {
 
   if (fallback > 1) {
     return (
-      <span className="grid h-7 w-7 place-items-center rounded-md bg-stone-200 text-xs font-semibold uppercase text-stone-600">
+      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-2xl bg-white/70 text-xs font-semibold uppercase text-stone-600">
         {domain[0]}
       </span>
     );
@@ -70,7 +75,7 @@ export function Favicon({ url }) {
     <img
       src={fallback === 0 ? directIcon : serviceIcon}
       alt=""
-      className="h-7 w-7 rounded-md border border-stone-200 bg-white object-contain p-1"
+      className="h-8 w-8 shrink-0 rounded-2xl border border-white/70 bg-white/75 object-contain p-1"
       onError={() => setFallback((value) => value + 1)}
     />
   );
@@ -78,7 +83,7 @@ export function Favicon({ url }) {
 
 export function CookedCheckbox({ checked, onChange }) {
   return (
-    <label className="flex h-8 w-8 items-center justify-center rounded-md border border-stone-300 bg-white">
+    <label className="grid h-9 w-9 shrink-0 place-items-center rounded-2xl border border-white/80 bg-white/65 shadow-inner shadow-white/60">
       <input
         type="checkbox"
         checked={checked}
@@ -90,12 +95,23 @@ export function CookedCheckbox({ checked, onChange }) {
   );
 }
 
-export function RecipeTitleLink({ recipe }) {
+export function RecipeTitleLink({ recipe, cooked = false, showTags = true }) {
   const domain = getDomain(recipe.url);
+  const tags = getRecipeTags(recipe);
 
   return (
     <div className="min-w-0 flex-1">
-      <p className="break-words text-sm font-medium leading-5 text-stone-950">{recipe.name}</p>
+      <div className="flex flex-wrap items-center gap-2">
+        <p className={`break-words text-sm font-semibold leading-5 text-stone-950 ${cooked ? 'line-through decoration-2 opacity-55' : ''}`}>
+          {recipe.name}
+        </p>
+        {recipe.isNew && (
+          <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.16em] text-emerald-800">
+            New
+          </span>
+        )}
+      </div>
+
       {recipe.url ? (
         <a
           href={recipe.url}
@@ -108,62 +124,80 @@ export function RecipeTitleLink({ recipe }) {
       ) : (
         <p className="mt-1 text-xs text-stone-500">No link saved</p>
       )}
+
+      {showTags && tags.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-1">
+          {tags.map((tag) => (
+            <span key={tag} className="rounded-full bg-white/70 px-2 py-1 text-[11px] font-medium text-stone-600">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
-export function AddRecipeModal({ open, onClose, onSubmit }) {
+export function AddRecipeModal({ open, onClose, onSubmit, initialRecipe = null }) {
+  const isEditing = Boolean(initialRecipe);
   const [name, setName] = useState('');
   const [mealType, setMealType] = useState('lunch');
   const [url, setUrl] = useState('');
+  const [tags, setTags] = useState('');
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (!open) return;
+    setName(initialRecipe?.name || '');
+    setMealType(initialRecipe?.mealType || initialRecipe?.defaultMealType || 'lunch');
+    setUrl(initialRecipe?.url || '');
+    setTags((initialRecipe?.tags || []).join(', '));
+    setError('');
+  }, [initialRecipe, open]);
 
   if (!open) return null;
 
   const submit = (event) => {
     event.preventDefault();
     const trimmedName = name.trim();
-    const trimmedUrl = url.trim();
+    const normalizedUrl = normalizeRecipeLink(url);
 
     if (!trimmedName) {
       setError('Add a recipe name.');
       return;
     }
 
-    const normalizedUrl = normalizeRecipeLink(trimmedUrl);
-
     if (!normalizedUrl) {
       setError('Add a link, for example test.com or https://test.com.');
       return;
     }
 
-    onSubmit({ name: trimmedName, mealType, url: normalizedUrl });
+    onSubmit({
+      id: initialRecipe?.id,
+      name: trimmedName,
+      mealType,
+      url: normalizedUrl,
+      tags: tags.split(',').map((tag) => tag.trim()).filter(Boolean),
+    });
     setName('');
     setMealType('lunch');
     setUrl('');
+    setTags('');
     setError('');
     onClose();
   };
 
   return (
-    <Modal title="Add recipe" onClose={onClose}>
+    <Modal title={isEditing ? 'Edit recipe' : 'Add recipe'} onClose={onClose}>
       <form onSubmit={submit} className="space-y-4">
-        <label className="block">
-          <span className="text-sm font-medium text-stone-700">Name</span>
-          <input
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            className="mt-1 w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-base outline-none focus:border-emerald-700"
-            placeholder="Chicken salad"
-          />
-        </label>
+        <TextField label="Name" value={name} onChange={setName} placeholder="Chicken salad" />
 
         <label className="block">
-          <span className="text-sm font-medium text-stone-700">Type of meal</span>
+          <span className="text-sm font-semibold text-stone-700">Type of meal</span>
           <select
             value={mealType}
             onChange={(event) => setMealType(event.target.value)}
-            className="mt-1 w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-base outline-none focus:border-emerald-700"
+            className="mt-1 w-full rounded-2xl border border-white/70 bg-white/70 px-3 py-3 text-base outline-none focus:border-emerald-600"
           >
             {MEAL_TYPES.map((meal) => (
               <option key={meal.id} value={meal.id}>{meal.label}</option>
@@ -171,28 +205,35 @@ export function AddRecipeModal({ open, onClose, onSubmit }) {
           </select>
         </label>
 
-        <label className="block">
-          <span className="text-sm font-medium text-stone-700">Link</span>
-          <input
-            value={url}
-            onChange={(event) => setUrl(event.target.value)}
-            className="mt-1 w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-base outline-none focus:border-emerald-700"
-            placeholder="test.com or https://..."
-          />
-        </label>
+        <TextField label="Link" value={url} onChange={setUrl} placeholder="test.com or https://..." />
+        <TextField label="Tags" value={tags} onChange={setTags} placeholder="meat, salad, quick" />
 
-        {error && <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
+        {error && <p className="rounded-2xl bg-red-50/90 px-3 py-2 text-sm text-red-700">{error}</p>}
 
         <div className="flex justify-end gap-2">
-          <button type="button" onClick={onClose} className="rounded-md border border-stone-300 bg-white px-3 py-2 text-sm font-medium text-stone-700">
+          <button type="button" onClick={onClose} className="rounded-2xl border border-white/70 bg-white/65 px-4 py-3 text-sm font-semibold text-stone-700">
             Cancel
           </button>
-          <button type="submit" className="rounded-md bg-emerald-700 px-3 py-2 text-sm font-medium text-white">
-            Submit
+          <button type="submit" className="rounded-2xl bg-emerald-700 px-4 py-3 text-sm font-semibold text-white">
+            {isEditing ? 'Save' : 'Submit'}
           </button>
         </div>
       </form>
     </Modal>
+  );
+}
+
+function TextField({ label, value, onChange, placeholder }) {
+  return (
+    <label className="block">
+      <span className="text-sm font-semibold text-stone-700">{label}</span>
+      <input
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="mt-1 w-full rounded-2xl border border-white/70 bg-white/70 px-3 py-3 text-base outline-none focus:border-emerald-600"
+        placeholder={placeholder}
+      />
+    </label>
   );
 }
 
@@ -202,7 +243,7 @@ export function AddToWeekDialog({ recipe, open, onClose, onAdd }) {
   return (
     <Modal title="Add to week" onClose={onClose}>
       <div className="space-y-4">
-        <div className="flex items-start gap-3 rounded-md bg-stone-100 p-3">
+        <div className="flex items-start gap-3 rounded-3xl bg-white/55 p-3">
           <Favicon url={recipe.url} />
           <RecipeTitleLink recipe={recipe} />
         </div>
@@ -216,7 +257,7 @@ export function AddToWeekDialog({ recipe, open, onClose, onAdd }) {
                 onAdd(recipe.id, meal.id);
                 onClose();
               }}
-              className="rounded-md border border-stone-300 bg-white px-3 py-3 text-sm font-medium text-stone-800"
+              className="rounded-2xl border border-white/70 bg-white/70 px-3 py-3 text-sm font-semibold text-stone-800"
             >
               {meal.label}
             </button>
@@ -229,14 +270,14 @@ export function AddToWeekDialog({ recipe, open, onClose, onAdd }) {
 
 function Modal({ title, children, onClose }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-stone-950/30 px-4 py-4 sm:items-center">
-      <div className="w-full max-w-md rounded-lg bg-white p-5 shadow-xl">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-stone-950/25 px-4 py-4 backdrop-blur-sm sm:items-center">
+      <div className={`${glassPanel} w-full max-w-md rounded-[30px] p-5`}>
         <div className="mb-4 flex items-center justify-between gap-4">
           <h2 className="text-xl font-semibold text-stone-950">{title}</h2>
           <button
             type="button"
             onClick={onClose}
-            className="grid h-8 w-8 place-items-center rounded-md border border-stone-300 text-lg leading-none text-stone-600"
+            className="grid h-9 w-9 place-items-center rounded-2xl border border-white/70 bg-white/65 text-lg leading-none text-stone-600"
             aria-label="Close"
           >
             ×
