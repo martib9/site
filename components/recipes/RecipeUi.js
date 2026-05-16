@@ -2,73 +2,78 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { MEAL_TYPES } from '../../data/recipes';
-import { getDomain, getRecipeTags, normalizeRecipeLink } from './RecipeStore';
+import { getDomain, getRecipeTags, getTagEmoji, normalizeRecipeLink } from './RecipeStore';
 
-const glassPanel = 'border border-white/45 bg-white/45 shadow-[0_18px_60px_rgba(15,23,42,0.10)] backdrop-blur-2xl dark:border-white/10 dark:bg-stone-950/35 dark:shadow-black/30';
+const glassPanel = 'border border-white/70 bg-white/80 shadow-[0_18px_48px_rgba(15,23,42,0.08)] backdrop-blur-2xl dark:border-white/10 dark:bg-stone-950/78 dark:shadow-black/30';
+const solidPanel = 'border border-stone-200/80 bg-white/90 shadow-[0_10px_28px_rgba(15,23,42,0.06)] dark:border-white/10 dark:bg-stone-950/78 dark:shadow-black/20';
 const buttonMotion = 'transition duration-200 ease-out hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0';
+const themeStorageKey = 'martib_recipes_theme';
 
 export function RecipeShell({ activePage, children, onAddRecipe }) {
   const router = useRouter();
   const [theme, setTheme] = useState('light');
 
   useEffect(() => {
-    setTheme(window.localStorage.getItem('martib_recipes_theme') || 'light');
+    const savedTheme = window.localStorage.getItem(themeStorageKey);
+    const systemTheme = window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    setTheme(savedTheme || systemTheme);
     router.prefetch('/recipes');
     router.prefetch('/recipes/box');
   }, [router]);
 
-  const changeTheme = (value) => {
-    setTheme(value);
-    window.localStorage.setItem('martib_recipes_theme', value);
+  const toggleTheme = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+    window.localStorage.setItem(themeStorageKey, nextTheme);
   };
 
   return (
-    <main className={`${theme === 'dark' ? 'dark' : ''} min-h-screen bg-[radial-gradient(circle_at_top_left,#f8fafc_0,#f0fdf4_34%,#eef2ff_68%,#fafaf9_100%)] pb-28 text-stone-950 transition-colors duration-500 dark:bg-[radial-gradient(circle_at_top_left,#1f2937_0,#0f172a_45%,#020617_100%)] dark:text-stone-50`}>
-      <RecipeMotionStyles />
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-5 px-4 py-5 sm:px-6 lg:px-8">
-        <header className={`${glassPanel} rounded-[28px] px-5 py-5`}>
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-stone-400">Recipe planner</p>
-              <h1 className="mt-1 text-3xl font-semibold tracking-normal text-stone-950 sm:text-4xl dark:text-stone-50">
-                {activePage === 'box' ? 'Recipe box' : 'Plan for the week'}
-              </h1>
-            </div>
-            <label className="shrink-0">
-              <span className="sr-only">Theme</span>
-              <select
-                value={theme}
-                onChange={(event) => changeTheme(event.target.value)}
-                className="rounded-2xl border border-white/60 bg-white/55 px-3 py-2 text-sm font-semibold text-stone-700 outline-none backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:text-stone-50"
+    <div className={theme === 'dark' ? 'dark' : ''}>
+      <main className="min-h-screen bg-[#f7f7f4] pb-28 text-stone-950 transition-colors duration-500 dark:bg-[#10100f] dark:text-stone-50">
+        <RecipeMotionStyles />
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-5 px-4 py-5 sm:px-6 lg:px-8">
+          <header className={`${solidPanel} rounded-[24px] px-5 py-5`}>
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500 dark:text-stone-400">Recipe planner</p>
+                <h1 className="mt-1 text-3xl font-semibold tracking-normal text-stone-950 sm:text-4xl dark:text-stone-50">
+                  {activePage === 'box' ? 'Recipe box' : 'Plan for the week'}
+                </h1>
+              </div>
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className={`${buttonMotion} shrink-0 rounded-2xl border border-stone-200 bg-stone-50 px-3 py-2 text-sm font-semibold text-stone-700 dark:border-white/10 dark:bg-white/10 dark:text-stone-100`}
+                aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+                title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
               >
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
-              </select>
-            </label>
+                {theme === 'dark' ? '☀︎' : '☾'}
+              </button>
+            </div>
+          </header>
+
+          <div className="recipe-page-swipe">
+            {children}
           </div>
-        </header>
-
-        <div className="recipe-page-swipe">
-          {children}
         </div>
-      </div>
 
-      <nav className="fixed inset-x-0 bottom-0 z-40 px-4 pb-4">
-        <div className={`${glassPanel} mx-auto grid max-w-md grid-cols-3 gap-2 rounded-[30px] bg-white/25 p-2 supports-[backdrop-filter]:bg-white/25 dark:bg-white/10`}>
-          <BottomNavItem active={activePage === 'week'} href="/recipes" label="Week" />
-          <BottomNavItem active={activePage === 'box'} href="/recipes/box" label="Recipe Box" />
-          <button
-            type="button"
-            onClick={onAddRecipe}
-            className={`${buttonMotion} rounded-[22px] px-3 py-3 text-2xl font-semibold leading-none text-emerald-900 dark:text-emerald-200`}
-            aria-label="Add Recipe"
-            title="Add Recipe"
-          >
-            +
-          </button>
-        </div>
-      </nav>
-    </main>
+        <nav className="fixed inset-x-0 bottom-0 z-40 px-4 pb-4">
+          <div className={`${glassPanel} mx-auto grid max-w-md grid-cols-3 gap-2 rounded-[26px] bg-white/55 p-2 supports-[backdrop-filter]:bg-white/45 dark:bg-stone-950/55`}>
+            <BottomNavItem active={activePage === 'week'} href="/recipes" label="Week" />
+            <BottomNavItem active={activePage === 'box'} href="/recipes/box" label="Recipe Box" />
+            <button
+              type="button"
+              onClick={onAddRecipe}
+              className={`${buttonMotion} rounded-[20px] bg-emerald-700 px-3 py-3 text-3xl font-semibold leading-none text-white shadow-lg shadow-emerald-900/15 dark:bg-emerald-500 dark:text-stone-950`}
+              aria-label="Add Recipe"
+              title="Add Recipe"
+            >
+              +
+            </button>
+          </div>
+        </nav>
+      </main>
+    </div>
   );
 }
 
@@ -77,7 +82,7 @@ function BottomNavItem({ active, href, label }) {
     <Link
       href={href}
       prefetch
-      className={`rounded-[20px] px-3 py-3 text-center text-sm font-semibold ${
+      className={`rounded-[20px] px-3 py-3 text-center text-sm font-semibold transition duration-200 hover:-translate-y-0.5 hover:shadow-lg ${
         active ? 'bg-stone-950/90 text-white shadow-lg shadow-stone-950/15 dark:bg-white/85 dark:text-stone-950' : 'text-stone-700 dark:text-stone-200'
       }`}
     >
@@ -87,7 +92,11 @@ function BottomNavItem({ active, href, label }) {
 }
 
 export function GlassSection({ children, className = '', ...props }) {
-  return <section className={`${glassPanel} rounded-[28px] ${className}`} {...props}>{children}</section>;
+  return <section className={`${solidPanel} rounded-[24px] ${className}`} {...props}>{children}</section>;
+}
+
+export function StickyGlassSection({ children, className = '', ...props }) {
+  return <section className={`${glassPanel} rounded-[24px] ${className}`} {...props}>{children}</section>;
 }
 
 export function Favicon({ url }) {
@@ -179,7 +188,7 @@ export function RecipeTitleLink({ recipe, cooked = false, showTags = true, strik
               }}
               className={`${buttonMotion} rounded-full border border-emerald-500/25 bg-emerald-50/80 px-2.5 py-1 text-[11px] font-bold text-emerald-800 dark:border-emerald-300/20 dark:bg-emerald-300/10 dark:text-emerald-100`}
             >
-              #{tag}
+              {getTagEmoji(tag)} {tag}
             </button>
           ))}
         </div>
@@ -243,11 +252,11 @@ export function AddRecipeModal({ open, onClose, onSubmit, initialRecipe = null }
         <TextField label="Name" value={name} onChange={setName} placeholder="Chicken salad" />
 
         <label className="block">
-          <span className="text-sm font-semibold text-stone-700">Type of meal</span>
+          <span className="text-sm font-semibold text-stone-700 dark:text-stone-200">Type of meal</span>
           <select
             value={mealType}
             onChange={(event) => setMealType(event.target.value)}
-            className="mt-1 w-full rounded-2xl border border-white/70 bg-white/70 px-3 py-3 text-base outline-none focus:border-emerald-600 dark:border-white/10 dark:bg-white/10 dark:text-stone-50"
+            className="mt-1 w-full rounded-2xl border border-stone-200 bg-white px-3 py-3 text-base outline-none focus:border-emerald-600 dark:border-white/10 dark:bg-stone-900 dark:text-stone-50"
           >
             {MEAL_TYPES.map((meal) => (
               <option key={meal.id} value={meal.id}>{meal.label}</option>
@@ -258,7 +267,7 @@ export function AddRecipeModal({ open, onClose, onSubmit, initialRecipe = null }
         <TextField label="Link" value={url} onChange={setUrl} placeholder="test.com or https://..." />
         <TextField label="Tags" value={tags} onChange={setTags} placeholder="meat, salad, quick" />
 
-        {error && <p className="rounded-2xl bg-red-50/90 px-3 py-2 text-sm text-red-700">{error}</p>}
+        {error && <p className="rounded-2xl bg-red-50/90 px-3 py-2 text-sm text-red-700 dark:bg-red-400/10 dark:text-red-200">{error}</p>}
 
         <div className="flex justify-end gap-2">
           <button type="button" onClick={onClose} className={`${buttonMotion} rounded-2xl border border-white/70 bg-white/65 px-4 py-3 text-sm font-semibold text-stone-700 dark:border-white/10 dark:bg-white/10 dark:text-stone-100`}>
@@ -276,11 +285,11 @@ export function AddRecipeModal({ open, onClose, onSubmit, initialRecipe = null }
 function TextField({ label, value, onChange, placeholder }) {
   return (
     <label className="block">
-      <span className="text-sm font-semibold text-stone-700">{label}</span>
+      <span className="text-sm font-semibold text-stone-700 dark:text-stone-200">{label}</span>
       <input
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="mt-1 w-full rounded-2xl border border-white/70 bg-white/70 px-3 py-3 text-base outline-none focus:border-emerald-600 dark:border-white/10 dark:bg-white/10 dark:text-stone-50"
+        className="mt-1 w-full rounded-2xl border border-stone-200 bg-white px-3 py-3 text-base outline-none focus:border-emerald-600 dark:border-white/10 dark:bg-stone-900 dark:text-stone-50"
         placeholder={placeholder}
       />
     </label>
@@ -321,13 +330,13 @@ export function AddToWeekDialog({ recipe, open, onClose, onAdd }) {
 function Modal({ title, children, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-stone-950/25 px-4 py-4 backdrop-blur-sm sm:items-center">
-      <div className={`${glassPanel} w-full max-w-md rounded-[30px] p-5`}>
+      <div className={`${solidPanel} w-full max-w-md rounded-[28px] p-5`}>
         <div className="mb-4 flex items-center justify-between gap-4">
-          <h2 className="text-xl font-semibold text-stone-950">{title}</h2>
+          <h2 className="text-xl font-semibold text-stone-950 dark:text-stone-50">{title}</h2>
           <button
             type="button"
             onClick={onClose}
-          className={`${buttonMotion} grid h-9 w-9 place-items-center rounded-2xl border border-white/70 bg-white/65 text-lg leading-none text-stone-600 dark:border-white/10 dark:bg-white/10 dark:text-stone-200`}
+            className={`${buttonMotion} grid h-9 w-9 place-items-center rounded-2xl border border-stone-200 bg-stone-50 text-lg leading-none text-stone-600 dark:border-white/10 dark:bg-white/10 dark:text-stone-200`}
             aria-label="Close"
           >
             ×
@@ -370,6 +379,19 @@ function RecipeMotionStyles() {
         opacity: 1;
       }
       .recipe-accordion > div {
+        overflow: hidden;
+      }
+      .recipe-filter-panel {
+        display: grid;
+        grid-template-rows: 0fr;
+        opacity: 0;
+        transition: grid-template-rows 240ms ease, opacity 200ms ease;
+      }
+      .recipe-filter-panel[data-open='true'] {
+        grid-template-rows: 1fr;
+        opacity: 1;
+      }
+      .recipe-filter-panel > div {
         overflow: hidden;
       }
       @keyframes recipe-slide-in {
