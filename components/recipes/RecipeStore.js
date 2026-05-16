@@ -7,10 +7,13 @@ export const COOKED_FILTERS = [
   { id: 'cooked', label: 'Show all cooked' },
 ];
 
+export const NEW_RECIPE_MS = 48 * 60 * 60 * 1000;
+
 const mealLabels = Object.fromEntries(MEAL_TYPES.map((meal) => [meal.id, meal.label]));
 const extraStorageKeys = {
   recipeEdits: 'martib_recipes_edits',
   deletedRecipes: 'martib_recipes_deleted',
+  weekCooked: 'martib_week_cooked',
 };
 
 const tagRules = [
@@ -88,6 +91,10 @@ export function getRecipeTags(recipe) {
   return normalizeTags([...(inferRecipeTags(recipe)), ...(recipe.tags || [])]);
 }
 
+export function isNewRecipe(recipe) {
+  return Boolean(recipe.isCustom && Date.now() - customTimestamp(recipe) < NEW_RECIPE_MS);
+}
+
 export function validateRecipeLink(value) {
   return Boolean(normalizeRecipeLink(value));
 }
@@ -121,6 +128,7 @@ export function useRecipeStore() {
   const [recipeEdits, setRecipeEdits] = useState({});
   const [deletedRecipeIds, setDeletedRecipeIds] = useState([]);
   const [cookedOverrides, setCookedOverrides] = useState({});
+  const [weekCooked, setWeekCooked] = useState({});
   const [weekPlan, setWeekPlan] = useState(fallbackWeekPlan);
 
   useEffect(() => {
@@ -128,6 +136,7 @@ export function useRecipeStore() {
     setRecipeEdits(readJson(extraStorageKeys.recipeEdits, {}));
     setDeletedRecipeIds(readJson(extraStorageKeys.deletedRecipes, []));
     setCookedOverrides(readJson(STORAGE_KEYS.cookedRecipes, {}));
+    setWeekCooked(readJson(extraStorageKeys.weekCooked, {}));
     setWeekPlan(normalizeWeekPlan(readJson(STORAGE_KEYS.weekPlan, null)));
     setHydrated(true);
   }, []);
@@ -157,7 +166,7 @@ export function useRecipeStore() {
       tags: getRecipeTags(recipe),
       cooked: Boolean(recipe.cooked),
       isCustom: true,
-      isNew: true,
+      isNew: isNewRecipe(recipe),
     }));
 
     return [...normalizedSeeds, ...normalizedCustom];
@@ -168,6 +177,7 @@ export function useRecipeStore() {
   }, [recipes]);
 
   const getCooked = (recipe) => cookedOverrides[recipe.id] ?? recipe.cooked;
+  const getWeekCooked = (recipeId) => Boolean(weekCooked[recipeId]);
 
   const setCooked = (recipeId, cooked) => {
     const recipe = recipesById[recipeId];
@@ -183,6 +193,26 @@ export function useRecipeStore() {
       writeJson(STORAGE_KEYS.cookedRecipes, next);
       return next;
     });
+  };
+
+  const setCookedThisWeek = (recipeId, cooked) => {
+    const recipe = recipesById[recipeId];
+    if (!recipe) return;
+
+    setWeekCooked((current) => {
+      const next = { ...current };
+      if (cooked) {
+        next[recipeId] = true;
+      } else {
+        delete next[recipeId];
+      }
+      writeJson(extraStorageKeys.weekCooked, next);
+      return next;
+    });
+
+    if (cooked && !getCooked(recipe)) {
+      setCooked(recipeId, true);
+    }
   };
 
   const persistCustomRecipes = (updater) => {
@@ -286,6 +316,12 @@ export function useRecipeStore() {
       writeJson(STORAGE_KEYS.cookedRecipes, next);
       return next;
     });
+    setWeekCooked((current) => {
+      const next = { ...current };
+      delete next[recipeId];
+      writeJson(extraStorageKeys.weekCooked, next);
+      return next;
+    });
   };
 
   const addToWeek = (recipeId, mealType) => {
@@ -329,7 +365,9 @@ export function useRecipeStore() {
     groupedRecipes,
     weekPlan,
     getCooked,
+    getWeekCooked,
     setCooked,
+    setCookedThisWeek,
     addCustomRecipe,
     updateRecipe,
     deleteRecipe,

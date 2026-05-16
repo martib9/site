@@ -1,33 +1,70 @@
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { MEAL_TYPES } from '../../data/recipes';
 import { getDomain, getRecipeTags, normalizeRecipeLink } from './RecipeStore';
 
-const glassPanel = 'border border-white/55 bg-white/60 shadow-[0_18px_60px_rgba(15,23,42,0.10)] backdrop-blur-2xl';
+const glassPanel = 'border border-white/45 bg-white/45 shadow-[0_18px_60px_rgba(15,23,42,0.10)] backdrop-blur-2xl dark:border-white/10 dark:bg-stone-950/35 dark:shadow-black/30';
+const buttonMotion = 'transition duration-200 ease-out hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0';
 
 export function RecipeShell({ activePage, children, onAddRecipe }) {
+  const router = useRouter();
+  const [theme, setTheme] = useState('light');
+
+  useEffect(() => {
+    setTheme(window.localStorage.getItem('martib_recipes_theme') || 'light');
+    router.prefetch('/recipes');
+    router.prefetch('/recipes/box');
+  }, [router]);
+
+  const changeTheme = (value) => {
+    setTheme(value);
+    window.localStorage.setItem('martib_recipes_theme', value);
+  };
+
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top_left,#f8fafc_0,#f0fdf4_34%,#eef2ff_68%,#fafaf9_100%)] pb-28 text-stone-950">
+    <main className={`${theme === 'dark' ? 'dark' : ''} min-h-screen bg-[radial-gradient(circle_at_top_left,#f8fafc_0,#f0fdf4_34%,#eef2ff_68%,#fafaf9_100%)] pb-28 text-stone-950 transition-colors duration-500 dark:bg-[radial-gradient(circle_at_top_left,#1f2937_0,#0f172a_45%,#020617_100%)] dark:text-stone-50`}>
+      <RecipeMotionStyles />
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-5 px-4 py-5 sm:px-6 lg:px-8">
         <header className={`${glassPanel} rounded-[28px] px-5 py-5`}>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">Recipe planner</p>
-          <h1 className="mt-1 text-3xl font-semibold tracking-normal text-stone-950 sm:text-4xl">
-            {activePage === 'box' ? 'Recipe box' : 'Plan for the week'}
-          </h1>
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 dark:text-stone-400">Recipe planner</p>
+              <h1 className="mt-1 text-3xl font-semibold tracking-normal text-stone-950 sm:text-4xl dark:text-stone-50">
+                {activePage === 'box' ? 'Recipe box' : 'Plan for the week'}
+              </h1>
+            </div>
+            <label className="shrink-0">
+              <span className="sr-only">Theme</span>
+              <select
+                value={theme}
+                onChange={(event) => changeTheme(event.target.value)}
+                className="rounded-2xl border border-white/60 bg-white/55 px-3 py-2 text-sm font-semibold text-stone-700 outline-none backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:text-stone-50"
+              >
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+              </select>
+            </label>
+          </div>
         </header>
 
-        {children}
+        <div className="recipe-page-swipe">
+          {children}
+        </div>
       </div>
 
       <nav className="fixed inset-x-0 bottom-0 z-40 px-4 pb-4">
-        <div className={`${glassPanel} mx-auto grid max-w-md grid-cols-3 gap-2 rounded-[28px] p-2`}>
+        <div className={`${glassPanel} mx-auto grid max-w-md grid-cols-3 gap-2 rounded-[30px] bg-white/25 p-2 supports-[backdrop-filter]:bg-white/25 dark:bg-white/10`}>
           <BottomNavItem active={activePage === 'week'} href="/recipes" label="Week" />
           <BottomNavItem active={activePage === 'box'} href="/recipes/box" label="Recipe Box" />
           <button
             type="button"
             onClick={onAddRecipe}
-            className="rounded-[20px] px-3 py-3 text-sm font-semibold text-emerald-900"
+            className={`${buttonMotion} rounded-[22px] px-3 py-3 text-2xl font-semibold leading-none text-emerald-900 dark:text-emerald-200`}
+            aria-label="Add Recipe"
+            title="Add Recipe"
           >
-            Add Recipe
+            +
           </button>
         </div>
       </nav>
@@ -37,14 +74,15 @@ export function RecipeShell({ activePage, children, onAddRecipe }) {
 
 function BottomNavItem({ active, href, label }) {
   return (
-    <a
+    <Link
       href={href}
+      prefetch
       className={`rounded-[20px] px-3 py-3 text-center text-sm font-semibold ${
-        active ? 'bg-stone-950/90 text-white shadow-lg shadow-stone-950/15' : 'text-stone-700'
+        active ? 'bg-stone-950/90 text-white shadow-lg shadow-stone-950/15 dark:bg-white/85 dark:text-stone-950' : 'text-stone-700 dark:text-stone-200'
       }`}
     >
       {label}
-    </a>
+    </Link>
   );
 }
 
@@ -57,7 +95,7 @@ export function Favicon({ url }) {
   const domain = getDomain(url);
 
   if (!domain) {
-    return <span className="grid h-8 w-8 shrink-0 place-items-center rounded-2xl bg-white/70 text-xs font-semibold text-stone-500">?</span>;
+    return <span className="grid h-8 w-8 shrink-0 place-items-center rounded-2xl bg-white/70 text-xs font-semibold text-stone-500 dark:bg-white/10 dark:text-stone-300">?</span>;
   }
 
   const directIcon = `https://${domain}/favicon.ico`;
@@ -65,7 +103,7 @@ export function Favicon({ url }) {
 
   if (fallback > 1) {
     return (
-      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-2xl bg-white/70 text-xs font-semibold uppercase text-stone-600">
+      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-2xl bg-white/70 text-xs font-semibold uppercase text-stone-600 dark:bg-white/10 dark:text-stone-300">
         {domain[0]}
       </span>
     );
@@ -75,7 +113,7 @@ export function Favicon({ url }) {
     <img
       src={fallback === 0 ? directIcon : serviceIcon}
       alt=""
-      className="h-8 w-8 shrink-0 rounded-2xl border border-white/70 bg-white/75 object-contain p-1"
+      className="h-8 w-8 shrink-0 rounded-2xl border border-white/70 bg-white/75 object-contain p-1 dark:border-white/10 dark:bg-white/10"
       onError={() => setFallback((value) => value + 1)}
     />
   );
@@ -83,7 +121,10 @@ export function Favicon({ url }) {
 
 export function CookedCheckbox({ checked, onChange }) {
   return (
-    <label className="grid h-9 w-9 shrink-0 place-items-center rounded-2xl border border-white/80 bg-white/65 shadow-inner shadow-white/60">
+    <label
+      className="grid h-9 w-9 shrink-0 place-items-center rounded-2xl border border-white/80 bg-white/65 shadow-inner shadow-white/60 dark:border-white/10 dark:bg-white/10"
+      onClick={(event) => event.stopPropagation()}
+    >
       <input
         type="checkbox"
         checked={checked}
@@ -95,18 +136,18 @@ export function CookedCheckbox({ checked, onChange }) {
   );
 }
 
-export function RecipeTitleLink({ recipe, cooked = false, showTags = true }) {
+export function RecipeTitleLink({ recipe, cooked = false, showTags = true, strike = false, onTagClick }) {
   const domain = getDomain(recipe.url);
   const tags = getRecipeTags(recipe);
 
   return (
     <div className="min-w-0 flex-1">
       <div className="flex flex-wrap items-center gap-2">
-        <p className={`break-words text-sm font-semibold leading-5 text-stone-950 ${cooked ? 'line-through decoration-2 opacity-55' : ''}`}>
+        <p className={`break-words text-sm font-semibold leading-5 text-stone-950 dark:text-stone-50 ${cooked && strike ? 'line-through decoration-2 opacity-55' : ''}`}>
           {recipe.name}
         </p>
         {recipe.isNew && (
-          <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.16em] text-emerald-800">
+          <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.16em] text-emerald-800 dark:text-emerald-200">
             New
           </span>
         )}
@@ -117,20 +158,29 @@ export function RecipeTitleLink({ recipe, cooked = false, showTags = true }) {
           href={recipe.url}
           target="_blank"
           rel="noreferrer"
-          className="mt-1 block truncate text-xs text-stone-500 underline decoration-stone-300 underline-offset-2"
+          onClick={(event) => event.stopPropagation()}
+          className="mt-1 block truncate text-xs text-stone-500 underline decoration-stone-300 underline-offset-2 dark:text-stone-400"
         >
           {domain || recipe.url}
         </a>
       ) : (
-        <p className="mt-1 text-xs text-stone-500">No link saved</p>
+        <p className="mt-1 text-xs text-stone-500 dark:text-stone-400">No link saved</p>
       )}
 
       {showTags && tags.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-1">
           {tags.map((tag) => (
-            <span key={tag} className="rounded-full bg-white/70 px-2 py-1 text-[11px] font-medium text-stone-600">
+            <button
+              key={tag}
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                onTagClick?.(tag);
+              }}
+              className={`${buttonMotion} rounded-full border border-emerald-500/25 bg-emerald-50/80 px-2.5 py-1 text-[11px] font-bold text-emerald-800 dark:border-emerald-300/20 dark:bg-emerald-300/10 dark:text-emerald-100`}
+            >
               #{tag}
-            </span>
+            </button>
           ))}
         </div>
       )}
@@ -197,7 +247,7 @@ export function AddRecipeModal({ open, onClose, onSubmit, initialRecipe = null }
           <select
             value={mealType}
             onChange={(event) => setMealType(event.target.value)}
-            className="mt-1 w-full rounded-2xl border border-white/70 bg-white/70 px-3 py-3 text-base outline-none focus:border-emerald-600"
+            className="mt-1 w-full rounded-2xl border border-white/70 bg-white/70 px-3 py-3 text-base outline-none focus:border-emerald-600 dark:border-white/10 dark:bg-white/10 dark:text-stone-50"
           >
             {MEAL_TYPES.map((meal) => (
               <option key={meal.id} value={meal.id}>{meal.label}</option>
@@ -211,10 +261,10 @@ export function AddRecipeModal({ open, onClose, onSubmit, initialRecipe = null }
         {error && <p className="rounded-2xl bg-red-50/90 px-3 py-2 text-sm text-red-700">{error}</p>}
 
         <div className="flex justify-end gap-2">
-          <button type="button" onClick={onClose} className="rounded-2xl border border-white/70 bg-white/65 px-4 py-3 text-sm font-semibold text-stone-700">
+          <button type="button" onClick={onClose} className={`${buttonMotion} rounded-2xl border border-white/70 bg-white/65 px-4 py-3 text-sm font-semibold text-stone-700 dark:border-white/10 dark:bg-white/10 dark:text-stone-100`}>
             Cancel
           </button>
-          <button type="submit" className="rounded-2xl bg-emerald-700 px-4 py-3 text-sm font-semibold text-white">
+          <button type="submit" className={`${buttonMotion} rounded-2xl bg-emerald-700 px-4 py-3 text-sm font-semibold text-white`}>
             {isEditing ? 'Save' : 'Submit'}
           </button>
         </div>
@@ -230,7 +280,7 @@ function TextField({ label, value, onChange, placeholder }) {
       <input
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="mt-1 w-full rounded-2xl border border-white/70 bg-white/70 px-3 py-3 text-base outline-none focus:border-emerald-600"
+        className="mt-1 w-full rounded-2xl border border-white/70 bg-white/70 px-3 py-3 text-base outline-none focus:border-emerald-600 dark:border-white/10 dark:bg-white/10 dark:text-stone-50"
         placeholder={placeholder}
       />
     </label>
@@ -277,7 +327,7 @@ function Modal({ title, children, onClose }) {
           <button
             type="button"
             onClick={onClose}
-            className="grid h-9 w-9 place-items-center rounded-2xl border border-white/70 bg-white/65 text-lg leading-none text-stone-600"
+          className={`${buttonMotion} grid h-9 w-9 place-items-center rounded-2xl border border-white/70 bg-white/65 text-lg leading-none text-stone-600 dark:border-white/10 dark:bg-white/10 dark:text-stone-200`}
             aria-label="Close"
           >
             ×
@@ -286,5 +336,51 @@ function Modal({ title, children, onClose }) {
         {children}
       </div>
     </div>
+  );
+}
+
+export function Toast({ message }) {
+  if (!message) return null;
+
+  return (
+    <div className="fixed left-4 right-4 top-4 z-[60] mx-auto max-w-sm rounded-[24px] border border-emerald-200/70 bg-white/75 px-4 py-3 text-sm font-semibold text-emerald-900 shadow-2xl shadow-emerald-900/10 backdrop-blur-2xl dark:border-emerald-300/20 dark:bg-stone-950/75 dark:text-emerald-100">
+      <span className="mr-2 inline-grid h-5 w-5 place-items-center rounded-full bg-emerald-600 text-xs text-white recipe-check-pop">✓</span>
+      {message}
+    </div>
+  );
+}
+
+function RecipeMotionStyles() {
+  return (
+    <style jsx global>{`
+      .recipe-page-swipe {
+        animation: recipe-slide-in 280ms ease both;
+      }
+      .recipe-check-pop {
+        animation: recipe-check-pop 420ms cubic-bezier(.2, 1.7, .35, 1) both;
+      }
+      .recipe-accordion {
+        display: grid;
+        grid-template-rows: 0fr;
+        opacity: 0;
+        transition: grid-template-rows 260ms ease, opacity 220ms ease;
+      }
+      .recipe-accordion[data-open='true'] {
+        grid-template-rows: 1fr;
+        opacity: 1;
+      }
+      .recipe-accordion > div {
+        overflow: hidden;
+      }
+      @keyframes recipe-slide-in {
+        from { opacity: 0; transform: translateX(16px); }
+        to { opacity: 1; transform: translateX(0); }
+      }
+      @keyframes recipe-check-pop {
+        0% { transform: scale(.55); opacity: .2; }
+        70% { transform: scale(1.14); opacity: 1; }
+        100% { transform: scale(1); opacity: 1; }
+      }
+    `}</style>
   );
 }
