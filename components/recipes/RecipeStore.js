@@ -54,11 +54,21 @@ const makeCustomId = (name) => {
 };
 
 export function validateRecipeLink(value) {
+  return Boolean(normalizeRecipeLink(value));
+}
+
+export function normalizeRecipeLink(value) {
+  const trimmed = value.trim();
+  const withProtocol = /^[a-z][a-z0-9+.-]*:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+
   try {
-    const url = new URL(value);
-    return url.protocol === 'http:' || url.protocol === 'https:';
+    const url = new URL(withProtocol);
+    const isWebLink = url.protocol === 'http:' || url.protocol === 'https:';
+    const hasDomain = url.hostname.includes('.') && !url.hostname.startsWith('.') && !url.hostname.endsWith('.');
+
+    return isWebLink && hasDomain ? url.toString() : '';
   } catch {
-    return false;
+    return '';
   }
 }
 

@@ -1,7 +1,6 @@
-import Link from 'next/link';
 import { useState } from 'react';
 import { MEAL_TYPES } from '../../data/recipes';
-import { getDomain, validateRecipeLink } from './RecipeStore';
+import { getDomain, normalizeRecipeLink } from './RecipeStore';
 
 export function RecipeShell({ activePage, children, onAddRecipe }) {
   return (
@@ -16,22 +15,22 @@ export function RecipeShell({ activePage, children, onAddRecipe }) {
           </div>
 
           <nav className="flex flex-wrap items-center gap-2">
-            <Link
+            <a
               href="/recipes"
               className={`rounded-md px-3 py-2 text-sm font-medium ${
                 activePage === 'week' ? 'bg-stone-950 text-white' : 'border border-stone-300 bg-white text-stone-700'
               }`}
             >
               Week
-            </Link>
-            <Link
+            </a>
+            <a
               href="/recipes/box"
               className={`rounded-md px-3 py-2 text-sm font-medium ${
                 activePage === 'box' ? 'bg-stone-950 text-white' : 'border border-stone-300 bg-white text-stone-700'
               }`}
             >
               Recipe Box
-            </Link>
+            </a>
             <button
               type="button"
               onClick={onAddRecipe}
@@ -131,12 +130,14 @@ export function AddRecipeModal({ open, onClose, onSubmit }) {
       return;
     }
 
-    if (!validateRecipeLink(trimmedUrl)) {
-      setError('Add a full link that starts with http:// or https://.');
+    const normalizedUrl = normalizeRecipeLink(trimmedUrl);
+
+    if (!normalizedUrl) {
+      setError('Add a link, for example test.com or https://test.com.');
       return;
     }
 
-    onSubmit({ name: trimmedName, mealType, url: trimmedUrl });
+    onSubmit({ name: trimmedName, mealType, url: normalizedUrl });
     setName('');
     setMealType('lunch');
     setUrl('');
@@ -176,7 +177,7 @@ export function AddRecipeModal({ open, onClose, onSubmit }) {
             value={url}
             onChange={(event) => setUrl(event.target.value)}
             className="mt-1 w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-base outline-none focus:border-emerald-700"
-            placeholder="https://..."
+            placeholder="test.com or https://..."
           />
         </label>
 
