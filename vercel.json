@@ -1,6 +1,1 @@
-{
-  "redirects": [
-    { "source": "/budget", "destination": "https://budget.martib.app", "permanent": false },
-    { "source": "/budget/:path*", "destination": "https://budget.martib.app/:path*", "permanent": false }
-  ]
-}
+{}
