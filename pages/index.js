@@ -1,225 +1,345 @@
-// File: pages/index.js
-import { useState, useEffect } from 'react';
-import InputNumeric from '../components/InputNumeric';
-import { db } from '../firebase';
-import { doc, setDoc, updateDoc, onSnapshot, getDoc } from 'firebase/firestore';
+import Head from 'next/head';
+import { useEffect, useState } from 'react';
+
+const PIN = '6699';
+
+const contactLinks = [
+  { href: 'https://www.linkedin.com/in/mokin/', label: 'Linkedin', external: true },
+  { href: 'https://instagram.com/daniel.mkn', label: 'Instagram', external: true },
+  { href: 'mailto:daniel@martib.app', label: 'Email', external: true },
+  { href: '/main/lera', label: 'Fun for Lera', external: true },
+];
+
+const projectLinks = [
+  { href: '/budget', label: 'Budget Tool' },
+  { href: '/recipes/box', label: 'Recipe Box' },
+  { href: '/travel-2026', label: 'Travel Plans' },
+  { href: '/main/lxd/index.html', label: 'LxD 5 Years' },
+  { href: '/main/bday/index.html', label: 'Lera BDay' },
+];
 
 export default function Home() {
-  const [step, setStep] = useState('auth');
   const [pin, setPin] = useState('');
-  const [total, setTotal] = useState('');
-  const [initialDays, setInitialDays] = useState(1);
-  const [startDate, setStartDate] = useState(null);
-  const [history, setHistory] = useState([]);
-  const [spendInput, setSpendInput] = useState('');
-  const [overflowMessage, setOverflowMessage] = useState('');
+  const [unlocked, setUnlocked] = useState(false);
+  const [error, setError] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
 
-
-  // On mount, check for saved PIN and auto-login
   useEffect(() => {
-    const savedPin = localStorage.getItem('budget_pin');
-    if (savedPin === '6699') {
-      setPin(savedPin);
-      fetchBudget(savedPin);
-    }
+    setUnlocked(window.localStorage.getItem('martib_home_unlocked') === 'true');
   }, []);
 
-  // Sync Firestore on PIN entry
-  useEffect(() => {
-    if (pin.length === 4) {
-      const refDoc = doc(db, 'budgets', pin);
-      const unsub = onSnapshot(refDoc, snap => {
-        if (snap.exists()) {
-          const data = snap.data();
-          setTotal(String(data.total));
-          setInitialDays(data.initialDays);
-          setStartDate(data.startDate);
-          setHistory(data.history || []);
-          setStep(data.total ? 'daily' : 'intro');
-        }
-      });
-      return () => unsub();
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (pin === PIN) {
+      window.localStorage.setItem('martib_home_unlocked', 'true');
+      setUnlocked(true);
+      setError('');
+      return;
     }
-  }, [pin]);
 
-  // Derived budget logic
-  const today = new Date();
-  const daysElapsed = startDate
-    ? Math.floor((today - new Date(startDate)) / (1000 * 60 * 60 * 24))
-    : 0;
-  const daysLeft = Math.max(initialDays - daysElapsed, 0);
-  const used = history.reduce((sum, e) => sum + e.amount, 0);
-  const remTotal = (parseFloat(total || 0) - used).toFixed(2);
-  const remDaily = daysLeft > 0 ? (remTotal / daysLeft).toFixed(2) : '0.00';
-
-  // Sum of today’s spends
-  const sumToday = history.reduce((sum, e) => {
-    const d = new Date(e.timestamp);
-    return d.toDateString() === new Date().toDateString() ? sum + e.amount : sum;
-  }, 0);
-  // Today's remaining budget
-  const numTodayRem = parseFloat(remDaily) - sumToday;
-  const displayToday = Math.max(numTodayRem, 0).toFixed(2);
-
-  const fmt = ts => {
-    const d = new Date(ts);
-    const dd = String(d.getDate()).padStart(2, '0');
-    const mm = String(d.getMonth() + 1).padStart(2, '0');
-    const yy = d.getFullYear();
-    const hh = String(d.getHours()).padStart(2, '0');
-    const mi = String(d.getMinutes()).padStart(2, '0');
-    return `${dd}.${mm}.${yy}, ${hh}:${mi}`;
+    setError('Nope.');
   };
 
-  // Fetch and populate budget state from Firestore
-  const fetchBudget = async (enteredPin) => {
-    const refDoc = doc(db, 'budgets', enteredPin);
-    const snap = await getDoc(refDoc);
-    if (snap.exists()) {
-      const d = snap.data();
-      setTotal(String(d.total));
-      setInitialDays(d.initialDays);
-      setStartDate(d.startDate);
-      setHistory(d.history || []);
-      setStep(d.total ? 'daily' : 'intro');
-    } else {
-      setStep('intro');
-    }
-  };
+  return (
+    <>
+      <Head>
+        <title>PMing, AI tests and trash.</title>
+        <meta name="description" content="PMing, AI tests and trash. I do it for fun and to get cringe." />
+      </Head>
 
-  const handleAuth = async () => {
-    console.log('Unlock clicked, pin=', pin);
-    try {
-      if (pin !== '6699') {
-        alert('Invalid PIN');
-        return;
-      }
-      // Persist PIN and load budget
-      localStorage.setItem('budget_pin', pin);
-      await fetchBudget(pin);
-    } catch (err) {
-      console.error('handleAuth error', err);
-      alert('Error unlocking, see console');
-    }
-  };
+      <div className="home">
+        {!unlocked ? (
+          <main className="gate" aria-label="Homepage PIN gate">
+            <form className="gate-box" onSubmit={handleSubmit}>
+              <h1>Martib</h1>
+              <p>Enter PIN</p>
+              <input
+                autoFocus
+                inputMode="numeric"
+                maxLength={4}
+                onChange={(event) => setPin(event.target.value)}
+                placeholder="...."
+                type="password"
+                value={pin}
+              />
+              <button type="submit">Unlock</button>
+              {error && <span role="alert">{error}</span>}
+            </form>
+          </main>
+        ) : (
+          <>
+            <header>
+              <h1>Martib</h1>
+              <p className="tagline">PMing, AI tests and trash. I do it for fun and to get cringe.</p>
+            </header>
 
-  const saveIntro = async () => {
-    const refDoc = doc(db, 'budgets', pin);
-    const now = new Date().toISOString();
-    await setDoc(refDoc, {
-      total: parseFloat(total),
-      initialDays,
-      startDate: now,
-      history: []
-    });
-    setStartDate(now);
-    setStep('daily');
-  };
+            <main>
+              <section>
+                <h2>Contacts and links:</h2>
+                <ul>
+                  {contactLinks.map((link) => (
+                    <li key={link.href}>
+                      <a
+                        href={link.href}
+                        rel={link.external ? 'noreferrer' : undefined}
+                        target={link.external ? '_blank' : undefined}
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                <br />
+                <button type="button" onClick={() => setShowPopup(true)}>TEXT ME</button>
+              </section>
 
-  const handleSpend = async () => {
-    const amt = parseFloat(spendInput);
-    if (!amt || amt <= 0) return;
+              <section>
+                <h2>Projects:</h2>
+                <ul>
+                  {projectLinks.map((link) => (
+                    <li key={link.href}>
+                      <a href={link.href}>{link.label}</a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            </main>
 
-    const newHist = [...history, { amount: amt, timestamp: new Date().toISOString() }];
-    const refDoc = doc(db, 'budgets', pin);
-    await updateDoc(refDoc, { history: newHist });
+            {showPopup && (
+              <div className="popup" role="dialog" aria-modal="true" aria-labelledby="rickroll-title">
+                <div className="popup-content">
+                  <h2 id="rickroll-title">YOU HAVE BEEN RICKROLLED</h2>
+                  <img src="/main/images/rickroll.gif" alt="Rick Roll" />
+                  <button id="close-popup" type="button" onClick={() => setShowPopup(false)}>&#10005;</button>
+                </div>
+              </div>
+            )}
 
-    // Update local history and clear input
-    setHistory(newHist);
-    setSpendInput('');
-
-    // Calculate today's total spend
-    const sumNewToday = newHist.reduce((sum, e) => {
-      const d = new Date(e.timestamp);
-      return d.toDateString() === new Date().toDateString() ? sum + e.amount : sum;
-    }, 0);
-
-    // Recalculate today's remaining
-    const remainingAfter = parseFloat(remDaily) - sumNewToday;
-    if (remainingAfter < 0) {
-      const newDaily = ((parseFloat(remTotal) - sumNewToday) / daysLeft).toFixed(2);
-      setOverflowMessage(`You spent all money for today! New daily budget is ${newDaily}`);
-    } else {
-      setOverflowMessage('');
-    }
-  };
-
-  // Screens
-  if (step === 'auth') {
-    return (
-      <div className="p-8">
-        <h1 className="text-2xl font-semibold mb-4">Enter PIN</h1>
-        <InputNumeric value={pin} onChange={setPin} placeholder="••••" />
-        <button onClick={handleAuth} className="mt-4 bg-blue-600 text-white p-3 rounded-2xl w-full">Unlock</button>
-      </div>
-    );
-  }
-
-  if (step === 'intro') {
-    return (
-      <div className="p-8 space-y-6">
-        <h1 className="text-3xl font-semibold">Welcome to LxD budget app</h1>
-        <InputNumeric value={total} onChange={setTotal} placeholder="0.00" />
-        <label>Select days (1-40):</label>
-        <select
-          value={initialDays}
-          onChange={e => setInitialDays(Number(e.target.value))}
-          className="w-full p-4 border rounded-2xl"
-        >
-          {Array.from({ length: 40 }, (_, i) => (
-            <option key={i} value={i + 1}>{i + 1}</option>
-          ))}
-        </select>
-        <p>Days: {initialDays}</p>
-        <p>Initial daily: {(parseFloat(total || 0) / initialDays).toFixed(2)}</p>
-        <div className="flex space-x-4">
-          <button onClick={() => setStep('auth')} className="flex-1 bg-gray-300 p-3 rounded-2xl">BACK</button>
-          <button onClick={saveIntro} className="flex-1 bg-blue-600 text-white p-3 rounded-2xl">SAVE</button>
-        </div>
-      </div>
-    );
-  }
-
-  if (step === 'daily') {
-    return (
-      <div className="p-8">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-semibold">
-            FOR TODAY YOU HAVE: {' '}
-            <span className={numTodayRem < 0 ? 'text-red-600' : ''}>
-              {displayToday}
-            </span>
-          </h1>
-          <span className="text-sm">Remaining {remTotal} over {daysLeft} days</span>
-        </div>
-        <InputNumeric value={spendInput} onChange={setSpendInput} placeholder="0.00" />
-        <button onClick={handleSpend} className="mt-2 bg-green-600 text-white p-2 rounded-2xl w-full">OK</button>
-        {overflowMessage && (
-          <div className="text-red-600 mt-2">
-            {overflowMessage}
-          </div>
+            <footer>
+              <p>DM 2023 &copy;</p>
+            </footer>
+          </>
         )}
-        <div className="fixed bottom-0 left-0 right-0 flex justify-between p-4 bg-white">
-          <button onClick={() => setStep('intro')} className="bg-gray-300 p-3 rounded-2xl">EDIT</button>
-          <button onClick={() => setStep('history')} className="bg-gray-300 p-3 rounded-2xl">HISTORY</button>
-        </div>
       </div>
-    );
-  }
 
-  if (step === 'history') {
-    return (
-      <div className="p-8">
-        <h1 className="text-2xl font-semibold mb-4">History (last 72h)</h1>
-        <ul className="list-disc pl-5 space-y-2">
-          {history.map((e, i) => (
-            <li key={i}>{parseFloat(e.amount).toFixed(2)} ({fmt(e.timestamp)})</li>
-          ))}
-        </ul>
-        <button onClick={() => setStep('daily')} className="mt-4 bg-gray-300 p-3 rounded-2xl">BACK</button>
-      </div>
-    );
-  }
+      <style jsx global>{`
+        @font-face {
+          font-family: 'Apple Garamond';
+          src: url('/main/fonts/AppleGaramond.ttf');
+        }
 
-  return null;
+        body {
+          background: #000;
+        }
+      `}</style>
+
+      <style jsx>{`
+        .home {
+          min-height: 100vh;
+          max-width: 800px;
+          margin: 0 auto;
+          color: #fff;
+          font-family: 'Apple Garamond', serif;
+        }
+
+        .home * {
+          box-sizing: border-box;
+        }
+
+        header {
+          text-align: left;
+          margin: 2rem 0;
+          border-bottom: 1px solid gray;
+        }
+
+        header h1,
+        .gate h1 {
+          font-size: 3rem;
+          color: white;
+          margin: 0;
+        }
+
+        header p.tagline {
+          font-size: 1.5rem;
+          margin-top: 1rem;
+          line-height: 1.5;
+          color: white;
+        }
+
+        main {
+          padding: 2rem;
+        }
+
+        section {
+          margin-bottom: 2rem;
+        }
+
+        section h2 {
+          font-size: 2rem;
+          margin: 0 0 1rem;
+          color: white;
+        }
+
+        ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        ul li {
+          margin-bottom: 1rem;
+        }
+
+        a {
+          color: white;
+          text-decoration: none;
+          display: inline-block;
+          background-image: url('/main/images/skull.png');
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: left center;
+          padding-left: 2rem;
+        }
+
+        a:hover {
+          color: #7e7e7e;
+        }
+
+        a:visited {
+          color: #bfbfbf;
+        }
+
+        a[target='_blank']::after {
+          content: "↗";
+          margin-left: 0.2em;
+        }
+
+        button {
+          background-color: white;
+          color: black;
+          padding: 0.5rem 1rem;
+          border: none;
+          border-radius: 0.5rem;
+          cursor: pointer;
+          font-family: 'Apple Garamond', serif;
+        }
+
+        footer {
+          padding: 0 2rem 2rem;
+        }
+
+        .gate {
+          min-height: 100vh;
+          display: grid;
+          place-items: center;
+          padding: 2rem;
+        }
+
+        .gate-box {
+          width: min(100%, 360px);
+          display: grid;
+          gap: 1rem;
+          padding: 2rem;
+          border: 1px solid gray;
+          border-radius: 0.75rem;
+        }
+
+        .gate-box p {
+          margin: 0;
+          font-size: 1.4rem;
+        }
+
+        .gate-box input {
+          width: 100%;
+          padding: 0.8rem 1rem;
+          border: 1px solid #777;
+          border-radius: 0.5rem;
+          background: #050505;
+          color: #fff;
+          font: inherit;
+          font-size: 1.4rem;
+        }
+
+        .gate-box span {
+          color: #bfbfbf;
+        }
+
+        .popup {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 1rem;
+        }
+
+        .popup-content {
+          background-color: black;
+          padding: 2rem;
+          text-align: center;
+          border-radius: 0.5rem;
+          position: relative;
+          box-shadow: 0 0 0 2px white;
+        }
+
+        .popup-content h2 {
+          font-size: 2rem;
+          margin: 0 0 1rem;
+          color: white;
+        }
+
+        .popup-content img {
+          width: 100%;
+          max-width: 400px;
+          margin-bottom: 1rem;
+        }
+
+        #close-popup {
+          background-color: black;
+          color: white;
+          padding: 0.5rem 1rem;
+          border: none;
+          border-radius: 0.5rem;
+          cursor: pointer;
+          position: absolute;
+          top: 0.5rem;
+          right: 0.5rem;
+          font-size: 1.5rem;
+          line-height: 1;
+        }
+
+        @media (max-width: 600px) {
+          header {
+            margin: 2rem;
+          }
+
+          header h1,
+          .gate h1 {
+            font-size: 2.5rem;
+          }
+
+          header p.tagline {
+            font-size: 1rem;
+          }
+
+          section h2 {
+            font-size: 1.5rem;
+          }
+
+          ul li {
+            margin-bottom: 0.5rem;
+          }
+
+          button {
+            font-size: 1rem;
+          }
+        }
+      `}</style>
+    </>
+  );
 }
