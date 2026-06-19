@@ -1,0 +1,1 @@
+import{a as r,j as e,N as t}from"./index-ByHBnkhy.js";function i(){const{user:n,loading:s}=r();return s?e.jsx("div",{className:"flex min-h-screen items-center justify-center text-sm text-muted-foreground",children:"Loading…"}):n?e.jsx(t,{to:"/expenses"}):e.jsx(t,{to:"/login"})}export{i as component};
