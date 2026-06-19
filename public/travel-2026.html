@@ -1,0 +1,917 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Italy New Year Dog Trip — City Comparison</title>
+<style>
+  :root {
+    --bg: #fbf6ef;
+    --ink: #241e18;
+    --muted: #6d6258;
+    --card: rgba(255,255,255,.78);
+    --line: #e4d7c8;
+    --accent: #8b3f2f;
+    --accent2: #294b3d;
+    --gold: #c79548;
+    --shadow: 0 18px 55px rgba(75,50,30,.12);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at 15% 5%, rgba(199,149,72,.25), transparent 28rem),
+      radial-gradient(circle at 85% 10%, rgba(41,75,61,.18), transparent 28rem),
+      linear-gradient(180deg, #fffaf3, var(--bg));
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 48px 22px 80px; }
+  header {
+    padding: 42px;
+    border: 1px solid var(--line);
+    border-radius: 32px;
+    background: linear-gradient(135deg, rgba(255,255,255,.88), rgba(255,247,237,.66));
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    position: relative;
+  }
+  header:after {
+    content: "";
+    position: absolute;
+    inset: auto -60px -90px auto;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: rgba(139,63,47,.08);
+  }
+  .eyebrow {
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 800;
+    font-size: 12px;
+  }
+  h1 {
+    margin: 12px 0 16px;
+    font-family: ui-serif, Georgia, serif;
+    font-size: clamp(40px, 7vw, 82px);
+    line-height: .92;
+    max-width: 900px;
+  }
+  .hero-text {
+    font-size: 19px;
+    line-height: 1.55;
+    max-width: 860px;
+    color: var(--muted);
+  }
+  .verdict-box {
+    margin-top: 26px;
+    padding: 22px;
+    border-radius: 24px;
+    background: #241e18;
+    color: #fff9ef;
+    max-width: 860px;
+  }
+  .verdict-box strong { color: #ffd895; }
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 26px;
+  }
+  .meta {
+    background: rgba(255,255,255,.7);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 14px 16px;
+  }
+  .meta b { display:block; font-size: 22px; }
+  .meta span { color: var(--muted); font-size: 13px; }
+  section { margin-top: 34px; }
+  h2 {
+    font-family: ui-serif, Georgia, serif;
+    font-size: 34px;
+    margin: 0 0 16px;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .card {
+    padding: 22px;
+    border-radius: 26px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    box-shadow: 0 10px 35px rgba(75,50,30,.08);
+  }
+  .card-top { display:flex; justify-content: space-between; align-items:center; }
+  .pill {
+    display: inline-block;
+    border-radius: 999px;
+    padding: 5px 9px;
+    background: rgba(139,63,47,.10);
+    color: var(--accent);
+    font-weight: 800;
+    font-size: 12px;
+  }
+  .score { font-weight: 900; color: var(--accent2); }
+  .card h3 { margin: 14px 0 8px; font-size: 24px; }
+  .card p { margin: 0 0 18px; color: var(--muted); line-height: 1.45; }
+  .bar { height: 10px; background: #eadfd2; border-radius: 999px; overflow:hidden; }
+  .bar span { display:block; height: 100%; background: linear-gradient(90deg, var(--accent2), var(--gold)); border-radius: 999px; }
+  dl { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 18px 0 0; }
+  dt { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing:.08em; }
+  dd { margin: 3px 0 0; font-weight: 800; }
+  .scoreboard {
+    padding: 24px;
+    border-radius: 28px;
+    background: var(--card);
+    border: 1px solid var(--line);
+  }
+  .score-row {
+    display: grid;
+    grid-template-columns: 190px 1fr 62px;
+    gap: 14px;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(228,215,200,.75);
+  }
+  .score-row:last-child { border-bottom: 0; }
+  .score-row span { font-weight: 700; }
+  .score-row b { text-align: right; color: var(--accent2); }
+  .table-wrap {
+    overflow:auto;
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    background: var(--card);
+    box-shadow: var(--shadow);
+  }
+  table { width: 100%; border-collapse: collapse; min-width: 1060px; }
+  th {
+    position: sticky; top: 0;
+    background: #fff5e8;
+    color: var(--accent);
+    text-align: left;
+    font-size: 12px;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    padding: 14px 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  td {
+    padding: 14px;
+    vertical-align: top;
+    border-bottom: 1px solid rgba(228,215,200,.85);
+    line-height: 1.35;
+  }
+  td span { color: var(--muted); font-size: 12px; }
+  td.rank { font-size: 20px; font-weight: 900; color: var(--accent); }
+  .notes {
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .note {
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 20px;
+    background: rgba(255,255,255,.68);
+  }
+  .note h3 { margin:0 0 8px; }
+  .note p, .note li { color: var(--muted); line-height: 1.5; }
+  footer {
+    margin-top: 32px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  @media (max-width: 850px) {
+    header { padding: 28px; }
+    .meta-grid, .cards, .notes { grid-template-columns: 1fr; }
+    .score-row { grid-template-columns: 135px 1fr 58px; }
+  }
+
+  .cta-row {
+    margin-top: 22px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .button {
+    border: 0;
+    border-radius: 999px;
+    padding: 12px 18px;
+    background: var(--accent);
+    color: #fff9ef;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(139,63,47,.18);
+  }
+  .button.secondary {
+    background: rgba(36,30,24,.08);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    box-shadow: none;
+  }
+  .button:hover { transform: translateY(-1px); }
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    display: none;
+    place-items: center;
+    padding: 20px;
+    background: rgba(36,30,24,.52);
+    z-index: 50;
+  }
+  .modal-backdrop.is-open { display: grid; }
+  .modal {
+    width: min(900px, 100%);
+    max-height: min(86vh, 820px);
+    overflow: auto;
+    border-radius: 28px;
+    background: #fffaf3;
+    color: var(--ink);
+    border: 1px solid var(--line);
+    box-shadow: 0 30px 90px rgba(0,0,0,.28);
+  }
+  .modal-head {
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    align-items: flex-start;
+    padding: 24px 26px 18px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(255,250,243,.96);
+    backdrop-filter: blur(10px);
+  }
+  .modal-head h2 {
+    margin: 0;
+    font-size: 30px;
+  }
+  .modal-head p {
+    margin: 8px 0 0;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .close {
+    flex: 0 0 auto;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .modal-body { padding: 22px 26px 28px; }
+  .breakdown-grid {
+    display: grid;
+    gap: 10px;
+  }
+  .breakdown-row {
+    display: grid;
+    grid-template-columns: 170px 1fr 130px;
+    gap: 14px;
+    align-items: start;
+    padding: 13px 0;
+    border-bottom: 1px solid rgba(228,215,200,.9);
+  }
+  .breakdown-row:last-child { border-bottom: 0; }
+  .breakdown-row b { color: var(--accent2); }
+  .breakdown-row span { color: var(--muted); line-height: 1.45; }
+  .modal-note {
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 20px;
+    background: rgba(139,63,47,.08);
+    border: 1px solid rgba(139,63,47,.16);
+  }
+  .modal-note h3 { margin: 0 0 8px; }
+  .modal-note ul { margin: 8px 0 0 20px; padding: 0; color: var(--muted); line-height: 1.55; }
+  @media (max-width: 720px) {
+    .breakdown-row { grid-template-columns: 1fr; gap: 4px; }
+    .modal-head { padding: 20px; }
+    .modal-body { padding: 18px 20px 24px; }
+  }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">Italy New Year 2026/27 • 4 adults • 2 dachshunds</div>
+  <h1>Where should we stay?</h1>
+  <p class="hero-text">A brutal, dog-first comparison of the cities we discussed for a relaxed 29 Dec–3 Jan trip from Cyprus via Venice or Milan. Scores are built around the actual trip you described: short dog walks, good food, coffee, cozy streets, light art, birthdays, and a calm New Year.</p>
+  <div class="verdict-box">
+    <strong>Executive recommendation:</strong> choose <strong>Treviso</strong> unless the group explicitly wants a more romantic/cultural birthday setting, in which case choose <strong>Mantua</strong>. Avoid “deep Dolomites” for this trip unless snow is the whole point.
+  </div>
+  <div class="cta-row">
+    <button class="button" data-open-cost>What does the cost estimate include?</button>
+    <button class="button secondary" onclick="document.querySelector('#full-comparison').scrollIntoView({behavior:'smooth'});">Jump to comparison table</button>
+  </div>
+
+  <div class="meta-grid">
+    <div class="meta"><b>Treviso</b><span>lowest-friction winner</span></div>
+    <div class="meta"><b>Mantua</b><span>best birthday mood</span></div>
+    <div class="meta"><b>Ferrara</b><span>quiet Renaissance fallback</span></div>
+    <div class="meta"><b>Cernobbio</b><span>best lake version</span></div>
+  </div>
+</header>
+
+<section>
+  <h2>Top shortlist</h2>
+  <div class="cards">
+    
+    <article class="card">
+      <div class="card-top">
+        <span class="pill">#1</span>
+        <span class="score">9/10</span>
+      </div>
+      <h3>Treviso</h3>
+      <p>Best fit. Easy, quiet, canal-walkable, dog-friendly rhythm. Not the strongest art city, but the trip will actually feel relaxed.</p>
+      <div class="bar"><span style="width:90%"></span></div>
+      <dl>
+        <div><dt>Transfer</dt><dd>35–60 min</dd></div>
+        <div><dt>Cost</dt><dd>€1,350–2,150</dd></div>
+      </dl>
+    </article>
+    
+    <article class="card">
+      <div class="card-top">
+        <span class="pill">#2</span>
+        <span class="score">8.5/10</span>
+      </div>
+      <h3>Mantua / Mantova</h3>
+      <p>Best emotional/birthday choice. Beautiful, cultured, calm. Transfer is the tax you pay.</p>
+      <div class="bar"><span style="width:85%"></span></div>
+      <dl>
+        <div><dt>Transfer</dt><dd>2h30–3h30</dd></div>
+        <div><dt>Cost</dt><dd>€1,500–2,400</dd></div>
+      </dl>
+    </article>
+    
+    <article class="card">
+      <div class="card-top">
+        <span class="pill">#3</span>
+        <span class="score">8.3/10</span>
+      </div>
+      <h3>Ferrara</h3>
+      <p>Quiet Renaissance city. Very solid if you want culture without tourist intensity.</p>
+      <div class="bar"><span style="width:83%"></span></div>
+      <dl>
+        <div><dt>Transfer</dt><dd>1h20–1h45</dd></div>
+        <div><dt>Cost</dt><dd>€1,350–2,150</dd></div>
+      </dl>
+    </article>
+    
+    <article class="card">
+      <div class="card-top">
+        <span class="pill">#4</span>
+        <span class="score">8/10</span>
+      </div>
+      <h3>Cernobbio</h3>
+      <p>Best lake version if you want quiet + scenery. More elegant than cultural; can feel sleepy.</p>
+      <div class="bar"><span style="width:80%"></span></div>
+      <dl>
+        <div><dt>Transfer</dt><dd>55–110 min</dd></div>
+        <div><dt>Cost</dt><dd>€1,800–3,000</dd></div>
+      </dl>
+    </article>
+    
+    <article class="card">
+      <div class="card-top">
+        <span class="pill">#5</span>
+        <span class="score">7.8/10</span>
+      </div>
+      <h3>Vicenza</h3>
+      <p>Objectively excellent, but you’ve already done it. Only repeat if logistics beat novelty.</p>
+      <div class="bar"><span style="width:78%"></span></div>
+      <dl>
+        <div><dt>Transfer</dt><dd>1h05–1h20</dd></div>
+        <div><dt>Cost</dt><dd>€1,500–2,300</dd></div>
+      </dl>
+    </article>
+    
+    <article class="card">
+      <div class="card-top">
+        <span class="pill">#6</span>
+        <span class="score">7.8/10</span>
+      </div>
+      <h3>Bassano del Grappa</h3>
+      <p>Sweet, calm, river/mountain atmosphere. Maybe too small for 5 nights unless you truly want to do almost nothing.</p>
+      <div class="bar"><span style="width:78%"></span></div>
+      <dl>
+        <div><dt>Transfer</dt><dd>1h15–1h50</dd></div>
+        <div><dt>Cost</dt><dd>€1,300–2,100</dd></div>
+      </dl>
+    </article>
+    
+  </div>
+</section>
+
+<section>
+  <h2>Overall suitability ranking</h2>
+  <div class="scoreboard">
+    
+    <div class="score-row">
+      <span>Treviso</span>
+      <div class="bar"><span style="width:90%"></span></div>
+      <b>9/10</b>
+    </div>
+    
+    <div class="score-row">
+      <span>Mantua / Mantova</span>
+      <div class="bar"><span style="width:85%"></span></div>
+      <b>8.5/10</b>
+    </div>
+    
+    <div class="score-row">
+      <span>Ferrara</span>
+      <div class="bar"><span style="width:83%"></span></div>
+      <b>8.3/10</b>
+    </div>
+    
+    <div class="score-row">
+      <span>Cernobbio</span>
+      <div class="bar"><span style="width:80%"></span></div>
+      <b>8/10</b>
+    </div>
+    
+    <div class="score-row">
+      <span>Vicenza</span>
+      <div class="bar"><span style="width:78%"></span></div>
+      <b>7.8/10</b>
+    </div>
+    
+    <div class="score-row">
+      <span>Bassano del Grappa</span>
+      <div class="bar"><span style="width:78%"></span></div>
+      <b>7.8/10</b>
+    </div>
+    
+    <div class="score-row">
+      <span>Como city</span>
+      <div class="bar"><span style="width:77%"></span></div>
+      <b>7.7/10</b>
+    </div>
+    
+    <div class="score-row">
+      <span>Padua / Padova</span>
+      <div class="bar"><span style="width:76%"></span></div>
+      <b>7.6/10</b>
+    </div>
+    
+    <div class="score-row">
+      <span>Bressanone / Brixen</span>
+      <div class="bar"><span style="width:74%"></span></div>
+      <b>7.4/10</b>
+    </div>
+    
+    <div class="score-row">
+      <span>Lecco</span>
+      <div class="bar"><span style="width:72%"></span></div>
+      <b>7.2/10</b>
+    </div>
+    
+    <div class="score-row">
+      <span>Parma</span>
+      <div class="bar"><span style="width:72%"></span></div>
+      <b>7.2/10</b>
+    </div>
+    
+    <div class="score-row">
+      <span>Cremona</span>
+      <div class="bar"><span style="width:71%"></span></div>
+      <b>7.1/10</b>
+    </div>
+    
+    <div class="score-row">
+      <span>Modena</span>
+      <div class="bar"><span style="width:70%"></span></div>
+      <b>7/10</b>
+    </div>
+    
+    <div class="score-row">
+      <span>Bergamo</span>
+      <div class="bar"><span style="width:68%"></span></div>
+      <b>6.8/10</b>
+    </div>
+    
+    <div class="score-row">
+      <span>Varenna</span>
+      <div class="bar"><span style="width:66%"></span></div>
+      <b>6.6/10</b>
+    </div>
+    
+    <div class="score-row">
+      <span>Verona</span>
+      <div class="bar"><span style="width:64%"></span></div>
+      <b>6.4/10</b>
+    </div>
+    
+    <div class="score-row">
+      <span>Ortisei / Val Gardena</span>
+      <div class="bar"><span style="width:61%"></span></div>
+      <b>6.1/10</b>
+    </div>
+    
+    <div class="score-row">
+      <span>Cortina d’Ampezzo</span>
+      <div class="bar"><span style="width:58%"></span></div>
+      <b>5.8/10</b>
+    </div>
+    
+  </div>
+</section>
+
+<section id="full-comparison">
+  <h2>Full comparison table</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Base</th>
+          <th>Transfer</th>
+          <th>Est. cost / couple</th>
+          <th>Dogs</th>
+          <th>Access</th>
+          <th>Your taste fit</th>
+          <th>NY calm</th>
+          <th>Overall</th>
+          <th>Brutal note</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+      <tr>
+        <td class="rank">1</td>
+        <td><strong>Treviso</strong><br><span>Venice VCE</span></td>
+        <td>35–60 min</td>
+        <td>€1,350–2,150</td>
+        <td>9.5/10</td>
+        <td>10/10</td>
+        <td>8.1/10</td>
+        <td>9/10</td>
+        <td><strong>9/10</strong><br><span class="pill">Winner</span></td>
+        <td>Best fit. Easy, quiet, canal-walkable, dog-friendly rhythm. Not the strongest art city, but the trip will actually feel relaxed.</td>
+      </tr>
+    
+      <tr>
+        <td class="rank">2</td>
+        <td><strong>Mantua / Mantova</strong><br><span>Venice VCE, possible Milan MXP</span></td>
+        <td>2h30–3h30</td>
+        <td>€1,500–2,400</td>
+        <td>8.5/10</td>
+        <td>6.5/10</td>
+        <td>9/10</td>
+        <td>8.5/10</td>
+        <td><strong>8.5/10</strong><br><span class="pill">Winner</span></td>
+        <td>Best emotional/birthday choice. Beautiful, cultured, calm. Transfer is the tax you pay.</td>
+      </tr>
+    
+      <tr>
+        <td class="rank">3</td>
+        <td><strong>Ferrara</strong><br><span>Venice VCE</span></td>
+        <td>1h20–1h45</td>
+        <td>€1,350–2,150</td>
+        <td>8.5/10</td>
+        <td>8/10</td>
+        <td>8.1/10</td>
+        <td>8.5/10</td>
+        <td><strong>8.3/10</strong><br><span class="pill">Strong option</span></td>
+        <td>Quiet Renaissance city. Very solid if you want culture without tourist intensity.</td>
+      </tr>
+    
+      <tr>
+        <td class="rank">4</td>
+        <td><strong>Cernobbio</strong><br><span>Milan MXP</span></td>
+        <td>55–110 min</td>
+        <td>€1,800–3,000</td>
+        <td>8.5/10</td>
+        <td>8/10</td>
+        <td>7.5/10</td>
+        <td>8.5/10</td>
+        <td><strong>8/10</strong><br><span class="pill">Strong option</span></td>
+        <td>Best lake version if you want quiet + scenery. More elegant than cultural; can feel sleepy.</td>
+      </tr>
+    
+      <tr>
+        <td class="rank">5</td>
+        <td><strong>Vicenza</strong><br><span>Venice VCE</span></td>
+        <td>1h05–1h20</td>
+        <td>€1,500–2,300</td>
+        <td>8.5/10</td>
+        <td>9/10</td>
+        <td>8.4/10</td>
+        <td>8/10</td>
+        <td><strong>7.8/10</strong><br><span class="pill">Strong option</span></td>
+        <td>Objectively excellent, but you’ve already done it. Only repeat if logistics beat novelty.</td>
+      </tr>
+    
+      <tr>
+        <td class="rank">6</td>
+        <td><strong>Bassano del Grappa</strong><br><span>Venice VCE</span></td>
+        <td>1h15–1h50</td>
+        <td>€1,300–2,100</td>
+        <td>9/10</td>
+        <td>7.5/10</td>
+        <td>7.8/10</td>
+        <td>8.5/10</td>
+        <td><strong>7.8/10</strong><br><span class="pill">Strong option</span></td>
+        <td>Sweet, calm, river/mountain atmosphere. Maybe too small for 5 nights unless you truly want to do almost nothing.</td>
+      </tr>
+    
+      <tr>
+        <td class="rank">7</td>
+        <td><strong>Como city</strong><br><span>Milan MXP</span></td>
+        <td>35–105 min</td>
+        <td>€1,700–2,800</td>
+        <td>8/10</td>
+        <td>8.5/10</td>
+        <td>7.2/10</td>
+        <td>7.5/10</td>
+        <td><strong>7.7/10</strong><br><span class="pill">Strong option</span></td>
+        <td>Practical lake option. Scenic and easy, but more traffic/urban lake-town than cozy village.</td>
+      </tr>
+    
+      <tr>
+        <td class="rank">8</td>
+        <td><strong>Padua / Padova</strong><br><span>Venice VCE</span></td>
+        <td>40–50 min</td>
+        <td>€1,500–2,300</td>
+        <td>7/10</td>
+        <td>9.5/10</td>
+        <td>8.5/10</td>
+        <td>6.5/10</td>
+        <td><strong>7.6/10</strong><br><span class="pill">Strong option</span></td>
+        <td>Best art-to-effort ratio. But it is a real city, not a soft dog retreat.</td>
+      </tr>
+    
+      <tr>
+        <td class="rank">9</td>
+        <td><strong>Bressanone / Brixen</strong><br><span>Venice VCE</span></td>
+        <td>3h30–5h</td>
+        <td>€1,800–3,000</td>
+        <td>7.5/10</td>
+        <td>5.5/10</td>
+        <td>8/10</td>
+        <td>8/10</td>
+        <td><strong>7.4/10</strong><br><span class="pill">Conditional</span></td>
+        <td>Best alpine compromise. Pretty and cozy, but the transfer is no longer relaxed.</td>
+      </tr>
+    
+      <tr>
+        <td class="rank">10</td>
+        <td><strong>Lecco</strong><br><span>Milan MXP</span></td>
+        <td>1h45–2h15</td>
+        <td>€1,500–2,400</td>
+        <td>8/10</td>
+        <td>7.5/10</td>
+        <td>6.8/10</td>
+        <td>8/10</td>
+        <td><strong>7.2/10</strong><br><span class="pill">Conditional</span></td>
+        <td>Good practical lake/mountain base. Less romantic than Como/Cernobbio; weaker classical art.</td>
+      </tr>
+    
+      <tr>
+        <td class="rank">11</td>
+        <td><strong>Parma</strong><br><span>Milan MXP</span></td>
+        <td>2h15–3h</td>
+        <td>€1,600–2,500</td>
+        <td>7.5/10</td>
+        <td>6.5/10</td>
+        <td>8.2/10</td>
+        <td>7/10</td>
+        <td><strong>7.2/10</strong><br><span class="pill">Conditional</span></td>
+        <td>Food heaven. But for dogs and a slow New Year, it is more ‘city break’ than retreat.</td>
+      </tr>
+    
+      <tr>
+        <td class="rank">12</td>
+        <td><strong>Cremona</strong><br><span>Milan MXP</span></td>
+        <td>2h10–3h</td>
+        <td>€1,350–2,100</td>
+        <td>8/10</td>
+        <td>6.5/10</td>
+        <td>7.2/10</td>
+        <td>8/10</td>
+        <td><strong>7.1/10</strong><br><span class="pill">Conditional</span></td>
+        <td>Underrated and calm. Safe choice if budget matters, but not magical enough for birthday/New Year.</td>
+      </tr>
+    
+      <tr>
+        <td class="rank">13</td>
+        <td><strong>Modena</strong><br><span>Milan MXP</span></td>
+        <td>2h55–3h35</td>
+        <td>€1,600–2,500</td>
+        <td>7/10</td>
+        <td>6/10</td>
+        <td>8.2/10</td>
+        <td>7/10</td>
+        <td><strong>7/10</strong><br><span class="pill">Conditional</span></td>
+        <td>Great food + Romanesque art. But transfer and dog value are only average.</td>
+      </tr>
+    
+      <tr>
+        <td class="rank">14</td>
+        <td><strong>Bergamo</strong><br><span>Milan MXP</span></td>
+        <td>1h30–2h</td>
+        <td>€1,600–2,500</td>
+        <td>6.5/10</td>
+        <td>7.5/10</td>
+        <td>7.9/10</td>
+        <td>6.5/10</td>
+        <td><strong>6.8/10</strong><br><span class="pill">Conditional</span></td>
+        <td>Beautiful, but hills/stairs and holiday crowds are bad dachshund math.</td>
+      </tr>
+    
+      <tr>
+        <td class="rank">15</td>
+        <td><strong>Varenna</strong><br><span>Milan MXP</span></td>
+        <td>2h05–3h</td>
+        <td>€1,700–2,800</td>
+        <td>6/10</td>
+        <td>5.5/10</td>
+        <td>7/10</td>
+        <td>7.5/10</td>
+        <td><strong>6.6/10</strong><br><span class="pill">Avoid for this brief</span></td>
+        <td>Romantic postcard, poor logistics. Stairs, slopes, winter ferry dependency, less food depth.</td>
+      </tr>
+    
+      <tr>
+        <td class="rank">16</td>
+        <td><strong>Verona</strong><br><span>Venice VCE</span></td>
+        <td>1h25–1h40</td>
+        <td>€1,700–2,700</td>
+        <td>5.5/10</td>
+        <td>8.5/10</td>
+        <td>8.4/10</td>
+        <td>4.5/10</td>
+        <td><strong>6.4/10</strong><br><span class="pill">Avoid for this brief</span></td>
+        <td>Gorgeous but too obvious, busy and noisy. Not the trip you described.</td>
+      </tr>
+    
+      <tr>
+        <td class="rank">17</td>
+        <td><strong>Ortisei / Val Gardena</strong><br><span>Venice VCE</span></td>
+        <td>3h private / 6h+ public</td>
+        <td>€2,300–4,000</td>
+        <td>5.5/10</td>
+        <td>4/10</td>
+        <td>7.6/10</td>
+        <td>6.5/10</td>
+        <td><strong>6.1/10</strong><br><span class="pill">Avoid for this brief</span></td>
+        <td>Visual dream, operational trap. Only worth it if snow/mountains are the main reason for the trip.</td>
+      </tr>
+    
+      <tr>
+        <td class="rank">18</td>
+        <td><strong>Cortina d’Ampezzo</strong><br><span>Venice VCE</span></td>
+        <td>2h15–2h45 bus</td>
+        <td>€2,500–4,500</td>
+        <td>5/10</td>
+        <td>6.5/10</td>
+        <td>6.6/10</td>
+        <td>5/10</td>
+        <td><strong>5.8/10</strong><br><span class="pill">Avoid for this brief</span></td>
+        <td>Expensive ski-resort energy. Easy to reach, but not relaxed and not great value for dogs.</td>
+      </tr>
+    
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>How to read this</h2>
+  <div class="notes">
+    <div class="note">
+      <h3>Cost assumption</h3>
+      <p>Estimated per couple, excluding flights, for 5 nights. Open the pop-up for the full breakdown by accommodation, food, cafes, restaurants, transport, museums, gifts, and pet extras.</p>
+      <button class="button secondary" data-open-cost>Open cost breakdown</button>
+    </div>
+    <div class="note">
+      <h3>Dog assumption</h3>
+      <p>Dachshund logic matters: flat streets, short loops, low stairs, low fireworks exposure, easy station access, and a comfortable apartment are more important than “prettiest place on Instagram.”</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Prepared 2026-06-19. Treat transfer times and costs as planning ranges; check exact 29 Dec 2026 and 3 Jan 2027 flights/trains before booking.
+</footer>
+</div>
+
+<div class="modal-backdrop" id="costModal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="costModalTitle">
+    <div class="modal-head">
+      <div>
+        <h2 id="costModalTitle">What the estimate covers</h2>
+        <p>Per couple, excluding flights, for 29 Dec–3 Jan / 5 nights. This assumes a shared pet-friendly 2-bedroom apartment for 4 adults + 2 dogs and a relaxed, non-luxury trip style.</p>
+      </div>
+      <button class="close" data-close-cost aria-label="Close cost breakdown">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="breakdown-grid">
+        <div class="breakdown-row">
+          <b>Accommodation share</b>
+          <span>Half of a pet-friendly 2-bedroom apartment for 4 adults + 2 dogs, 5 nights.</span>
+          <strong>€550–900</strong>
+        </div>
+        <div class="breakdown-row">
+          <b>Food at home</b>
+          <span>Groceries, market food, breakfast supplies, wine, snacks, and cooking 2–3 dinners at home.</span>
+          <strong>€180–300</strong>
+        </div>
+        <div class="breakdown-row">
+          <b>Cafes / brunch / casual lunches</b>
+          <span>Coffee, pastries, casual lunches, aperitivo, and easy daytime food.</span>
+          <strong>€180–300</strong>
+        </div>
+        <div class="breakdown-row">
+          <b>Restaurants</b>
+          <span>2–3 normal meals out plus one nicer birthday-ish dinner, not luxury tasting menus.</span>
+          <strong>€250–450</strong>
+        </div>
+        <div class="breakdown-row">
+          <b>Local transport</b>
+          <span>Airport-to-city trains/buses, local trains, and occasional taxi if useful.</span>
+          <strong>€70–180</strong>
+        </div>
+        <div class="breakdown-row">
+          <b>Museums / light getaways</b>
+          <span>1–2 museum or art visits, or one small day trip.</span>
+          <strong>€50–180</strong>
+        </div>
+        <div class="breakdown-row">
+          <b>Small gift shopping</b>
+          <span>Books, food gifts, dog treats, ceramics, small souvenirs, or local products.</span>
+          <strong>€150–300</strong>
+        </div>
+        <div class="breakdown-row">
+          <b>Pet extras</b>
+          <span>Accommodation pet fee, cleaning surcharge, and small dog supplies.</span>
+          <strong>€50–120</strong>
+        </div>
+      </div>
+
+      <div class="modal-note">
+        <h3>Not included</h3>
+        <ul>
+          <li>Flights, unless you include them separately at around €800 for 2 people + dog.</li>
+          <li>Luxury hotels, New Year gala/tasting menus, private transfers, car rental, emergency vet costs, new dog carriers, vaccines/documents, or heavy shopping.</li>
+          <li>Airline pet fee, unless it is already inside your flight estimate.</li>
+        </ul>
+      </div>
+
+      <div class="modal-note">
+        <h3>Rule of thumb</h3>
+        <ul>
+          <li>Most sensible cities: around €2,150–3,200 per couple all-in with flights.</li>
+          <li>Como/Cernobbio and Bressanone: around €2,500–3,800 per couple all-in.</li>
+          <li>Ortisei/Cortina: easily €3,100–5,300+ per couple all-in.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('costModal');
+  const openButtons = document.querySelectorAll('[data-open-cost]');
+  const closeButtons = document.querySelectorAll('[data-close-cost]');
+
+  function openCostModal() {
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCostModal() {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  openButtons.forEach(button => button.addEventListener('click', openCostModal));
+  closeButtons.forEach(button => button.addEventListener('click', closeCostModal));
+
+  modal.addEventListener('click', event => {
+    if (event.target === modal) closeCostModal();
+  });
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && modal.classList.contains('is-open')) closeCostModal();
+  });
+</script>
+
+</body>
+</html>
