@@ -41,6 +41,7 @@ const Button = ({ children, variant = 'primary', ...props }) => (
       variant === 'primary'
         ? 'bg-[#8b3f2f] text-[#fff9ef] shadow-lg shadow-[#8b3f2f]/20 hover:bg-[#743326] focus:ring-[#8b3f2f]'
         : 'border border-[#e4d7c8] bg-white/70 text-[#241e18] hover:bg-white focus:ring-[#c79548]',
+      'disabled:cursor-not-allowed disabled:opacity-55',
     ].join(' ')}
     {...props}
   >
@@ -54,7 +55,7 @@ const ScoreBar = ({ value }) => (
   </div>
 );
 
-const VoteControls = ({ cityId, votes, onVote }) => {
+const VoteControls = ({ cityId, ready, votes, onVote }) => {
   const counts = countVotes(votes);
   return (
     <div className="mt-4 min-w-[190px]">
@@ -75,9 +76,10 @@ const VoteControls = ({ cityId, votes, onVote }) => {
             <button
               key={person}
               type="button"
+              disabled={!ready}
               onClick={() => onVote(person, cityId)}
               className={[
-                'rounded-full border px-2.5 py-1.5 text-xs transition focus:outline-none focus:ring-2 focus:ring-[#c79548]',
+                'rounded-full border px-2.5 py-1.5 text-xs transition focus:outline-none focus:ring-2 focus:ring-[#c79548] disabled:cursor-not-allowed disabled:opacity-55',
                 active
                   ? 'border-[#294b3d] bg-[#294b3d] font-black text-[#fff9ef]'
                   : 'border-[#e4d7c8] bg-white/70 text-[#6d6258] hover:bg-white',
@@ -93,7 +95,7 @@ const VoteControls = ({ cityId, votes, onVote }) => {
   );
 };
 
-const CityCard = ({ city, votes, onVote }) => (
+const CityCard = ({ city, ready, votes, onVote }) => (
   <article className="rounded-[26px] border border-[#e4d7c8] bg-white/75 p-5 shadow-xl shadow-stone-900/5">
     <div className="flex items-center justify-between gap-3">
       <span className="rounded-full bg-[#8b3f2f]/10 px-2.5 py-1 text-xs font-black text-[#8b3f2f]">#{city.rank}</span>
@@ -114,7 +116,7 @@ const CityCard = ({ city, votes, onVote }) => (
         <dd className="mt-1 font-black">{city.cost}</dd>
       </div>
     </dl>
-    <VoteControls cityId={city.id} votes={votes} onVote={onVote} />
+    <VoteControls cityId={city.id} ready={ready} votes={votes} onVote={onVote} />
   </article>
 );
 
@@ -223,9 +225,9 @@ export default function Travel2026Page() {
                   <b className="text-[#ffd895]">Recommendation:</b> choose <b className="text-[#ffd895]">Treviso</b> unless the group explicitly wants a more romantic/cultural birthday setting, in which case choose <b className="text-[#ffd895]">Mantua</b>. <b className="text-[#ffd895]">Lucca</b> is the best new contender if everyone accepts the longer transfer.
                 </div>
                 <div className="mt-6 flex flex-wrap gap-3">
-                  <Button onClick={() => setModalOpen(true)}>Cost estimate</Button>
-                  <Button variant="secondary" onClick={() => document.querySelector('#voting')?.scrollIntoView({ behavior: 'smooth' })}>Voting</Button>
-                  <Button variant="secondary" onClick={() => document.querySelector('#comparison')?.scrollIntoView({ behavior: 'smooth' })}>Comparison</Button>
+                  <Button disabled={!hydrated} onClick={() => setModalOpen(true)}>Cost estimate</Button>
+                  <Button disabled={!hydrated} variant="secondary" onClick={() => document.querySelector('#voting')?.scrollIntoView({ behavior: 'smooth' })}>Voting</Button>
+                  <Button disabled={!hydrated} variant="secondary" onClick={() => document.querySelector('#comparison')?.scrollIntoView({ behavior: 'smooth' })}>Comparison</Button>
                 </div>
               </div>
 
@@ -251,9 +253,10 @@ export default function Travel2026Page() {
                   <button
                     key={item.id}
                     type="button"
+                    disabled={!hydrated}
                     onClick={() => setFilter(item.id)}
                     className={[
-                      'rounded-full border px-3 py-2 text-sm font-bold transition',
+                      'rounded-full border px-3 py-2 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-55',
                       filter === item.id ? 'border-[#294b3d] bg-[#294b3d] text-[#fff9ef]' : 'border-[#e4d7c8] bg-white/70 text-[#241e18] hover:bg-white',
                     ].join(' ')}
                   >
@@ -265,7 +268,7 @@ export default function Travel2026Page() {
 
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {visibleCities.slice(0, filter === 'all' ? 6 : visibleCities.length).map((city) => (
-                <CityCard key={city.id} city={city} votes={votes} onVote={toggleVote} />
+                <CityCard key={city.id} city={city} ready={hydrated} votes={votes} onVote={toggleVote} />
               ))}
             </div>
           </section>
@@ -278,9 +281,9 @@ export default function Travel2026Page() {
                   Each person gets one final vote. Clicking another city moves that person&apos;s vote. Votes are saved in this browser and can also be shared by link.
                 </p>
                 <div className="mt-5 flex flex-wrap gap-3">
-                  <Button onClick={resetVotes}>Reset votes</Button>
-                  <Button variant="secondary" onClick={copyShareLink}>Copy share link</Button>
-                  <Button variant="secondary" onClick={copySummary}>Copy summary</Button>
+                  <Button disabled={!hydrated} onClick={resetVotes}>Reset votes</Button>
+                  <Button disabled={!hydrated} variant="secondary" onClick={copyShareLink}>Copy share link</Button>
+                  <Button disabled={!hydrated} variant="secondary" onClick={copySummary}>Copy summary</Button>
                 </div>
                 {notice && <p className="mt-3 text-sm font-bold text-[#ffd895]">{notice}</p>}
               </div>
@@ -352,7 +355,7 @@ export default function Travel2026Page() {
                       <td className="p-3">{city.taste}/10</td>
                       <td className="p-3">{city.calm}/10</td>
                       <td className="p-3">
-                        <VoteControls cityId={city.id} votes={votes} onVote={toggleVote} />
+                        <VoteControls cityId={city.id} ready={hydrated} votes={votes} onVote={toggleVote} />
                       </td>
                       <td className="p-3">
                         <b>{city.score}/10</b>
@@ -384,7 +387,7 @@ export default function Travel2026Page() {
                     <div><dt className="text-[#6d6258]">Access</dt><dd className="font-bold">{city.access}/10</dd></div>
                   </dl>
                   <p className="mt-4 leading-6 text-[#6d6258]">{city.note}</p>
-                  <VoteControls cityId={city.id} votes={votes} onVote={toggleVote} />
+                  <VoteControls cityId={city.id} ready={hydrated} votes={votes} onVote={toggleVote} />
                 </article>
               ))}
             </div>
@@ -394,7 +397,7 @@ export default function Travel2026Page() {
             <div className="rounded-3xl border border-[#e4d7c8] bg-white/70 p-5">
               <h3 className="text-xl font-black">Cost assumption</h3>
               <p className="mt-2 leading-7 text-[#6d6258]">Estimated per couple, excluding flights, for 5 nights. The modal breaks down accommodation, food, cafes, restaurants, transport, museums, gifts, and pet extras.</p>
-              <div className="mt-4"><Button variant="secondary" onClick={() => setModalOpen(true)}>Open cost breakdown</Button></div>
+              <div className="mt-4"><Button disabled={!hydrated} variant="secondary" onClick={() => setModalOpen(true)}>Open cost breakdown</Button></div>
             </div>
             <div className="rounded-3xl border border-[#e4d7c8] bg-white/70 p-5">
               <h3 className="text-xl font-black">Dog assumption</h3>
