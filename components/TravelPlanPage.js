@@ -210,35 +210,35 @@ export default function TravelPlanPage({ cities, costBreakdown, plan, planningRu
         </div>
         <div className="relative mx-auto max-w-7xl px-4 py-6 sm:px-5 sm:py-8 lg:px-6 lg:py-12">
           <nav className="mb-4 flex items-center justify-between gap-3 text-sm">
-            <Link href="/travel-2026" className={['font-black', theme.linkText].join(' ')}>
+            <Link href="/travel-2026" className={['shrink-0 font-black', theme.linkText].join(' ')}>
               Back to plans
             </Link>
-            <div className={['rounded-full border bg-white/65 px-3 py-1.5 font-bold', theme.border, theme.mutedText].join(' ')}>
+            <div className={['max-w-[58vw] truncate rounded-full border bg-white/65 px-3 py-1.5 text-xs font-bold sm:max-w-none sm:text-sm', theme.border, theme.mutedText].join(' ')}>
               martib.app / travel-2026
             </div>
           </nav>
 
-          <header className={['overflow-hidden rounded-[28px] border bg-white/80 shadow-2xl shadow-stone-900/10 sm:rounded-[34px]', theme.border].join(' ')}>
+          <header className={['overflow-hidden rounded-[24px] border bg-white/82 shadow-2xl shadow-stone-900/10 sm:rounded-[34px]', theme.border].join(' ')}>
             <div className="grid lg:grid-cols-[0.95fr_1.05fr]">
-              <div className="relative min-h-[260px] overflow-hidden lg:min-h-[520px]">
-                <img src={plan.image} alt="" className="h-full min-h-[260px] w-full object-cover lg:min-h-[520px]" />
+              <div className="relative min-h-[220px] overflow-hidden sm:min-h-[300px] lg:min-h-[520px]">
+                <img src={plan.image} alt="" className="h-full min-h-[220px] w-full object-cover sm:min-h-[300px] lg:min-h-[520px]" />
                 <div className={['absolute inset-0', theme.imageFade].join(' ')} />
                 <div className={['absolute bottom-4 left-4 rounded-full border bg-white/80 px-3 py-1 text-xs font-black backdrop-blur', theme.border, theme.linkText].join(' ')}>
                   {plan.postcardLabel}
                 </div>
               </div>
-              <div className="relative p-6 sm:p-9 lg:p-12">
-                <div className={['absolute right-4 top-2 font-serif text-[8rem] font-black leading-none opacity-[0.07] sm:text-[11rem]', theme.headingText].join(' ')} aria-hidden="true">
+              <div className="relative p-5 sm:p-9 lg:p-12">
+                <div className={['pointer-events-none absolute right-3 top-3 hidden font-serif text-[9rem] font-black leading-none opacity-[0.06] sm:block lg:text-[11rem]', theme.headingText].join(' ')} aria-hidden="true">
                   {plan.mark}
                 </div>
-                <p className={['relative text-xs font-black uppercase tracking-[0.13em]', theme.accentText].join(' ')}>{plan.eyebrow}</p>
-                <h1 className={['relative mt-3 max-w-3xl font-serif text-5xl font-black leading-[0.95] sm:text-6xl lg:text-7xl', theme.headingText].join(' ')}>
+                <p className={['relative text-[11px] font-black uppercase tracking-[0.12em] sm:text-xs', theme.accentText].join(' ')}>{plan.eyebrow}</p>
+                <h1 className={['relative mt-3 max-w-3xl font-serif text-4xl font-black leading-[0.98] sm:text-6xl lg:text-7xl', theme.headingText].join(' ')}>
                   {plan.title}
                 </h1>
-                <p className={['relative mt-5 max-w-2xl text-base leading-7 sm:text-lg sm:leading-8', theme.mutedText].join(' ')}>
+                <p className={['relative mt-4 max-w-2xl text-base leading-7 sm:mt-5 sm:text-lg sm:leading-8', theme.mutedText].join(' ')}>
                   {plan.description}
                 </p>
-                <div className={['relative mt-6 max-w-3xl rounded-3xl p-5 leading-7 text-white', theme.verdictBg].join(' ')}>
+                <div className={['relative mt-5 max-w-3xl rounded-2xl p-4 text-sm leading-6 text-white sm:mt-6 sm:rounded-3xl sm:p-5 sm:text-base sm:leading-7', theme.verdictBg].join(' ')}>
                   <b>{plan.recommendationLead}</b> {plan.recommendation}
                 </div>
                 <div className="relative mt-6 flex flex-wrap gap-3">
