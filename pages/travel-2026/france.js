@@ -24,6 +24,7 @@ const franceTheme = {
   voteActive: 'border-[#223a5e] bg-[#223a5e] font-black text-[#fffaf2]',
   voteIdle: 'border-[#e7d9ca] bg-white/70 text-[#6f6872] hover:bg-white',
   rankPill: 'bg-[#862d3e]/10 text-[#862d3e]',
+  rankBadge: 'bg-[#223a5e]',
   verdictBg: 'bg-gradient-to-br from-[#223a5e] to-[#17253c]',
   votePanelBg: 'bg-gradient-to-br from-[#223a5e] to-[#862d3e]',
   noticeText: 'text-[#ffe2a3]',
@@ -34,6 +35,11 @@ const franceTheme = {
     backgroundSize: '38px 38px',
   },
   imageFade: 'bg-gradient-to-r from-transparent via-transparent to-[#fff8ef]/30',
+  scriptText: 'text-[#862d3e]',
+  stamp: 'border-[#9fb0c3] text-[#6d7f96]',
+  leaf: 'text-[#8e4d63]/45',
+  dotColor: '#223a5e',
+  dotEmptyColor: '#d9d2cc',
 };
 
 const francePlan = {
@@ -42,8 +48,10 @@ const francePlan = {
   postcardLabel: 'Cafe, river stone, winter lights',
   eyebrow: 'France New Year 2026/27 - 4 adults - 2 dachshunds',
   title: 'Small cities around Paris',
+  scriptLine: 'France New Year dog trip',
   description:
     'A dog-first comparison for a relaxed 29 Dec-3 Jan trip via Paris/CDG: cozy streets, short daily walks, food, coffee, light art, a calm New Year, and enough winter life to avoid feeling stranded.',
+  mobileDescription: 'Cozy towns, river walks, winter cafes, and calm dog-friendly New Year bases.',
   recommendationLead: 'Executive recommendation:',
   recommendation:
     'choose Chartres as the safest all-round base. Choose Rouen if food and culture matter more than small-town quiet. Choose Senlis only if everyone accepts weaker transport logistics for maximum charm.',

@@ -24,6 +24,7 @@ const italyTheme = {
   voteActive: 'border-[#294b3d] bg-[#294b3d] font-black text-[#fff9ef]',
   voteIdle: 'border-[#e4d7c8] bg-white/70 text-[#6d6258] hover:bg-white',
   rankPill: 'bg-[#8b3f2f]/10 text-[#8b3f2f]',
+  rankBadge: 'bg-[#b7572e]',
   verdictBg: 'bg-[#241e18]',
   votePanelBg: 'bg-[#241e18]',
   noticeText: 'text-[#ffd895]',
@@ -34,6 +35,11 @@ const italyTheme = {
     backgroundSize: '38px 38px',
   },
   imageFade: 'bg-gradient-to-r from-transparent via-transparent to-[#fffaf3]/25',
+  scriptText: 'text-[#8b3f2f]',
+  stamp: 'border-[#bfa891] text-[#9b806a]',
+  leaf: 'text-[#6b7145]/55',
+  dotColor: '#8b3f2f',
+  dotEmptyColor: '#ded1c4',
 };
 
 const italyPlan = {
@@ -42,8 +48,10 @@ const italyPlan = {
   postcardLabel: 'Canals, aperitivo, olive light',
   eyebrow: 'Italy New Year 2026/27 - 4 adults - 2 dachshunds',
   title: 'Where should we stay?',
+  scriptLine: 'Italy New Year dog trip',
   description:
     'A dog-first comparison for a relaxed 29 Dec-3 Jan trip from Cyprus via Venice or Milan. Includes Lucca and Crema, plus a voting board for Lera V, Lera D, Alina, and Danya.',
+  mobileDescription: 'Charming cities, easy walks, good food, and calm dog-friendly New Year bases.',
   recommendationLead: 'Recommendation:',
   recommendation:
     'choose Treviso unless the group explicitly wants a more romantic/cultural birthday setting, in which case choose Mantua. Lucca is the best new contender if everyone accepts the longer transfer.',
