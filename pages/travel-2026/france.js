@@ -44,7 +44,7 @@ const franceTheme = {
 
 const francePlan = {
   mark: 'FR',
-  image: '/travel-assets/france-postcard.png',
+  image: '/travel-assets/france-postcard.jpg',
   postcardLabel: 'Cafe, river stone, winter lights',
   eyebrow: 'France New Year 2026/27 - 4 adults - 2 dachshunds',
   title: 'Small cities around Paris',

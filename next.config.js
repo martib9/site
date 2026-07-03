@@ -6,7 +6,9 @@ const nextConfig = {
   async rewrites() {
     return [
       { source: '/budget', destination: '/budget/index.html' },
-      { source: '/budget/', destination: '/budget/index.html' }
+      { source: '/budget/', destination: '/budget/index.html' },
+      { source: '/main/lera', destination: '/main/lera/index.html' },
+      { source: '/main/lera/', destination: '/main/lera/index.html' }
     ];
   }
 };

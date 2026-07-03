@@ -44,7 +44,7 @@ const italyTheme = {
 
 const italyPlan = {
   mark: 'IT',
-  image: '/travel-assets/italy-postcard.png',
+  image: '/travel-assets/italy-postcard.jpg',
   postcardLabel: 'Canals, aperitivo, olive light',
   eyebrow: 'Italy New Year 2026/27 - 4 adults - 2 dachshunds',
   title: 'Where should we stay?',

@@ -73,7 +73,7 @@ const plans = [
     href: '/travel-2026/italy',
     country: 'ITALY',
     label: 'New Year dog-friendly trip',
-    image: '/travel-assets/italy-postcard.png',
+    image: '/travel-assets/italy-postcard.jpg',
     tone: 'from-[#8b3f2f] to-[#c79548]',
     text: 'text-[#8b3f2f]',
     border: 'border-[#d9bfa7]',
@@ -84,7 +84,7 @@ const plans = [
     href: '/travel-2026/france',
     country: 'FRANCE',
     label: 'New Year dog-friendly trip',
-    image: '/travel-assets/france-postcard.png',
+    image: '/travel-assets/france-postcard.jpg',
     tone: 'from-[#223a5e] to-[#862d3e]',
     text: 'text-[#223a5e]',
     border: 'border-[#d8c9bb]',
@@ -156,23 +156,23 @@ export default function TravelSelectorPage() {
         />
       </Head>
 
-      <main className="min-h-screen overflow-hidden bg-[#fffdf7] text-[#231f1a]" style={pageStyle}>
+      <main className="box-border min-h-screen w-full max-w-full overflow-x-hidden bg-[#fffdf7] text-[#231f1a]" style={pageStyle}>
         <div className="pointer-events-none fixed inset-0 opacity-[0.18]" aria-hidden="true">
           <div className="absolute inset-0" style={patternStyle} />
         </div>
 
-        <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-5 sm:px-6 lg:px-8">
-          <nav className="flex items-center justify-between rounded-full border border-[#e5d7c8] bg-white/75 px-4 py-2 text-sm shadow-sm backdrop-blur">
+        <div className="relative mx-auto box-border flex min-h-screen w-full max-w-7xl flex-col overflow-x-hidden px-4 py-5 sm:px-6 lg:px-8">
+          <nav className="box-border flex w-full min-w-0 items-center justify-between rounded-full border border-[#e5d7c8] bg-white/75 px-4 py-2 text-sm shadow-sm backdrop-blur">
             <Link href="/" className="font-black text-[#29311f]">martib.app</Link>
             <div className="flex items-center gap-2">
-              <span className="rounded-full bg-[#f0e4d6] px-3 py-1 text-xs font-bold text-[#6f6258]">Travel 2026</span>
+              <span className="hidden rounded-full bg-[#f0e4d6] px-3 py-1 text-xs font-bold text-[#6f6258] sm:inline-flex">Travel 2026</span>
               <span className="grid h-7 w-7 place-items-center rounded-full border border-[#e5d7c8] bg-white/70 text-[#59613f]">
                 <Icon name="globe" className="h-4 w-4" />
               </span>
             </div>
           </nav>
 
-          <section className="grid flex-1 items-center gap-8 py-8 sm:py-10 lg:grid-cols-[210px_1fr_230px] lg:py-12">
+          <section className="box-border grid w-full min-w-0 flex-1 items-center gap-8 py-8 sm:py-10 lg:grid-cols-[210px_1fr_230px] lg:py-12">
             <aside className="hidden lg:block">
               <div className="mb-8 grid h-9 w-9 place-items-center rounded-full text-[#59613f]">
                 <Icon name="pin" className="h-7 w-7" />
@@ -192,15 +192,15 @@ export default function TravelSelectorPage() {
               </div>
             </aside>
 
-            <div className="relative mx-auto w-full max-w-4xl overflow-hidden rounded-[26px] border border-[#d9c8b6] bg-[#fffaf0]/92 p-5 shadow-2xl shadow-stone-900/15 backdrop-blur sm:p-7 lg:p-8">
+            <div className="relative mx-auto box-border w-full min-w-0 max-w-[calc(100vw-2rem)] overflow-hidden rounded-[26px] border border-[#d9c8b6] bg-[#fffaf0]/92 p-5 shadow-2xl shadow-stone-900/15 backdrop-blur sm:max-w-4xl sm:p-7 lg:p-8">
               <Botanical side="left" />
               <Botanical side="right" />
               <Stamp className="absolute right-8 top-12" />
               <div className="pointer-events-none absolute bottom-0 left-0 z-0 h-52 w-64 opacity-45" aria-hidden="true">
-                <img src="/travel-assets/italy-postcard.png" alt="" className="h-full w-full object-cover object-left-bottom [mask-image:linear-gradient(90deg,black,transparent)]" />
+                <img src="/travel-assets/italy-postcard.jpg" alt="" className="h-full w-full object-cover object-left-bottom [mask-image:linear-gradient(90deg,black,transparent)]" />
               </div>
               <div className="pointer-events-none absolute bottom-0 right-0 z-0 hidden h-64 w-72 opacity-45 md:block" aria-hidden="true">
-                <img src="/travel-assets/france-postcard.png" alt="" className="h-full w-full object-cover object-right-bottom [mask-image:linear-gradient(270deg,black,transparent)]" />
+                <img src="/travel-assets/france-postcard.jpg" alt="" className="h-full w-full object-cover object-right-bottom [mask-image:linear-gradient(270deg,black,transparent)]" />
               </div>
 
               <header className="relative z-10 mx-auto max-w-xl text-center">
@@ -210,8 +210,8 @@ export default function TravelSelectorPage() {
                     <circle cx="20" cy="20" r="3" fill="currentColor" />
                   </svg>
                 </div>
-                <h1 className="font-serif text-4xl font-black leading-[0.95] text-[#1f2119] sm:text-5xl">Choose the plan</h1>
-                <p className="mx-auto mt-3 max-w-lg font-serif text-lg italic leading-7 text-[#8b6e58]">
+                <h1 className="break-words font-serif text-3xl font-black leading-[0.98] text-[#1f2119] sm:text-5xl">Choose the plan</h1>
+                <p className="mx-auto mt-3 max-w-lg break-words font-serif text-base italic leading-7 text-[#8b6e58] sm:text-lg">
                   Where shall we celebrate New Year with our dogs?
                 </p>
                 <div className="mx-auto mt-4 h-px w-16 bg-[#a88955]" />
@@ -223,7 +223,7 @@ export default function TravelSelectorPage() {
                     key={plan.country}
                     href={plan.href}
                     className={[
-                      'group overflow-hidden rounded-[12px] border bg-white/82 shadow-xl shadow-stone-900/12 transition hover:-translate-y-1 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-[#c79548]',
+                      'group min-w-0 overflow-hidden rounded-[12px] border bg-white/82 shadow-xl shadow-stone-900/12 transition hover:-translate-y-1 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-[#c79548]',
                       plan.border,
                     ].join(' ')}
                   >
@@ -231,7 +231,7 @@ export default function TravelSelectorPage() {
                       <img src={plan.image} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" />
                       <div className="absolute inset-0 bg-gradient-to-r from-white/88 via-white/50 to-transparent" />
                       <div className="absolute inset-0 p-5">
-                        <h2 className={['inline-block rounded-xl bg-white/58 px-2 py-1 font-serif text-2xl font-black leading-none backdrop-blur-sm sm:text-4xl', plan.text].join(' ')}>{plan.country}</h2>
+                        <h2 className={['inline-block max-w-full break-words rounded-xl bg-white/58 px-2 py-1 font-serif text-2xl font-black leading-none backdrop-blur-sm sm:text-4xl', plan.text].join(' ')}>{plan.country}</h2>
                         <p className="mt-2 max-w-[9rem] rounded-xl bg-white/55 p-2 text-sm font-bold leading-5 text-[#2d2922] backdrop-blur-sm">{plan.label}</p>
                         <div className="absolute bottom-5 left-5">
                           <span className={['grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gradient-to-br text-xl font-black text-white shadow-lg transition group-hover:translate-x-1', plan.tone].join(' ')}>

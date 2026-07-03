@@ -309,24 +309,24 @@ export default function TravelPlanPage({ cities, costBreakdown, plan, planningRu
         <meta name="description" content={plan.metaDescription} />
       </Head>
 
-      <main className={['min-h-screen overflow-hidden', theme.pageBg, theme.text].join(' ')} style={theme.pageStyle}>
+      <main className={['box-border min-h-screen w-full max-w-full overflow-x-hidden', theme.pageBg, theme.text].join(' ')} style={theme.pageStyle}>
         <div className="pointer-events-none fixed inset-0 opacity-[0.16]" aria-hidden="true">
           <div className="absolute inset-0" style={theme.patternStyle} />
         </div>
-        <div className="relative mx-auto max-w-7xl px-4 py-6 sm:px-5 sm:py-8 lg:px-6 lg:py-12">
-          <nav className="mb-4 flex items-center justify-between gap-3 text-sm">
+        <div className="relative mx-auto box-border w-full max-w-7xl overflow-x-hidden px-4 py-6 sm:px-5 sm:py-8 lg:px-6 lg:py-12">
+          <nav className="mb-4 box-border flex w-full min-w-0 items-center justify-between gap-3 text-sm">
             <Link href="/travel-2026" className={['shrink-0 font-black', theme.linkText].join(' ')}>
               <span className="inline-flex items-center gap-1.5"><Icon name="back" className="h-4 w-4" /> Back to plans</span>
             </Link>
-            <div className={['max-w-[58vw] truncate rounded-full border bg-white/65 px-3 py-1.5 text-xs font-bold sm:max-w-none sm:text-sm', theme.border, theme.mutedText].join(' ')}>
+            <div className={['hidden max-w-[58vw] truncate rounded-full border bg-white/65 px-3 py-1.5 text-xs font-bold sm:block sm:max-w-none sm:text-sm', theme.border, theme.mutedText].join(' ')}>
               martib.app / travel-2026
             </div>
           </nav>
 
-          <header className={['relative overflow-hidden rounded-[18px] border bg-white/82 shadow-2xl shadow-stone-900/10 sm:rounded-[26px]', theme.border].join(' ')}>
+          <header className={['relative box-border w-full min-w-0 max-w-[calc(100vw-2rem)] overflow-hidden rounded-[18px] border bg-white/82 shadow-2xl shadow-stone-900/10 sm:max-w-none sm:rounded-[26px]', theme.border].join(' ')}>
             <LeafCorner theme={theme} />
             <Stamp label={plan.mark} theme={theme} />
-            <div className="grid lg:grid-cols-[0.95fr_1.05fr]">
+            <div className="grid min-w-0 lg:grid-cols-[0.95fr_1.05fr]">
               <div className="relative min-h-[180px] overflow-hidden sm:min-h-[300px] lg:min-h-[420px]">
                 <img src={plan.image} alt="" className="h-full min-h-[180px] w-full object-cover sm:min-h-[300px] lg:min-h-[420px]" />
                 <div className={['absolute inset-0', theme.imageFade].join(' ')} />
@@ -334,12 +334,12 @@ export default function TravelPlanPage({ cities, costBreakdown, plan, planningRu
                   {plan.postcardLabel}
                 </div>
               </div>
-              <div className="relative p-5 sm:p-9 lg:p-10">
+              <div className="relative min-w-0 p-5 sm:p-9 lg:p-10">
                 <div className={['pointer-events-none absolute right-3 top-3 hidden font-serif text-[9rem] font-black leading-none opacity-[0.06] sm:block lg:text-[11rem]', theme.headingText].join(' ')} aria-hidden="true">
                   {plan.mark}
                 </div>
                 <p className={['relative text-[11px] font-black uppercase tracking-[0.12em] sm:text-xs', theme.accentText].join(' ')}>{plan.eyebrow}</p>
-                <h1 className={['relative mt-3 max-w-3xl font-serif text-3xl font-black leading-[0.98] sm:text-6xl', theme.headingText].join(' ')}>
+                <h1 className={['relative mt-3 max-w-3xl break-words font-serif text-3xl font-black leading-[0.98] sm:text-5xl lg:text-6xl', theme.headingText].join(' ')}>
                   {plan.title}
                 </h1>
                 <p className={['relative mt-2 font-serif text-xl italic leading-7', theme.scriptText].join(' ')}>
