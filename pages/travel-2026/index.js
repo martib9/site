@@ -57,6 +57,14 @@ const Icon = ({ name, className = 'h-5 w-5' }) => {
         <path d="M11 17h2" />
       </>
     ),
+    dog: (
+      <>
+        <circle cx="6.5" cy="10" r="2.1" />
+        <circle cx="12" cy="7" r="2.1" />
+        <circle cx="17.5" cy="10" r="2.1" />
+        <path d="M7.5 17c1-4 8-4 9 0 .6 2.4-1.8 3.6-4.5 3.6S6.9 19.4 7.5 17Z" />
+      </>
+    ),
     globe: (
       <>
         <circle cx="12" cy="12" r="9" />
@@ -68,11 +76,28 @@ const Icon = ({ name, className = 'h-5 w-5' }) => {
   return <svg {...common}>{paths[name]}</svg>;
 };
 
-const plans = [
+const finalPlan = {
+  href: '/travel-2026/milan',
+  country: 'ITALY VIA MILAN',
+  label: 'Final New Year dog-friendly plan',
+  image: '/travel-assets/milan-postcard.jpg',
+  tone: 'from-[#274c44] via-[#9a4a2d] to-[#c99a4f]',
+  text: 'text-[#274c44]',
+  border: 'border-[#d9bfa7]',
+  summary: 'Milan/Malpensa route with lake bases, easy transfers, dog logistics, cozy food, and calm winter rhythm.',
+  picks: 'Como, Cernobbio, Varese',
+  scores: [
+    ['Special', 9],
+    ['Dogs', 9],
+    ['Access', 9],
+  ],
+};
+
+const archivePlans = [
   {
     href: '/travel-2026/italy',
     country: 'ITALY',
-    label: 'New Year dog-friendly trip',
+    label: 'Original country shortlist',
     image: '/travel-assets/italy-postcard.jpg',
     tone: 'from-[#8b3f2f] to-[#c79548]',
     text: 'text-[#8b3f2f]',
@@ -83,7 +108,7 @@ const plans = [
   {
     href: '/travel-2026/france',
     country: 'FRANCE',
-    label: 'New Year dog-friendly trip',
+    label: 'Alternative country plan',
     image: '/travel-assets/france-postcard.jpg',
     tone: 'from-[#223a5e] to-[#862d3e]',
     text: 'text-[#223a5e]',
@@ -93,11 +118,11 @@ const plans = [
   },
 ];
 
-const features = ['Ranked shortlist', 'Side-by-side comparison', 'Group voting', 'Cost notes', 'Mobile-first'];
-const featureIcons = ['list', 'compare', 'vote', 'cost', 'mobile'];
+const features = ['Final Milan route', 'Ranked shortlist', 'Side-by-side comparison', 'Group voting', 'Mobile-first'];
+const featureIcons = ['pin', 'list', 'compare', 'vote', 'mobile'];
 
 const pageStyle = {
-  background: 'radial-gradient(circle at 14% 5%, rgba(139,63,47,.11), transparent 26rem), radial-gradient(circle at 86% 8%, rgba(34,58,94,.12), transparent 28rem), linear-gradient(180deg,#fffdf7,#fbf1e4)',
+  background: 'radial-gradient(circle at 14% 5%, rgba(39,76,68,.13), transparent 26rem), radial-gradient(circle at 86% 8%, rgba(154,74,45,.13), transparent 28rem), linear-gradient(180deg,#fffdf7,#fbf1e4)',
 };
 
 const patternStyle = {
@@ -137,7 +162,7 @@ const Stamp = ({ className = '' }) => (
     ].join(' ')}
     aria-hidden="true"
   >
-    martib
+    final
     <br />
     travel
     <br />
@@ -145,14 +170,56 @@ const Stamp = ({ className = '' }) => (
   </div>
 );
 
+const ScoreDots = ({ label, value }) => (
+  <div>
+    <div className="mb-1 flex items-center justify-between gap-2 text-[11px] font-black uppercase tracking-[0.08em] text-[#5c5348]">
+      <span>{label}</span>
+      <span>{value}/10</span>
+    </div>
+    <div className="flex gap-1">
+      {Array.from({ length: 10 }).map((_, index) => (
+        <span key={index} className={['h-1.5 w-1.5 rounded-full', index < value ? 'bg-[#274c44]' : 'bg-[#dfd1c0]'].join(' ')} />
+      ))}
+    </div>
+  </div>
+);
+
+const ArchiveCard = ({ plan }) => (
+  <Link
+    href={plan.href}
+    className={[
+      'group min-w-0 overflow-hidden rounded-[14px] border bg-white/82 shadow-lg shadow-stone-900/10 transition hover:-translate-y-0.5 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[#c79548]',
+      plan.border,
+    ].join(' ')}
+  >
+    <div className="relative h-36 overflow-hidden sm:h-44">
+      <img src={plan.image} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" />
+      <div className="absolute inset-0 bg-gradient-to-r from-white/88 via-white/48 to-transparent" />
+      <div className="absolute inset-0 p-4">
+        <h3 className={['inline-block max-w-full break-words rounded-xl bg-white/62 px-2 py-1 font-serif text-2xl font-black leading-none backdrop-blur-sm sm:text-3xl', plan.text].join(' ')}>
+          {plan.country}
+        </h3>
+        <p className="mt-2 max-w-[10rem] rounded-xl bg-white/55 p-2 text-xs font-bold leading-5 text-[#2d2922] backdrop-blur-sm">{plan.label}</p>
+        <div className="absolute bottom-4 right-4 rounded-full bg-white/75 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#756657] backdrop-blur">
+          Archive
+        </div>
+      </div>
+    </div>
+    <div className="border-t border-[#e2d2c0]/70 p-4">
+      <p className="text-sm leading-6 text-[#6f6258]">{plan.summary}</p>
+      <p className={['mt-3 text-sm font-black', plan.text].join(' ')}>{plan.picks}</p>
+    </div>
+  </Link>
+);
+
 export default function TravelSelectorPage() {
   return (
     <>
       <Head>
-        <title>Travel 2026 - Italy or France</title>
+        <title>Travel 2026 - Final Italy via Milan</title>
         <meta
           name="description"
-          content="Choose between Italy and France dog-friendly New Year 2026/27 travel plans with rankings, voting, costs, and mobile-friendly comparisons."
+          content="Final Italy via Milan dog-friendly New Year 2026/27 travel plan, with archived Italy and France comparison routes."
         />
       </Head>
 
@@ -172,23 +239,17 @@ export default function TravelSelectorPage() {
             </div>
           </nav>
 
-          <section className="box-border grid w-full min-w-0 flex-1 items-center gap-8 py-8 sm:py-10 lg:grid-cols-[210px_1fr_230px] lg:py-12">
-            <aside className="hidden lg:block">
+          <section className="box-border grid w-full min-w-0 flex-1 items-start gap-8 py-8 sm:py-10 lg:grid-cols-[210px_1fr_230px] lg:py-12">
+            <aside className="hidden pt-24 lg:block">
               <div className="mb-8 grid h-9 w-9 place-items-center rounded-full text-[#59613f]">
                 <Icon name="pin" className="h-7 w-7" />
               </div>
-              <p className="text-xs font-black uppercase tracking-[0.22em] text-[#59613f]">Travel 2026</p>
-              <h1 className="mt-5 max-w-xs font-serif text-4xl font-black leading-[0.98] text-[#29311f]">Choose the plan</h1>
+              <p className="text-xs font-black uppercase tracking-[0.22em] text-[#59613f]">Final plan</p>
+              <h1 className="mt-5 max-w-xs font-serif text-4xl font-black leading-[0.98] text-[#29311f]">Italy via Milan</h1>
               <div className="mt-6 h-px w-16 bg-[#59613f]" />
-              <p className="mt-6 max-w-[11rem] leading-7 text-[#4d463e]">Two beautiful options for our dog-friendly New Year escape.</p>
+              <p className="mt-6 max-w-[11rem] leading-7 text-[#4d463e]">Milan/Malpensa is now the route. The decision is the base.</p>
               <div className="mt-12 text-[#59613f]">
-                <svg viewBox="0 0 40 40" className="h-10 w-10 fill-current" aria-hidden="true">
-                  <circle cx="9" cy="25" r="5" />
-                  <circle cx="17" cy="14" r="4" />
-                  <circle cx="27" cy="14" r="4" />
-                  <circle cx="32" cy="25" r="5" />
-                  <path d="M13 30c2-6 13-6 15 0 1.2 4-3.3 6.8-7.5 6.8S11.8 34 13 30Z" />
-                </svg>
+                <Icon name="dog" className="h-10 w-10" />
               </div>
             </aside>
 
@@ -196,68 +257,72 @@ export default function TravelSelectorPage() {
               <Botanical side="left" />
               <Botanical side="right" />
               <Stamp className="absolute right-8 top-12" />
-              <div className="pointer-events-none absolute bottom-0 left-0 z-0 h-52 w-64 opacity-45" aria-hidden="true">
-                <img src="/travel-assets/italy-postcard.jpg" alt="" className="h-full w-full object-cover object-left-bottom [mask-image:linear-gradient(90deg,black,transparent)]" />
-              </div>
-              <div className="pointer-events-none absolute bottom-0 right-0 z-0 hidden h-64 w-72 opacity-45 md:block" aria-hidden="true">
-                <img src="/travel-assets/france-postcard.jpg" alt="" className="h-full w-full object-cover object-right-bottom [mask-image:linear-gradient(270deg,black,transparent)]" />
-              </div>
 
-              <header className="relative z-10 mx-auto max-w-xl text-center">
-                <div className="mx-auto mb-3 grid h-10 w-10 place-items-center text-[#a88955]" aria-hidden="true">
-                  <svg viewBox="0 0 40 40" className="h-full w-full">
-                    <path d="M20 2v36M2 20h36M7 7l26 26M33 7 7 33" stroke="currentColor" strokeWidth="1.3" />
-                    <circle cx="20" cy="20" r="3" fill="currentColor" />
-                  </svg>
-                </div>
-                <h1 className="break-words font-serif text-3xl font-black leading-[0.98] text-[#1f2119] sm:text-5xl">Choose the plan</h1>
+              <header className="relative z-10 mx-auto max-w-2xl text-center">
+                <p className="text-xs font-black uppercase tracking-[0.22em] text-[#9a4a2d]">Travel 2026</p>
+                <h1 className="mt-3 break-words font-serif text-3xl font-black leading-[0.98] text-[#1f2119] sm:text-5xl">
+                  Final plan: Italy via Milan
+                </h1>
                 <p className="mx-auto mt-3 max-w-lg break-words font-serif text-base italic leading-7 text-[#8b6e58] sm:text-lg">
-                  Where shall we celebrate New Year with our dogs?
+                  Where should we stay from Milan with our dogs?
                 </p>
                 <div className="mx-auto mt-4 h-px w-16 bg-[#a88955]" />
               </header>
 
-              <div className="relative z-10 mt-7 grid gap-4 md:grid-cols-2">
-                {plans.map((plan) => (
-                  <Link
-                    key={plan.country}
-                    href={plan.href}
-                    className={[
-                      'group min-w-0 overflow-hidden rounded-[12px] border bg-white/82 shadow-xl shadow-stone-900/12 transition hover:-translate-y-1 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-[#c79548]',
-                      plan.border,
-                    ].join(' ')}
-                  >
-                    <div className="relative h-[190px] overflow-hidden sm:h-[220px]">
-                      <img src={plan.image} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" />
-                      <div className="absolute inset-0 bg-gradient-to-r from-white/88 via-white/50 to-transparent" />
-                      <div className="absolute inset-0 p-5">
-                        <h2 className={['inline-block max-w-full break-words rounded-xl bg-white/58 px-2 py-1 font-serif text-2xl font-black leading-none backdrop-blur-sm sm:text-4xl', plan.text].join(' ')}>{plan.country}</h2>
-                        <p className="mt-2 max-w-[9rem] rounded-xl bg-white/55 p-2 text-sm font-bold leading-5 text-[#2d2922] backdrop-blur-sm">{plan.label}</p>
-                        <div className="absolute bottom-5 left-5">
-                          <span className={['grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gradient-to-br text-xl font-black text-white shadow-lg transition group-hover:translate-x-1', plan.tone].join(' ')}>
-                            <span aria-hidden="true">-&gt;</span>
-                          </span>
-                        </div>
-                        <div className="absolute bottom-5 right-5 rounded-full bg-white/70 px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.12em] text-[#756657] backdrop-blur">
-                          Open
-                        </div>
-                      </div>
-                    </div>
-                    <div className="border-t border-[#e2d2c0]/70 p-4">
-                      <p className="text-sm leading-6 text-[#6f6258]">{plan.summary}</p>
-                      <div className="mt-4">
-                        <span className={['text-sm font-black', plan.text].join(' ')}>{plan.picks}</span>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+              <Link
+                href={finalPlan.href}
+                className="group relative z-10 mt-7 grid min-w-0 overflow-hidden rounded-[18px] border border-[#d9bfa7] bg-white/86 shadow-2xl shadow-stone-900/15 transition hover:-translate-y-1 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-[#c79548] md:grid-cols-[1.15fr_0.85fr]"
+              >
+                <div className="relative min-h-[260px] overflow-hidden sm:min-h-[330px]">
+                  <img src={finalPlan.image} alt="" className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/92 via-white/60 to-transparent md:to-white/12" />
+                  <div className="absolute inset-0 p-5 sm:p-7">
+                    <span className="inline-flex rounded-full bg-[#274c44] px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-[#fff9ef] shadow-lg shadow-[#274c44]/20">
+                      Final
+                    </span>
+                    <h2 className={['mt-5 max-w-[15rem] break-words font-serif text-4xl font-black leading-[0.92] sm:text-6xl', finalPlan.text].join(' ')}>
+                      {finalPlan.country}
+                    </h2>
+                    <p className="mt-3 max-w-[14rem] rounded-xl bg-white/62 p-3 text-sm font-bold leading-6 text-[#2d2922] backdrop-blur-sm">{finalPlan.label}</p>
+                    <span className={['mt-5 grid h-12 w-12 shrink-0 place-items-center rounded-full bg-gradient-to-br text-xl font-black text-white shadow-lg transition group-hover:translate-x-1', finalPlan.tone].join(' ')}>
+                      <span aria-hidden="true">-&gt;</span>
+                    </span>
+                  </div>
+                </div>
+                <div className="relative p-5 sm:p-7">
+                  <p className="text-sm font-black uppercase tracking-[0.18em] text-[#9a4a2d]">Milan base decision</p>
+                  <p className="mt-4 text-base leading-7 text-[#5b5147]">{finalPlan.summary}</p>
+                  <p className={['mt-5 text-lg font-black', finalPlan.text].join(' ')}>{finalPlan.picks}</p>
+                  <div className="mt-6 grid gap-3">
+                    {finalPlan.scores.map(([label, value]) => (
+                      <ScoreDots key={label} label={label} value={value} />
+                    ))}
+                  </div>
+                  <div className="mt-6 inline-flex rounded-full bg-[#f0e4d6] px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.14em] text-[#756657]">
+                    Open final page
+                  </div>
+                </div>
+              </Link>
 
-              <p className="relative z-10 mt-6 text-center text-sm italic text-[#7c6f63]">~ 2 plans, 1 unforgettable start ~</p>
+              <section className="relative z-10 mt-8">
+                <div className="mb-4 flex items-end justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-[0.2em] text-[#59613f]">Archive</p>
+                    <h2 className="mt-2 font-serif text-2xl font-black text-[#29311f] sm:text-3xl">Previous comparison pages</h2>
+                  </div>
+                </div>
+                <div className="grid gap-4 md:grid-cols-2">
+                  {archivePlans.map((plan) => (
+                    <ArchiveCard key={plan.country} plan={plan} />
+                  ))}
+                </div>
+              </section>
+
+              <p className="relative z-10 mt-6 text-center text-sm italic text-[#7c6f63]">~ final route chosen, base still to decide ~</p>
             </div>
 
-            <aside className="hidden rounded-[24px] border border-[#e5d7c8] bg-white/45 p-5 backdrop-blur lg:block lg:border-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-0">
-              <h2 className="text-xs font-black uppercase tracking-[0.2em] text-[#59613f]">Shared experience</h2>
+            <aside className="hidden rounded-[24px] border border-[#e5d7c8] bg-white/45 p-5 backdrop-blur lg:block lg:border-0 lg:bg-transparent lg:p-0 lg:pt-24 lg:backdrop-blur-0">
+              <h2 className="text-xs font-black uppercase tracking-[0.2em] text-[#59613f]">Decision tool</h2>
               <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
                 {features.map((feature, index) => (
                   <div key={feature} className="flex items-center gap-4 text-sm text-[#463d35]">
@@ -272,7 +337,7 @@ export default function TravelSelectorPage() {
 
             <div className="lg:hidden">
               <div className="mt-5 border-t border-[#e2d2c0] pt-4">
-                <h2 className="sr-only">Shared experience</h2>
+                <h2 className="sr-only">Decision tool</h2>
                 <div className="flex flex-wrap justify-center gap-2">
                   {features.map((feature, index) => (
                     <div key={feature} className="flex min-h-10 items-center gap-2 rounded-full border border-[#e2d2c0] bg-white/65 px-3 py-2 text-sm text-[#463d35]">
