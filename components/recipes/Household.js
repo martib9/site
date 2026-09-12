@@ -490,6 +490,7 @@ function Basket({ store }) {
         Combined across your selected recipes. Check what you already have
         before shopping.
       </p>
+      {!recipe && store.agent && <p className="muted">Save a link to automatically look for ingredients, quantities, servings, and instructions. You can review the result in Recipes.</p>}
       {!store.agent && (
         <p className="notice">
           Product matching will be available after the agent is connected.
@@ -670,6 +671,7 @@ function RecipeForm({ recipe, store }) {
     const saved = await store.act({
       type: "save",
       revision: recipe?.revision,
+      caption,
       recipe: {
         ...recipe,
         id,
@@ -685,8 +687,6 @@ function RecipeForm({ recipe, store }) {
       },
     });
     if (saved) {
-      if (!recipe && !rows.length && store.agent && (url.trim() || caption.trim()))
-        await store.job({ kind: "import", recipeId: id, caption });
       window.location.assign("/recipes/box");
     }
     setBusy(false);
@@ -830,6 +830,7 @@ function RecipeForm({ recipe, store }) {
           />
         </label>
       </details>
+      {!recipe && store.agent && <p className="muted">Save a link to automatically look for ingredients, quantities, servings, and instructions. You can review the result in Recipes.</p>}
       {!store.agent && (
         <p className="muted">
           The agent is awaiting connection. You can save a link and enter

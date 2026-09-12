@@ -29,9 +29,11 @@ Existing seed links are already present in the public repository's history. Hous
 
 ## Agent behavior and limits
 
+Saving a new recipe with a source link or supplied caption and no manual ingredients automatically queues an import on the server in the same transaction as the recipe save. Replaying a save does not create a duplicate job. Imports do not depend on a second browser request. Existing recipe edits and recipes with manual ingredients do not automatically re-import; the explicit import button remains available. If the API key or daily allowance is unavailable, the recipe is still saved with an explanatory message.
+
 Imports are stored as jobs before a background function starts. A job has a lease, attempt count and visible status. Manual retries and a daily recovery cron resume interrupted jobs; this is not a guarantee of immediate retry after a platform interruption. Automatic recovery handles one job per day on the Hobby-compatible schedule. The household limit is 30 requested jobs per day, at most three attempts per job; set a provider spending limit separately.
 
-The agent uses OpenAI Responses API web search, with cited sources retained. It reads accessible pages or supplied captions, not video pixels. Instagram/login-protected/video-only sources may need a pasted caption or manually entered ingredients. Exact-source evidence is required before accepting link-only extraction. Imported recipes require review, and missing quantities remain unknown. Manual name/tags are preserved. If the recipe changes during an import, the result is discarded rather than replacing the user's work.
+The agent uses OpenAI Responses API web search, with cited sources retained. Link-only requests require web search. Structured responses describe ingredients, quantities, serving counts, steps, and source-access status; refusal and incomplete-response errors are handled explicitly. Equivalent Instagram post URLs are matched by post ID rather than literal URL text. It reads accessible pages or supplied captions, not video pixels. Instagram/login-protected/video-only sources may need a pasted caption or manually entered ingredients. Exact-source evidence is required before accepting link-only extraction. Imported recipes require review, and missing quantities remain unknown. Manual name/tags are preserved. If the recipe changes during an import, the result is discarded rather than replacing the user's work.
 
 Alphamega searches are domain-restricted, and only URLs present in returned search evidence are eligible. Matches are candidates, not live stock/price guarantees. Alternative products require acceptance. No supermarket login, cart writing, checkout, or purchase exists. Up to 15 unmatched ingredients are checked per job; manual search links are clearly labelled and are never presented as verified product links.
 
@@ -47,7 +49,7 @@ Install via the browser's normal Add to Home Screen / Install action. Share-targ
 
 ## Validation
 
-- `node --test tests/recipes.test.mjs tests/recipes-agent-errors.test.mjs` (10 tests passed)
+- `node --test tests/recipes*.test.mjs`
 - `npm run build`
 - Production checks passed for household sign-in, database reads and writes, stale-edit rejection, authenticated recipe pages, anonymous access rejection, cross-origin write rejection, and sign-out cookie clearing.
 - Browser end-to-end checks should use a separate disposable database and exercise authentication, add/edit, filtering, planning, basket consolidation, offline replay, and logout.
