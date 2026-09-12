@@ -4,7 +4,9 @@ This update replaces the recipe interface with This week, All recipes, Basket an
 
 ## Deployment setup
 
-The verified GitHub deployment status points to Vercel team `martib`, project `site`. The connected Vercel app currently returns no projects, so provisioning and live deployment have not been completed.
+Production setup completed on 12 September 2026 for Vercel team `martib`, project `site`, using the locally authenticated Vercel CLI. The live app is https://www.martib.app/recipes/box. The Vercel connector can list the team but may still return no project; use the local CLI for project administration.
+
+The Neon resource `martib-recipes` is connected only to Production. Household authentication, the OpenAI API key, and the recovery cron secret are configured in Production. Passwords and secrets are not stored in the repository. A separate `martib-recipes-preview` database is connected to Preview; preview household credentials and AI access have not been enabled.
 
 Configure these server-only environment variables in the Vercel project (use a separate database for preview deployments):
 
@@ -33,7 +35,9 @@ The agent uses OpenAI Responses API web search, with cited sources retained. It 
 
 Alphamega searches are domain-restricted, and only URLs present in returned search evidence are eligible. Matches are candidates, not live stock/price guarantees. Alternative products require acceptance. No supermarket login, cart writing, checkout, or purchase exists. Up to 15 unmatched ingredients are checked per job; manual search links are clearly labelled and are never presented as verified product links.
 
-Live AI extraction and product matching must be tested with real credentials before production. Recommended release checks: a normal recipe page, a readable Instagram caption, an inaccessible reel, missing amounts, two overlapping ingredient lists, an alternative product, and no-result handling.
+Live checks on 12 September 2026 verified caption extraction, missing-amount preservation, retention of manually entered names and tags, inaccessible-link handling, and an Alphamega search that returned no eligible product match. Temporary test recipes were removed, leaving the original 172 recipes. These checks do not establish successful matching of a real product, access to an Instagram reel, or live stock availability. Recommended further checks include a normal recipe page, a readable Instagram caption, two overlapping ingredient lists, and an alternative product.
+
+Failed AI jobs distinguish billing/credit problems, rejected API keys, permissions, rate limits, invalid request settings, and timeouts. Provider error text and credentials are never exposed in these messages.
 
 ## PWA and privacy
 
@@ -43,8 +47,9 @@ Install via the browser's normal Add to Home Screen / Install action. Share-targ
 
 ## Validation
 
-- `node --test tests/recipes.test.mjs`
+- `node --test tests/recipes.test.mjs tests/recipes-agent-errors.test.mjs` (10 tests passed)
 - `npm run build`
+- Production checks passed for household sign-in, database reads and writes, stale-edit rejection, authenticated recipe pages, anonymous access rejection, cross-origin write rejection, and sign-out cookie clearing.
 - Browser end-to-end checks should use a separate disposable database and exercise authentication, add/edit, filtering, planning, basket consolidation, offline replay, and logout.
 
 Next.js was updated from the repository's vulnerable 15.5.8 to patched 15.5.25 during this change.
