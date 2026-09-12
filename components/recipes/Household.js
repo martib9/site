@@ -8,7 +8,7 @@ const source = (url) => {
   try {
     return new URL(url).hostname.replace("www.", "");
   } catch {
-    return "Original source";
+    return "Source link not added";
   }
 };
 const amount = (i) =>
@@ -139,9 +139,9 @@ function RecipeRow({ recipe: r, store, weekly = false }) {
               <span>{r.name}</span>
             </summary>
             <div className="recipe-details">
-              <a href={r.url} target="_blank" rel="noreferrer">
+              {r.url ? <a href={r.url} target="_blank" rel="noreferrer">
                 Original source · {source(r.url)}
-              </a>
+              </a> : <p className="muted">Add a source link or paste the recipe text to import ingredients.</p>}
               <p>
                 {r.status === "review"
                   ? "Imported · please review"
@@ -253,7 +253,7 @@ function RecipeRow({ recipe: r, store, weekly = false }) {
                   recipes, paste the ingredients and instructions.
                 </p>
                 <button
-                  disabled={!store.agent || !store.online}
+                  disabled={!store.agent || !store.online || (!r.url && !caption.trim())}
                   onClick={() =>
                     store.job({ kind: "import", recipeId: r.id, caption })
                   }
@@ -657,8 +657,12 @@ function RecipeForm({ recipe, store }) {
     [error, setError] = useState("");
   const save = async (e) => {
     e.preventDefault();
-    if (!webUrl(url)) {
+    if (url.trim() && !webUrl(url)) {
       setError("Enter a valid recipe link.");
+      return;
+    }
+    if (!url.trim() && !name.trim()) {
+      setError("Enter a name for a recipe without a link.");
       return;
     }
     setBusy(true);
@@ -681,7 +685,7 @@ function RecipeForm({ recipe, store }) {
       },
     });
     if (saved) {
-      if (!recipe && !rows.length && store.agent)
+      if (!recipe && !rows.length && store.agent && (url.trim() || caption.trim()))
         await store.job({ kind: "import", recipeId: id, caption });
       window.location.assign("/recipes/box");
     }
@@ -695,9 +699,8 @@ function RecipeForm({ recipe, store }) {
         </p>
       )}
       <label>
-        Link
+        Link <span className="muted">(optional)</span>
         <input
-          required
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="https://…"
