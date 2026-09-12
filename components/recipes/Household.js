@@ -14,6 +14,23 @@ const source = (url) => {
 const amount = (i) =>
   `${i.quantity || ""} ${i.unit || ""} ${i.name}${i.uncertain ? " · amount needs checking" : ""}`.trim();
 
+function ScreenshotEvidence({ job }) {
+  const capture = job?.screenshot;
+  if (!capture) return null;
+  if (capture.status !== "captured") return <span className="muted"><br />{capture.message}</span>;
+  return (
+    <span className="muted">
+      <br />
+      <a href={`/api/recipes/screenshot?id=${encodeURIComponent(job.id)}`} target="_blank" rel="noreferrer">
+        View screenshot
+      </a>{" "}· {capture.title || "Source page"}
+      {capture.httpStatus ? ` · HTTP ${capture.httpStatus}` : ""}
+      {capture.navigation === "incomplete" ? " · Page did not finish loading" : ""}
+      <br />Browser visit without signing in. Captures are kept for 7 days (latest 50).
+    </span>
+  );
+}
+
 export function Shell({ children, page, store }) {
   return (
     <div className="recipes-app">
@@ -81,6 +98,7 @@ export function Shell({ children, page, store }) {
                   </strong>
                   <br />
                   {j.message || "Working in the background…"}
+                  <ScreenshotEvidence job={j} />
                   {(j.status === "failed" ||
                     (j.status === "running" &&
                       Date.now() - j.started > 240000)) && (
@@ -239,6 +257,7 @@ function RecipeRow({ recipe: r, store, weekly = false }) {
               </div>
               <details className="import-options">
                 <summary>Import ingredients with the agent</summary>
+                <ScreenshotEvidence job={[...store.state.jobs].reverse().find((j) => j.recipeId === r.id && j.screenshot)} />
                 <label>
                   Caption or recipe text{" "}
                   <textarea
@@ -250,7 +269,8 @@ function RecipeRow({ recipe: r, store, weekly = false }) {
                 </label>
                 <p className="muted">
                   The agent reads accessible source text. For video-only
-                  recipes, paste the ingredients and instructions.
+                  recipes, paste the ingredients and instructions. Each link import
+                  also attempts a browser screenshot so you can see what opened.
                 </p>
                 <button
                   disabled={!store.agent || !store.online || (!r.url && !caption.trim())}
