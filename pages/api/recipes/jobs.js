@@ -9,7 +9,7 @@ export const config = {
 export default async function handler(req, res) {
   if (!protect(req, res)) return;
   if (req.method !== "POST") return res.status(405).end();
-  if (!process.env.OPENAI_API_KEY)
+  if (!process.env.OPENAI_API_KEY && req.body.kind !== "capture" && !req.body.retryId)
     return res
       .status(503)
       .json({
@@ -29,9 +29,16 @@ export default async function handler(req, res) {
         return res
           .status(400)
           .json({ error: "This job cannot be retried. Start a new import." });
+      if (j.kind !== "capture" && !process.env.OPENAI_API_KEY)
+        return res.status(503).json({ error: "The AI connection is not configured." });
     } else {
-      if (!["import", "match"].includes(req.body.kind))
+      if (!["import", "match", "capture"].includes(req.body.kind))
         return res.status(400).end();
+      if (req.body.kind !== "match") {
+        const recipe = (await readState()).recipes.find((r) => r.id === req.body.recipeId);
+        if (!recipe || (req.body.kind === "capture" && !recipe.url))
+          return res.status(400).json({ error: "Choose a recipe with a source link." });
+      }
       id = await enqueue(req.body.kind, req.body.recipeId, req.body.caption);
     }
     waitUntil(runJob(id));

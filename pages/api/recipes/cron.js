@@ -9,12 +9,12 @@ export default async function handler(req, res) {
     !equal(req.headers.authorization, `Bearer ${process.env.CRON_SECRET}`)
   )
     return res.status(401).end();
-  if (!process.env.OPENAI_API_KEY) return res.json({ processed: 0 });
   try {
     const s = await readState();
     const jobs = s.jobs
       .filter(
         (j) =>
+          (j.kind === "capture" || Boolean(process.env.OPENAI_API_KEY)) &&
           j.attempts < 3 &&
           (["queued", "failed"].includes(j.status) ||
             (j.status === "running" && Date.now() - j.started > 240000)),

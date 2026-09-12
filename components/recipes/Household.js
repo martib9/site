@@ -26,6 +26,7 @@ function ScreenshotEvidence({ job }) {
       </a>{" "}· {capture.title || "Source page"}
       {capture.httpStatus ? ` · HTTP ${capture.httpStatus}` : ""}
       {capture.navigation === "incomplete" ? " · Page did not finish loading" : ""}
+      {capture.navigation === "not-opened" ? " · Source did not open; browser error or blank screen" : ""}
       <br />Browser visit without signing in. Captures are kept for 7 days (latest 50).
     </span>
   );
@@ -93,7 +94,7 @@ export function Shell({ children, page, store }) {
               .map((j) => (
                 <p key={j.id}>
                   <strong>
-                    {j.kind === "match" ? "Shopping matches" : "Recipe import"}{" "}
+                    {j.kind === "match" ? "Shopping matches" : j.kind === "capture" ? "Source screenshot" : "Recipe import"}{" "}
                     · {j.status}
                   </strong>
                   <br />
@@ -258,6 +259,9 @@ function RecipeRow({ recipe: r, store, weekly = false }) {
               <details className="import-options">
                 <summary>Import ingredients with the agent</summary>
                 <ScreenshotEvidence job={[...store.state.jobs].reverse().find((j) => j.recipeId === r.id && j.screenshot)} />
+                {r.url && <button disabled={!store.online} onClick={() => store.job({ kind: "capture", recipeId: r.id })}>
+                  Capture page again
+                </button>}
                 <label>
                   Caption or recipe text{" "}
                   <textarea
