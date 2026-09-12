@@ -3,7 +3,7 @@ import { protect } from "../../../lib/recipes/auth";
 import { rateLimit, readState } from "../../../lib/recipes/db";
 import { enqueue, runJob } from "../../../lib/recipes/agent";
 export const config = {
-  maxDuration: 300,
+  maxDuration: 60,
   api: { bodyParser: { sizeLimit: "32kb" } },
 };
 export default async function handler(req, res) {

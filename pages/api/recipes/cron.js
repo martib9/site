@@ -1,7 +1,7 @@
 import { readState } from "../../../lib/recipes/db";
 import { runJob } from "../../../lib/recipes/agent";
 import { equal } from "../../../lib/recipes/auth";
-export const config = { maxDuration: 300 };
+export const config = { maxDuration: 60 };
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   if (

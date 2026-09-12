@@ -15,7 +15,7 @@ Configure these server-only environment variables in the Vercel project (use a s
 - `RECIPES_AI_MODEL`: optional, defaults to `gpt-4.1`, using Responses API web search.
 - `CRON_SECRET`: random secret for the daily recovery job.
 
-Use a Node.js version supported by the installed Next.js and Vercel packages. Enable Fluid Compute and allow 300-second recipe job functions. Database tables are created lazily on the first authenticated sign-in attempt; the connection needs CREATE TABLE privileges. A single household document is updated under a Postgres row lock, so both partners' operations are serialized. Recipe editing additionally checks revisions to avoid overwriting concurrent edits.
+Use a Node.js version supported by the installed Next.js and Vercel packages. Recipe job functions use a 60-second maximum, compatible with this project’s Hobby configuration. AI requests time out after 40 seconds, leaving time to save a result or failure for retry. Database tables are created lazily on the first authenticated sign-in attempt; the connection needs CREATE TABLE privileges. A single household document is updated under a Postgres row lock, so both partners' operations are serialized. Recipe editing additionally checks revisions to avoid overwriting concurrent edits.
 
 The user requested a direct commit to main for automatic deployment. Until private access and the database are configured, the recipe area deliberately fails closed with a setup screen.
 
