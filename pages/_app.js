@@ -1,4 +1,5 @@
 import '../styles/globals.css';
+import '../styles/recipes.css';
 import Head from 'next/head';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
