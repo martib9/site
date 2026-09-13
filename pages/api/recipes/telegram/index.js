@@ -3,6 +3,7 @@ import { protect } from '../../../../lib/recipes/auth';
 import { mutate, readState, rateLimit } from '../../../../lib/recipes/db';
 import { telegramState, pairingHash } from '../../../../lib/recipes/telegram-model.mjs';
 import { telegramApi, telegramConfigured, webhookSecret } from '../../../../lib/recipes/telegram';
+export const config = { maxDuration: 60 };
 export default async function handler(req,res) {
   if (!protect(req,res)) return;
   if (req.method === 'GET') {
@@ -19,6 +20,21 @@ export default async function handler(req,res) {
     if (!(await rateLimit('telegram:pairing',20,3600000))) return res.status(429).json({error:'Too many connection requests. Try later.'});
     const bot = await telegramApi('getMe');
     await telegramApi('setWebhook',{url:'https://www.martib.app/api/recipes/telegram/webhook',secret_token:webhookSecret(),allowed_updates:['message'],max_connections:2});
+    if (req.body.action === 'configure') {
+      await Promise.all([
+        telegramApi('setMyName',{name:'LxD Meals'}),
+        telegramApi('setMyDescription',{description:'Welcome to LxD Meals! 🍽 Send a recipe link to save it to your shared collection, extract available ingredients and choose a meal category. Private companion for @mokin and @Aftertwoyears.'}),
+        telegramApi('setMyShortDescription',{short_description:'Your shared recipe box. Send a link, discover the ingredients, plan a meal.'}),
+        telegramApi('setMyCommands',{commands:[{command:'start',description:'Welcome and connect your account'},{command:'help',description:'How to add a recipe'},{command:'disconnect',description:'Disconnect this Telegram account'}]})
+      ]);
+      const image = await fetch('https://www.martib.app/recipes/meal-logo.png',{signal:AbortSignal.timeout(6000)});
+      if(!image.ok) throw new Error('Logo is not deployed.');
+      const form = new FormData();
+      form.append('photo',JSON.stringify({type:'static',photo:'attach://logo'}));
+      form.append('logo',new Blob([await image.arrayBuffer()],{type:'image/png'}),'meal-logo.png');
+      await telegramApi('setMyProfilePhoto',form);
+      return res.json({ok:true,username:bot.username,profilePhoto:true});
+    }
     const code=randomBytes(24).toString('hex');
     await mutate(s=>{ const t=telegramState(s); t.pairing=t.pairing.filter(p=>p.expires>Date.now()).slice(-3); t.pairing.push({hash:pairingHash(code),expires:Date.now()+15*60000}); });
     res.json({url:`https://t.me/${bot.username}?start=${code}`,username:bot.username});

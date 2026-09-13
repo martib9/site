@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { applyTelegramUpdate, messageLink, pairingHash } from '../lib/recipes/telegram-model.mjs';
 const code='a'.repeat(48);
 const state=()=>({recipes:[],jobs:[],telegram:{users:[],receipts:[],pairing:[{hash:pairingHash(code),expires:2000}]}});
-const update=(id,text,user=42)=>({update_id:id,message:{text,chat:{id:user,type:'private'},from:{id:user,first_name:'Test'}}});
+const update=(id,text,user=42)=>({update_id:id,message:{text,chat:{id:user,type:'private'},from:{id:user,first_name:'Test',username:user===42?'mokin':'Aftertwoyears'}}});
 const pair=s=>applyTelegramUpdate(s,update(1,`/start ${code}`),{now:1000});
 test('pairing is one-use, expires, and is capped at two members',()=>{
  const s=state();pair(s);assert.equal(s.telegram.users.length,1);assert.equal(s.telegram.pairing.length,0);
@@ -33,4 +33,11 @@ test('Telegram URL entities use UTF-16 offsets and support hidden/caption links'
 test('disconnect revokes future imports and preserves saved recipes',()=>{
  const s=state();pair(s);applyTelegramUpdate(s,update(2,'https://example.com/r'));applyTelegramUpdate(s,update(3,'/disconnect'));
  applyTelegramUpdate(s,update(4,'https://example.com/new'));assert.equal(s.recipes.length,1);assert.equal(s.telegram.users.length,0);
+});
+
+test('only the two named Telegram accounts can enroll or import',()=>{
+ const s=state();const stranger=update(1,'/start');stranger.message.from.username='stranger';
+ assert.match(applyTelegramUpdate(s,stranger).reply,/private/);assert.equal(s.telegram.users.length,0);
+ const known=update(2,'/start');assert.match(applyTelegramUpdate(s,known).reply,/Welcome/);assert.equal(s.telegram.users.length,1);
+ const changed=update(3,'https://example.com/recipe');changed.message.from.username='renamed';assert.match(applyTelegramUpdate(s,changed).reply,/private/);assert.equal(s.recipes.length,0);
 });
