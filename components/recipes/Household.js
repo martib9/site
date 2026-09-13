@@ -492,7 +492,6 @@ function Basket({ store }) {
         Combined across your selected recipes. Check what you already have
         before shopping.
       </p>
-      {!recipe && store.agent && <p className="muted">Save a link to automatically look for ingredients, quantities, servings, and instructions. You can review the result in Recipes.</p>}
       {!store.agent && (
         <p className="notice">
           Product matching will be available after the agent is connected.
