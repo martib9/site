@@ -471,6 +471,15 @@ function Basket({ store }) {
         >
           Copy list
         </button>
+        <button
+          disabled={!Object.keys(store.state.basket).length}
+          onClick={() => {
+            if (window.confirm("Clear the shared basket for both of you? Recipes and this week’s plan will stay saved."))
+              store.act({ type: "clearBasket" });
+          }}
+        >
+          Clear basket
+        </button>
       </div>
       <p className="muted">
         Combined across your selected recipes. Check what you already have

@@ -41,3 +41,11 @@ test('grocery search removes preparation text while preserving product distincti
  assert.equal(groceryTerm('unsalted butter, melted'),'unsalted butter');
  assert.equal(alphamegaSearchUrl(groceryTerm('large garlic clove, minced')), 'https://www.alphamega.com.cy/usearch?q=garlic');
 });
+
+test('clear basket resets shopping selections and checks while preserving recipes and meal plan',()=>{
+ const s=base();s.recipes.push(cleanRecipe({id:'rice',name:'Rice',cooked:true}));
+ s.basket.rice=2;s.checks.rice={have:true,bought:true};s.week.rice={mealType:'dinner',servings:2};s.weekCooked.rice=true;s.products.rice={url:'https://example.com/rice'};
+ const expected=structuredClone(s);expected.basket={};expected.checks={};
+ applyAction(s,{type:'clearBasket'});assert.deepEqual(s,expected);
+ applyAction(s,{type:'clearBasket'});assert.deepEqual(s,expected);
+});
