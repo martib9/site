@@ -5,7 +5,7 @@ const nextConfig = {
   outputFileTracingRoot: path.join(__dirname),
   serverExternalPackages: ['@sparticuz/chromium', 'puppeteer-core'],
   outputFileTracingIncludes: {
-    '/api/recipes/{jobs,state,cron}': ['./node_modules/@sparticuz/chromium/bin/**'],
+    '/api/recipes/{jobs,state,cron,telegram/webhook}': ['./node_modules/@sparticuz/chromium/bin/**'],
   },
   async rewrites() {
     return [

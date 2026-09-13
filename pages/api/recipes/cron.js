@@ -1,4 +1,5 @@
 import { readState } from "../../../lib/recipes/db";
+import { notifyTelegramJob } from "../../../lib/recipes/telegram";
 import { runJob } from "../../../lib/recipes/agent";
 import { equal } from "../../../lib/recipes/auth";
 export const config = { maxDuration: 60 };
@@ -21,6 +22,8 @@ export default async function handler(req, res) {
       )
       .slice(0, 1);
     for (const job of jobs) await runJob(job.id);
+    const pending = s.jobs.find(j=>j.telegramChatId&&!j.telegramNotified&&["done","failed"].includes(j.status));
+    if(pending) await notifyTelegramJob(pending.id);
     res.json({ processed: jobs.length });
   } catch {
     res.status(503).end();
