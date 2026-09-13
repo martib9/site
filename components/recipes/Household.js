@@ -612,7 +612,6 @@ function GrocerySearch({ name }) {
       <input aria-label={`Search product for ${name}`} value={term} onChange={e=>setTerm(e.target.value)} />
     </label>
     {term.trim() && <a href={alphamegaSearchUrl(term)} target="_blank" rel="noreferrer">Search Alphamega ↗</a>}
-    <small>If products do not appear, choose delivery or pickup on Alphamega first.</small>
   </div>;
 }
 export function AddRecipe({ editId }) {

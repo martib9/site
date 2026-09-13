@@ -39,5 +39,5 @@ test('grocery search removes preparation text while preserving product distincti
  assert.equal(groceryTerm('extra-virgin olive oil'),'extra-virgin olive oil');
  assert.equal(groceryTerm('gluten-free flour, plus more for dusting'),'gluten-free flour');
  assert.equal(groceryTerm('unsalted butter, melted'),'unsalted butter');
- assert.equal(new URL(alphamegaSearchUrl(groceryTerm('large garlic clove, minced'))).searchParams.get('Search'),'garlic');
+ assert.equal(alphamegaSearchUrl(groceryTerm('large garlic clove, minced')), 'https://www.alphamega.com.cy/usearch?q=garlic');
 });
