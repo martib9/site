@@ -1,8 +1,10 @@
 import Head from "next/head";
 import TelegramCompanion from "./TelegramCompanion";
 import Link from "next/link";
-import { useState } from "react";
-import { MEALS, basketItems, tags, webUrl } from "../../lib/recipes/model.mjs";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import { groceryTerm, alphamegaSearchUrl } from "../../lib/recipes/grocery-search.mjs";
+import { MEALS, basketItems, tags, webUrl, isNewRecipe } from "../../lib/recipes/model.mjs";
 import { useHousehold } from "./useHousehold";
 const title = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 const source = (url) => {
@@ -17,7 +19,7 @@ const amount = (i) =>
 
 export function Shell({ children, page, store }) {
   return (
-    <div className="recipes-app">
+    <div className={`recipes-app ${page === "week" ? "recipes-week" : ""}`}>
       <Head>
         <title>
           {page === "week"
@@ -27,7 +29,7 @@ export function Shell({ children, page, store }) {
               : page === "basket"
                 ? "Basket"
                 : "Add recipe"}{" "}
-          · Martib
+          · Recipes
         </title>
         <meta name="robots" content="noindex,nofollow" />
         <meta name="theme-color" content="#245c42" />
@@ -36,7 +38,7 @@ export function Shell({ children, page, store }) {
       </Head>
       <header className="recipes-header">
         <Link href="/recipes" className="recipes-brand">
-          Martib<span>Recipes</span>
+          Recipes
         </Link>
         <div className="recipes-actions">
           <button className="quiet" onClick={store.logout}>
@@ -139,6 +141,7 @@ function RecipeRow({ recipe: r, store, weekly = false }) {
           <details>
             <summary>
               <span>{r.name}</span>
+              {isNewRecipe(r, store.state) && <span className="recipe-new">NEW</span>}
             </summary>
             <div className="recipe-details">
               {r.url ? <a href={r.url} target="_blank" rel="noreferrer">
@@ -276,8 +279,8 @@ function RecipeRow({ recipe: r, store, weekly = false }) {
           </details>
           <span className="recipe-source">{source(r.url)}</span>
           <div className="recipe-tags">
-            {r.tags.slice(0, 4).map((t) => (
-              <span key={t}>{t}</span>
+            {r.tags.map((t) => (
+              <Link key={t} href={{ pathname: "/recipes/box", query: { tag: t } }} className="recipe-tag" aria-label={`Show recipes tagged ${t}`}>{t}</Link>
             ))}
           </div>
         </div>
@@ -299,11 +302,14 @@ function RecipeRow({ recipe: r, store, weekly = false }) {
   );
 }
 export default function Household({ page }) {
+  const router = useRouter();
   const store = useHousehold(),
     [query, setQuery] = useState(""),
     [meal, setMeal] = useState(""),
-    [tag, setTag] = useState(""),
     [cooked, setCooked] = useState("");
+  const tag = typeof router.query.tag === 'string' ? router.query.tag : '';
+  const setTag = value => router.push({pathname:'/recipes/box',query:value?{tag:value}:{}},undefined,{shallow:true});
+  useEffect(()=>{setQuery('');setMeal('');setCooked('');},[tag]);
   const { state } = store;
   if (!state)
     return (
@@ -390,31 +396,8 @@ export default function Household({ page }) {
             </select>
           </div>
         </div>
-      ) : (
-        <div className="week-tools">
-          <p className="muted">A little inspiration for the week ahead.</p>
-          <details>
-            <summary>Manage week</summary>
-            <button
-              onClick={() => {
-                if (
-                  window.confirm(
-                    "Start a fresh week? The current plan is kept as the previous week; basket and weekly checkmarks will reset.",
-                  )
-                )
-                  store.act({ type: "newWeek" });
-              }}
-            >
-              Start a new week
-            </button>
-            {Object.keys(state.previousWeek).length > 0 && (
-              <button onClick={() => store.act({ type: "copyWeek" })}>
-                Copy previous week
-              </button>
-            )}
-          </details>
-        </div>
-      )}
+      ) : null}
+      <div className={page === "week" ? "week-columns" : "meal-list"}>
       {MEALS.filter((m) => !meal || meal === m).map((m) => {
         const list =
           page === "week"
@@ -449,6 +432,7 @@ export default function Household({ page }) {
           </section>
         );
       })}
+      </div>
     </Shell>
   );
 }
@@ -590,13 +574,7 @@ function Basket({ store }) {
                         <small>
                           {i.product ? "Not found" : "Not matched yet"}
                         </small>
-                        <a
-                          href={`https://www.alphamega.com.cy/en/groceries?Search=${encodeURIComponent(i.name)}`}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          Search Alphamega ↗
-                        </a>
+                        <GrocerySearch name={i.name} />
                       </>
                     )}
                   </div>
@@ -626,6 +604,16 @@ function Basket({ store }) {
       )}
     </>
   );
+}
+function GrocerySearch({ name }) {
+  const [term, setTerm] = useState(() => groceryTerm(name));
+  return <div className="grocery-search">
+    <label>Search product
+      <input aria-label={`Search product for ${name}`} value={term} onChange={e=>setTerm(e.target.value)} />
+    </label>
+    {term.trim() && <a href={alphamegaSearchUrl(term)} target="_blank" rel="noreferrer">Search Alphamega ↗</a>}
+    <small>If products do not appear, choose delivery or pickup on Alphamega first.</small>
+  </div>;
 }
 export function AddRecipe({ editId }) {
   const store = useHousehold();

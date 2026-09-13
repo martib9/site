@@ -65,3 +65,9 @@ Install via the browser's normal Add to Home Screen / Install action. Share-targ
 - Browser end-to-end checks should use a separate disposable database and exercise authentication, add/edit, filtering, planning, basket consolidation, offline replay, and logout.
 
 Next.js was updated from the repository's vulnerable 15.5.8 to patched 15.5.25 during this change.
+
+## Recipe browsing improvements
+
+Tags link to the All recipes page with an exact tag filter. This week uses three meal columns on desktop (1100px and wider) and the existing stacked layout on smaller screens; previous-week controls are hidden. Newly saved recipes keep a creation timestamp and show NEW for seven days, until first planned or marked cooked. Existing Telegram recipes can use their original import-job timestamp; older list recipes without a known creation date are not labelled new.
+
+Duplicate comparison removes sharing trackers and recognizes recipe/post IDs for common sources. Telegram also resolves supported TikTok and Facebook short links with public-address checks, pinned DNS, same-platform redirects and a time limit; unresolved links retain their original URL. Manual Alphamega searches simplify ingredient descriptions to editable product terms. Product availability and live search results still require verification on Alphamega.

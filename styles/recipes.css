@@ -470,3 +470,41 @@
     animation: none !important;
   }
 }
+
+.recipes-app .recipe-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #e5f1e8;
+  border: 1px solid #b9d5c1;
+  color: #204f39;
+  font-size: 13px;
+  font-weight: 650;
+  text-decoration: none;
+}
+.recipes-app .recipe-tag:hover { background: #cfe6d7; }
+.recipe-new {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: #f9deae;
+  color: #70420c;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .05em;
+  vertical-align: middle;
+}
+.grocery-search { display: grid; gap: 6px; width: min(100%, 360px); margin-top: 6px; }
+.grocery-search label { display: grid; gap: 4px; }
+.grocery-search small { max-width: 340px; }
+@media (min-width: 1100px) {
+  .recipes-week .recipes-main, .recipes-week .recipes-header { max-width: 1440px; }
+  .week-columns { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 28px; align-items: start; }
+  .week-columns .meal-section { min-width: 0; margin-top: 0; }
+  .week-columns .recipe-row-top { display: grid; grid-template-columns: 19px minmax(0,1fr); gap: 10px; }
+  .week-columns .recipe-row-top > button { grid-column: 2; justify-self: start; }
+  .week-columns .recipe-row summary { overflow-wrap: anywhere; }
+}

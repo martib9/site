@@ -3,6 +3,8 @@ import { equal } from '../../../../lib/recipes/auth';
 import { mutate, rateLimit, readState } from '../../../../lib/recipes/db';
 import { applyTelegramUpdate, messageLink, ALLOWED_TELEGRAM_USERS } from '../../../../lib/recipes/telegram-model.mjs';
 import { sendTelegram, telegramConfigured, webhookSecret } from '../../../../lib/recipes/telegram';
+import { resolveRecipeLink } from '../../../../lib/recipes/resolve-link.mjs';
+import { sourceKey } from '../../../../lib/recipes/import-output.mjs';
 import { runJob } from '../../../../lib/recipes/agent';
 export const config = { maxDuration: 60, api: { bodyParser: { sizeLimit: '64kb' } } };
 export default async function handler(req, res) {
@@ -14,8 +16,11 @@ export default async function handler(req, res) {
     const state = await readState();
     const known = m?.chat?.type === 'private' && m.from?.id === m.chat.id && ALLOWED_TELEGRAM_USERS.includes(String(m.from?.username || '').toLowerCase());
     const fresh = !state.telegram?.receipts.includes(update?.update_id);
-    const allowImport = known && fresh && messageLink(m).url ? await rateLimit('agent:household',30,86400000) : false;
-    const { result } = await mutate(s => applyTelegramUpdate(s, update || {}, { allowImport, configured: Boolean(process.env.OPENAI_API_KEY) }));
+    const link = known && fresh ? messageLink(m) : null;
+    const resolvedUrl = link?.url && !link.multiple ? await resolveRecipeLink(link.url) : '';
+    const duplicate = resolvedUrl && state.recipes.some(r=>sourceKey(r.url)===sourceKey(resolvedUrl));
+    const allowImport = resolvedUrl && !duplicate ? await rateLimit('agent:household',30,86400000) : false;
+    const { result } = await mutate(s => applyTelegramUpdate(s, update || {}, { allowImport, resolvedUrl, configured: Boolean(process.env.OPENAI_API_KEY) }));
     if (result) waitUntil((async () => {
       // Import and acknowledgement run together, leaving the full function budget for parsing.
       await Promise.allSettled([sendTelegram(result.chatId,result.reply), result.jobId ? runJob(result.jobId) : Promise.resolve()]);

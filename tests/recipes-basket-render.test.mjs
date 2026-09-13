@@ -4,12 +4,13 @@ import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { groceryTerm, alphamegaSearchUrl } from '../lib/recipes/grocery-search.mjs';
 import { basketItems } from '../lib/recipes/model.mjs';
 const require = createRequire(import.meta.url);
 const source = fs.readFileSync(new URL('../components/recipes/Household.js',import.meta.url),'utf8');
 const component = source.slice(source.indexOf('function Basket('),source.indexOf('export function AddRecipe'));
 const { code } = require('next/dist/compiled/babel/core').transformSync(component,{filename:'Basket.jsx',babelrc:false,configFile:false,presets:[[require.resolve('next/babel'),{'preset-env':{targets:{node:'current'}}}]]});
-const Basket = new Function('require','React','basketItems','amount',`${code.replace('import React from "react";', '')};return Basket;`)(require,React,basketItems,i=>`${i.quantity ?? ''} ${i.unit} ${i.name}`);
+const Basket = new Function('require','React','basketItems','amount','useState','groceryTerm','alphamegaSearchUrl',`${code.replace('import React from "react";', '')};return Basket;`)(require,React,basketItems,i=>`${i.quantity ?? ''} ${i.unit} ${i.name}`,React.useState,groceryTerm,alphamegaSearchUrl);
 for (const agent of [false,true]) {
   test(`Basket renders empty and populated states with agent=${agent}`,()=>{
     const state={recipes:[],basket:{},checks:{},products:{}};
