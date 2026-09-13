@@ -23,7 +23,7 @@ export default async function handler(req,res) {
     if (req.body.action === 'configure') {
       await Promise.all([
         telegramApi('setMyName',{name:'LxD Meals'}),
-        telegramApi('setMyDescription',{description:'Welcome to LxD Meals! 🍽 Send a recipe link to save it to your shared collection, extract available ingredients and choose a meal category. Private companion for @mokin and @Aftertwoyears.'}),
+        telegramApi('setMyDescription',{description:'Welcome to LxD Meals! 🍽 Send a recipe link to save it to your shared collection, extract available ingredients and choose a meal category. A private companion for your household.'}),
         telegramApi('setMyShortDescription',{short_description:'Your shared recipe box. Send a link, discover the ingredients, plan a meal.'}),
         telegramApi('setMyCommands',{commands:[{command:'start',description:'Welcome and connect your account'},{command:'help',description:'How to add a recipe'},{command:'disconnect',description:'Disconnect this Telegram account'}]})
       ]);
