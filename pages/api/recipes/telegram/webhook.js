@@ -1,7 +1,7 @@
 import { waitUntil } from '@vercel/functions';
 import { equal } from '../../../../lib/recipes/auth';
 import { mutate, rateLimit, readState } from '../../../../lib/recipes/db';
-import { applyTelegramUpdate, messageLink } from '../../../../lib/recipes/telegram-model.mjs';
+import { applyTelegramUpdate, messageLink, ALLOWED_TELEGRAM_USERS } from '../../../../lib/recipes/telegram-model.mjs';
 import { sendTelegram, telegramConfigured, webhookSecret } from '../../../../lib/recipes/telegram';
 import { runJob } from '../../../../lib/recipes/agent';
 export const config = { maxDuration: 60, api: { bodyParser: { sizeLimit: '64kb' } } };
@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   try {
     const update = req.body, m = update?.message;
     const state = await readState();
-    const known = m?.chat?.type === 'private' && state.telegram?.users.some(u => u.id === String(m.from?.id));
+    const known = m?.chat?.type === 'private' && m.from?.id === m.chat.id && ALLOWED_TELEGRAM_USERS.includes(String(m.from?.username || '').toLowerCase());
     const fresh = !state.telegram?.receipts.includes(update?.update_id);
     const allowImport = known && fresh && messageLink(m).url ? await rateLimit('agent:household',30,86400000) : false;
     const { result } = await mutate(s => applyTelegramUpdate(s, update || {}, { allowImport, configured: Boolean(process.env.OPENAI_API_KEY) }));

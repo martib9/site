@@ -12,7 +12,7 @@ test('pairing is one-use, expires, and is capped at two members',()=>{
  const full=state();full.telegram.users=[{id:'1'},{id:'2'}];pair(full);assert.equal(full.telegram.users.length,2);
 });
 test('unpaired users, groups and forged sender/chat combinations cannot add recipes',()=>{
- const s=state();applyTelegramUpdate(s,update(1,'https://example.com/recipe'));assert.equal(s.recipes.length,0);
+ const s=state();const stranger=update(1,'https://example.com/recipe');stranger.message.from.username='stranger';applyTelegramUpdate(s,stranger);assert.equal(s.recipes.length,0);
  const u=update(2,'https://example.com/recipe');u.message.chat.type='group';assert.equal(applyTelegramUpdate(s,u),null);
  u.message.chat.type='private';u.message.from.id=999;assert.equal(applyTelegramUpdate(s,u),null);
 });
@@ -30,9 +30,9 @@ test('Telegram URL entities use UTF-16 offsets and support hidden/caption links'
  assert.equal(messageLink({caption:'recipe',caption_entities:[{type:'text_link',url:'https://example.com/r'}]}).url,'https://example.com/r');
  assert.equal(messageLink({text:'https://example.com/a https://example.com/b'}).multiple,true);
 });
-test('disconnect revokes future imports and preserves saved recipes',()=>{
+test('disconnect preserves recipes and approved users can reconnect',()=>{
  const s=state();pair(s);applyTelegramUpdate(s,update(2,'https://example.com/r'));applyTelegramUpdate(s,update(3,'/disconnect'));
- applyTelegramUpdate(s,update(4,'https://example.com/new'));assert.equal(s.recipes.length,1);assert.equal(s.telegram.users.length,0);
+ applyTelegramUpdate(s,update(4,'https://example.com/new'));assert.equal(s.recipes.length,2);assert.equal(s.telegram.users.length,1);
 });
 
 test('only the two named Telegram accounts can enroll or import',()=>{
@@ -40,4 +40,9 @@ test('only the two named Telegram accounts can enroll or import',()=>{
  assert.match(applyTelegramUpdate(s,stranger).reply,/private/);assert.equal(s.telegram.users.length,0);
  const known=update(2,'/start');assert.match(applyTelegramUpdate(s,known).reply,/Welcome/);assert.equal(s.telegram.users.length,1);
  const changed=update(3,'https://example.com/recipe');changed.message.from.username='renamed';assert.match(applyTelegramUpdate(s,changed).reply,/private/);assert.equal(s.recipes.length,0);
+});
+
+test('an approved account can send its first link without a separate connection step',()=>{
+ const s=state();const result=applyTelegramUpdate(s,update(1,'https://example.com/first #breakfast'));
+ assert.ok(result.jobId);assert.equal(s.telegram.users.length,1);assert.equal(s.recipes.length,1);assert.equal(s.recipes[0].mealType,'breakfast');
 });
