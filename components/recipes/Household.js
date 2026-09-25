@@ -35,10 +35,14 @@ export function Shell({ children, page, store }) {
           Recipes
         </Link>
         <div className="recipes-actions">
-          <ThemeToggle />
-          <button className="quiet" onClick={store.logout}>
-            Sign out
-          </button>
+          <details className="recipes-settings">
+            <summary aria-label="Appearance and account settings">Settings</summary>
+            <div className="recipes-settings-panel">
+              <span className="muted">Appearance</span>
+              <ThemeToggle />
+              <button className="quiet" onClick={store.logout}>Sign out</button>
+            </div>
+          </details>
           <Link className="primary" href="/recipes/add">
             Add recipe
           </Link>
