@@ -1,14 +1,18 @@
+import ThemeToggle from '../../components/recipes/ThemeToggle';
+import { safeReturn } from '../../lib/recipes/experience.mjs';
+import { useRouter } from 'next/router';
 import Head from "next/head";
 import { useState } from "react";
 import { authConfigured, authenticated } from "../../lib/recipes/auth";
 import { configured } from "../../lib/recipes/db";
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ req, res, query }) {
   res.setHeader("Cache-Control", "private,no-store");
   if (authenticated(req))
-    return { redirect: { destination: "/recipes", permanent: false } };
+    return { redirect: { destination: safeReturn(query.next), permanent: false } };
   return { props: { ready: authConfigured() && configured() } };
 }
 export default function Login({ ready }) {
+  const router=useRouter();
   const [password, setPassword] = useState(""),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
@@ -23,7 +27,7 @@ export default function Login({ ready }) {
       });
       const d = await r.json();
       if (!r.ok) throw Error(d.error);
-      window.location.assign("/recipes");
+      window.location.assign(safeReturn(router.query.next));
     } catch (e) {
       setError(e.message);
       setBusy(false);
@@ -36,6 +40,7 @@ export default function Login({ ready }) {
         <meta name="robots" content="noindex,nofollow" />
       </Head>
       <main className="recipe-login">
+        <ThemeToggle/>
         <p className="recipes-brand">
           Martib<span>Recipes</span>
         </p>

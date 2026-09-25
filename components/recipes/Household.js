@@ -1,3 +1,6 @@
+import ThemeToggle from './ThemeToggle';
+import { WeekActions, Staples } from './ExperienceControls';
+import { portions, scaledIngredients, recipePath, recipeStatus } from '../../lib/recipes/experience.mjs';
 import Head from "next/head";
 import TelegramCompanion from "./TelegramCompanion";
 import Link from "next/link";
@@ -21,16 +24,7 @@ export function Shell({ children, page, store }) {
   return (
     <div className={`recipes-app ${page === "week" ? "recipes-week" : ""}`}>
       <Head>
-        <title>
-          {page === "week"
-            ? "This week"
-            : page === "box"
-              ? "All recipes"
-              : page === "basket"
-                ? "Basket"
-                : "Add recipe"}{" "}
-          · Recipes
-        </title>
+        <title>{`${({week:'This week',box:'All recipes',basket:'Basket',recipe:'Recipe',add:'Add recipe'})[page]||'Recipes'} · Recipes`}</title>
         <meta name="robots" content="noindex,nofollow" />
         <meta name="theme-color" content="#245c42" />
         <link rel="manifest" href="/recipes/manifest.webmanifest" />
@@ -41,6 +35,7 @@ export function Shell({ children, page, store }) {
           Recipes
         </Link>
         <div className="recipes-actions">
+          <ThemeToggle />
           <button className="quiet" onClick={store.logout}>
             Sign out
           </button>
@@ -69,7 +64,10 @@ export function Shell({ children, page, store }) {
             </button>
           </div>
         )}
+        {store.saving>0&&<p className="notice" role="status">Saving {store.saving} change{store.saving===1?'':'s'}…</p>}
+        {store.undoId&&<div className="notice" role="status">Change saved. <button onClick={()=>store.act({type:'undo',undoId:store.undoId})}>Undo last change</button><span className="muted"> · available for 5 minutes</span></div>}
         {children}
+        <details className="activity"><summary>Household activity & display name</summary><label>Your name on this device<input value={store.actor||''} maxLength={40} onChange={e=>store.setActor(e.target.value)} placeholder="Optional name"/></label><p className="muted">A display label, not a separate sign-in. Updates refresh every few seconds.</p>{store.state?.activity?.slice().reverse().slice(0,10).map(a=><p key={a.id}>{a.actor} · {a.label} <small>{new Date(a.at).toLocaleString()}</small></p>)}</details>
         <TelegramCompanion />
         {store.state?.jobs?.length > 0 && (
           <details className="activity">
@@ -115,9 +113,9 @@ export function Shell({ children, page, store }) {
     </div>
   );
 }
-function RecipeRow({ recipe: r, store, weekly = false }) {
+export function RecipeRow({ recipe: r, store, weekly = false, expanded = false }) {
   const [servings, setServings] = useState(
-      store.state.week[r.id]?.servings || r.servings,
+      store.state.basket[r.id] || store.state.week[r.id]?.servings || 2,
     ),
     [caption, setCaption] = useState("");
   const planned = Boolean(store.state.week[r.id]),
@@ -138,9 +136,11 @@ function RecipeRow({ recipe: r, store, weekly = false }) {
           }
         />
         <div className="recipe-row-body">
-          <details>
+          <h3 className="recipe-title"><Link href={recipePath(r.id)}>{r.name}</Link></h3>
+          <p className={`recipe-status status-${recipeStatus(r,store.state).replaceAll(' ','-').toLowerCase()}`}>{recipeStatus(r,store.state)}{r.importMessage&&recipeStatus(r,store.state)==='Needs ingredients'?` · ${r.importMessage}`:''}</p>
+          <details open={expanded||undefined}>
             <summary>
-              <span>{r.name}</span>
+              <span>Ingredients & details</span>
               {isNewRecipe(r, store.state) && <span className="recipe-new">NEW</span>}
             </summary>
             <div className="recipe-details">
@@ -161,10 +161,10 @@ function RecipeRow({ recipe: r, store, weekly = false }) {
                 <>
                   <h3>
                     Ingredients{" "}
-                    <span className="muted">· {r.servings} servings</span>
+                    <span className="muted">· {servings} servings (original: {r.servings})</span>
                   </h3>
                   <ul>
-                    {r.ingredients.map((i, n) => (
+                    {scaledIngredients(r,servings).map((i, n) => (
                       <li key={n}>
                         {amount(i)}
                         {i.quantity == null ? " · quantity not specified" : ""}
@@ -201,6 +201,8 @@ function RecipeRow({ recipe: r, store, weekly = false }) {
                 </details>
               )}
               <div className="recipes-actions wrap">
+                <Link href={`${recipePath(r.id)}&cook=1`}>Start cooking</Link>
+                {r.status==='review'&&<button onClick={()=>store.act({type:'review',recipeId:r.id})}>Reviewed · looks right</button>}
                 <label className="servings">
                   Servings{" "}
                   <input
@@ -208,7 +210,7 @@ function RecipeRow({ recipe: r, store, weekly = false }) {
                     min="1"
                     max="100"
                     value={servings}
-                    onChange={(e) => setServings(Number(e.target.value))}
+                    onChange={(e) => setServings(portions(e.target.value))}
                   />
                 </label>
                 <button
@@ -224,6 +226,7 @@ function RecipeRow({ recipe: r, store, weekly = false }) {
                 >
                   {inBasket ? "Remove from basket" : "Add to basket"}
                 </button>
+                {planned&&<button onClick={()=>store.act({type:"plan",recipeId:r.id,value:true,servings,mealType:store.state.week[r.id].mealType})}>Update planned portions</button>}
                 {inBasket && (
                   <button
                     onClick={() =>
@@ -277,7 +280,7 @@ function RecipeRow({ recipe: r, store, weekly = false }) {
               </button>
             </div>
           </details>
-          <span className="recipe-source">{source(r.url)}</span>
+          {r.url&&<a className="recipe-source" href={r.url} target="_blank" rel="noreferrer">{source(r.url)} ↗</a>}
           <div className="recipe-tags">
             {r.tags.map((t) => (
               <Link key={t} href={{ pathname: "/recipes/box", query: { tag: t } }} className="recipe-tag" aria-label={`Show recipes tagged ${t}`}>{t}</Link>
@@ -306,10 +309,11 @@ export default function Household({ page }) {
   const store = useHousehold(),
     [query, setQuery] = useState(""),
     [meal, setMeal] = useState(""),
-    [cooked, setCooked] = useState("");
+    [cooked, setCooked] = useState(""),
+    [attention,setAttention] = useState("");
   const tag = typeof router.query.tag === 'string' ? router.query.tag : '';
   const setTag = value => router.push({pathname:'/recipes/box',query:value?{tag:value}:{}},undefined,{shallow:true});
-  useEffect(()=>{setQuery('');setMeal('');setCooked('');},[tag]);
+  useEffect(()=>{setQuery('');setMeal('');setCooked('');setAttention(router.query.attention==='attention'?'attention':'');},[tag]);
   const { state } = store;
   if (!state)
     return (
@@ -332,6 +336,7 @@ export default function Household({ page }) {
     );
   const filtered = state.recipes.filter(
     (r) =>
+      (!attention || (attention==="attention" ? recipeStatus(r,state)!=="Ready" : recipeStatus(r,state)===attention)) &&
       (!meal || r.mealType === meal) &&
       (!tag || r.tags.includes(tag)) &&
       (!cooked || (cooked === "yes") === r.cooked) &&
@@ -351,6 +356,8 @@ export default function Household({ page }) {
           recipes
         </span>
       </div>
+      {page==='week'&&<WeekActions store={store}/>}
+      {page==='box'&&<div className="attention-controls"><button className={attention==='attention'?'primary':''} onClick={()=>{setAttention(attention?'':'attention');setQuery('');setMeal('');setCooked('');if(tag)router.push({pathname:'/recipes/box',query:{attention:attention?'':'attention'}},undefined,{shallow:true});}}>Needs attention · {state.recipes.filter(r=>recipeStatus(r,state)!=='Ready').length}</button><select aria-label="Import status" value={attention} onChange={e=>setAttention(e.target.value)}><option value="">All import states</option><option value="attention">Needs attention</option>{['Importing','Review','Needs ingredients','Ready'].map(v=><option key={v}>{v}</option>)}</select></div>}
       {page === "box" ? (
         <div className="recipe-filters">
           <label className="search-label">
@@ -481,6 +488,7 @@ function Basket({ store }) {
           Clear basket
         </button>
       </div>
+      <Staples store={store}/>
       <p className="muted">
         Combined across your selected recipes. Check what you already have
         before shopping.
@@ -644,7 +652,7 @@ function RecipeForm({ recipe, store }) {
       recipe?.name === "Untitled recipe" ? "" : recipe?.name || "",
     ),
     [url, setUrl] = useState(recipe?.url || ""),
-    [meal, setMeal] = useState(recipe?.mealType || "lunch"),
+    [meal, setMeal] = useState(recipe?.mealType || ""),
     [tagText, setTags] = useState(recipe?.tags.join(", ") || ""),
     [caption, setCaption] = useState(""),
     [servings, setServings] = useState(recipe?.servings || 2),
@@ -652,14 +660,15 @@ function RecipeForm({ recipe, store }) {
     [steps, setSteps] = useState(recipe?.steps.join("\n") || ""),
     [notes, setNotes] = useState(recipe?.notes || ""),
     [busy, setBusy] = useState(false),
-    [error, setError] = useState("");
+    [error, setError] = useState(""),
+    [manual,setManual] = useState(Boolean(recipe));
   const save = async (e) => {
     e.preventDefault();
     if (url.trim() && !webUrl(url)) {
       setError("Enter a valid recipe link.");
       return;
     }
-    if (!url.trim() && !name.trim()) {
+    if (!url.trim() && !name.trim() && !caption.trim()) {
       setError("Enter a name for a recipe without a link.");
       return;
     }
@@ -669,10 +678,11 @@ function RecipeForm({ recipe, store }) {
       type: "save",
       revision: recipe?.revision,
       caption,
+      categorize: !meal,
       recipe: {
         ...recipe,
         id,
-        name,
+        name:name || (!url && caption ? "Untitled recipe" : ""),
         url,
         mealType: meal,
         tags: tags(tagText),
@@ -684,7 +694,7 @@ function RecipeForm({ recipe, store }) {
       },
     });
     if (saved) {
-      window.location.assign("/recipes/box");
+      window.location.assign(recipePath(id));
     }
     setBusy(false);
   };
@@ -704,6 +714,8 @@ function RecipeForm({ recipe, store }) {
           maxLength={2000}
         />
       </label>
+      {!recipe&&<button type="button" className="quiet" onClick={()=>setManual(!manual)}>{manual?'Hide optional details':'Add text or enter details manually'}</button>}
+      <div hidden={!manual}>
       <label>
         Name <span className="muted">(optional)</span>
         <input
@@ -716,6 +728,7 @@ function RecipeForm({ recipe, store }) {
       <label>
         Meal type
         <select value={meal} onChange={(e) => setMeal(e.target.value)}>
+          <option value="">Choose automatically</option>
           {MEALS.map((m) => (
             <option key={m} value={m}>
               {title(m)}
@@ -750,7 +763,7 @@ function RecipeForm({ recipe, store }) {
             min="1"
             max="100"
             value={servings}
-            onChange={(e) => setServings(Number(e.target.value))}
+            onChange={(e) => setServings(portions(e.target.value))}
           />
         </label>
         {rows.map((r, i) => (
@@ -827,6 +840,7 @@ function RecipeForm({ recipe, store }) {
           />
         </label>
       </details>
+      </div>
       {!recipe && store.agent && <p className="muted">Save a link to automatically look for ingredients, quantities, servings, and instructions. You can review the result in Recipes.</p>}
       {!store.agent && (
         <p className="muted">
@@ -849,3 +863,5 @@ function RecipeForm({ recipe, store }) {
     </form>
   );
 }
+
+export { Basket, RecipeForm };

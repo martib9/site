@@ -19,11 +19,12 @@ export default async function handler(req, res) {
     const link = known && fresh ? messageLink(m) : null;
     const resolvedUrl = link?.url && !link.multiple ? await resolveRecipeLink(link.url) : '';
     const duplicate = resolvedUrl && state.recipes.some(r=>sourceKey(r.url)===sourceKey(resolvedUrl));
-    const allowImport = resolvedUrl && !duplicate ? await rateLimit('agent:household',30,86400000) : false;
+    const repairOrForward = known && fresh && (m.reply_to_message || m.forward_origin) && Boolean(m.text || m.caption);
+    const allowImport = (repairOrForward || (resolvedUrl && !duplicate)) ? await rateLimit('agent:household',30,86400000) : false;
     const { result } = await mutate(s => applyTelegramUpdate(s, update || {}, { allowImport, resolvedUrl, configured: Boolean(process.env.OPENAI_API_KEY) }));
     if (result) waitUntil((async () => {
       // Import and acknowledgement run together, leaving the full function budget for parsing.
-      await Promise.allSettled([sendTelegram(result.chatId,result.reply), result.jobId ? runJob(result.jobId) : Promise.resolve()]);
+      await Promise.allSettled([sendTelegram(result.chatId,result.reply,result.recipeId), result.jobId ? runJob(result.jobId) : Promise.resolve()]);
     })());
     res.status(200).json({ok:true});
   } catch { res.status(503).json({ok:false}); }

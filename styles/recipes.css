@@ -508,3 +508,39 @@
   .week-columns .recipe-row-top > button { grid-column: 2; justify-self: start; }
   .week-columns .recipe-row summary { overflow-wrap: anywhere; }
 }
+
+/* Connected recipe, shopping and cooking flows */
+.recipes-app .recipe-title { margin:0 0 6px; font-size:18px; line-height:1.4; }
+.recipe-status { font-size:12px; margin:4px 0 10px; color:var(--muted); }
+.recipes-app .status-review,.recipes-app .status-needs-ingredients { color:#895615; font-weight:650; }
+.attention-controls,.shop-selection { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin:16px 0; }
+.shop-selection label { flex:1; min-width:180px; }
+.shop-selection input[type=number],.cooking-mode input[type=number] { width:76px; }
+.action-panel { border:1px solid var(--line); border-radius:12px; padding:18px; margin:18px 0; }
+.action-panel > label,.staple-check,.cooking-ingredient { display:flex; align-items:center; gap:12px; margin:12px 0; }
+.action-panel input[type=checkbox],.cooking-mode input[type=checkbox] { width:22px; height:22px; flex-shrink:0; }
+.cooking-mode { max-width:740px; margin:auto; }
+.cooking-step { font-size:24px; line-height:1.65; min-height:150px; }
+.cooking-ingredient { font-size:18px; min-height:44px; }
+.cooking-ingredient:has(input:checked) span { text-decoration:line-through; color:var(--muted); }
+.recipes-app .theme-control select { max-width:140px; min-height:42px; }
+.recipes-app [hidden] { display:none !important; }
+@media(max-width:600px) { .recipes-header { flex-wrap:wrap; } .recipes-header .recipes-actions { flex-wrap:wrap; } .cooking-step { font-size:21px; } }
+html[data-recipe-theme=dark] .recipes-app {
+ --ink:#edf2ee; --green:#a5d9b6; --muted:#abb8af; --line:#3c4d42; background:#141d18; color-scheme:dark;
+}
+html[data-recipe-theme=dark] .recipes-app button,
+html[data-recipe-theme=dark] .recipes-app input,
+html[data-recipe-theme=dark] .recipes-app select,
+html[data-recipe-theme=dark] .recipes-app textarea,
+html[data-recipe-theme=dark] .recipes-nav { background:#1e2a23; color:var(--ink); border-color:var(--line); }
+html[data-recipe-theme=dark] .recipes-app .primary { background:#a5d9b6; color:#122219; border-color:#a5d9b6; }
+html[data-recipe-theme=dark] .recipes-app .notice,
+html[data-recipe-theme=dark] .recipes-nav a[aria-current=page],
+html[data-recipe-theme=dark] .recipe-tags span { background:#26392d; color:var(--ink); }
+html[data-recipe-theme=dark] .recipes-app .recipe-tag { background:#284c36; color:#d7f2e0; border-color:#557a60; }
+html[data-recipe-theme=dark] .recipes-app .recipe-tag:hover { background:#345e43; }
+html[data-recipe-theme=dark] .recipes-app .error,
+html[data-recipe-theme=dark] .recipes-app .danger { color:#ffa9a9; }
+html[data-recipe-theme=dark] .recipes-app .status-review,
+html[data-recipe-theme=dark] .recipes-app .status-needs-ingredients { color:#f6d19b; }
