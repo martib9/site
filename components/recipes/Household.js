@@ -26,7 +26,7 @@ export function Shell({ children, page, store }) {
       <Head>
         <title>{`${({week:'This week',box:'All recipes',basket:'Basket',recipe:'Recipe',add:'Add recipe'})[page]||'Recipes'} · Recipes`}</title>
         <meta name="robots" content="noindex,nofollow" />
-        <meta name="theme-color" content="#245c42" />
+        <meta name="theme-color" content="#34363b" />
         <link rel="manifest" href="/recipes/manifest.webmanifest" />
         <link rel="apple-touch-icon" href="/recipes/icon-192.png" />
       </Head>
