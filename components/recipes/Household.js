@@ -1,10 +1,12 @@
+import { useLiquidGlass } from './useLiquidGlass';
+import GlassSurface from './GlassSurface';
 import ThemeToggle from './ThemeToggle';
 import { WeekActions, Staples } from './ExperienceControls';
 import { portions, scaledIngredients, recipePath, recipeStatus } from '../../lib/recipes/experience.mjs';
 import Head from "next/head";
 import TelegramCompanion from "./TelegramCompanion";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { Children, useRef, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { groceryTerm, alphamegaSearchUrl } from "../../lib/recipes/grocery-search.mjs";
 import { MEALS, basketItems, tags, webUrl, isNewRecipe } from "../../lib/recipes/model.mjs";
@@ -21,8 +23,13 @@ const amount = (i) =>
   `${i.quantity || ""} ${i.unit || ""} ${i.name}${i.uncertain ? " · amount needs checking" : ""}`.trim();
 
 export function Shell({ children, page, store }) {
+  const glassRoot = useRef(null);
+  useLiquidGlass(glassRoot, `${page}-${Boolean(store.state)}`);
+  const items = Children.toArray(children);
+  const filters = items.find(child => child.props?.className === 'recipe-filters');
+  const content = items.filter(child => child !== filters);
   return (
-    <div className={`recipes-app ${page === "week" ? "recipes-week" : ""}`}>
+    <div ref={glassRoot} className={`recipes-app recipes-glass-layout ${filters ? "has-recipe-search" : ""} ${page === "week" ? "recipes-week" : ""}`}>
       <Head>
         <title>{`${({week:'This week',box:'All recipes',basket:'Basket',recipe:'Recipe',add:'Add recipe'})[page]||'Recipes'} · Recipes`}</title>
         <meta name="robots" content="noindex,nofollow" />
@@ -30,7 +37,8 @@ export function Shell({ children, page, store }) {
         <link rel="manifest" href="/recipes/manifest.webmanifest" />
         <link rel="apple-touch-icon" href="/recipes/icon-192.png" />
       </Head>
-      <header className="recipes-header">
+      <div className="recipe-glass-backdrop" aria-hidden="true" />
+      <GlassSurface as="header" className="recipes-header">
         <Link href="/recipes" className="recipes-brand">
           Recipes
         </Link>
@@ -47,7 +55,8 @@ export function Shell({ children, page, store }) {
             Add recipe
           </Link>
         </div>
-      </header>
+      </GlassSurface>
+      {filters}
       <main className="recipes-main">
         {store.pending > 0 || !store.online ? (
           <p className="notice" role="status">
@@ -70,7 +79,7 @@ export function Shell({ children, page, store }) {
         )}
         {store.saving>0&&<p className="notice" role="status">Saving {store.saving} change{store.saving===1?'':'s'}…</p>}
         {store.undoId&&<div className="notice" role="status">Change saved. <button onClick={()=>store.act({type:'undo',undoId:store.undoId})}>Undo last change</button><span className="muted"> · available for 5 minutes</span></div>}
-        {children}
+        {content}
         <details className="activity"><summary>Household activity & display name</summary><label>Your name on this device<input value={store.actor||''} maxLength={40} onChange={e=>store.setActor(e.target.value)} placeholder="Optional name"/></label><p className="muted">A display label, not a separate sign-in. Updates refresh every few seconds.</p>{store.state?.activity?.slice().reverse().slice(0,10).map(a=><p key={a.id}>{a.actor} · {a.label} <small>{new Date(a.at).toLocaleString()}</small></p>)}</details>
         <TelegramCompanion />
         {store.state?.jobs?.length > 0 && (
@@ -99,7 +108,7 @@ export function Shell({ children, page, store }) {
           </details>
         )}
       </main>
-      <nav className="recipes-nav" aria-label="Recipe navigation">
+      <GlassSurface as="nav" className="recipes-nav" aria-label="Recipe navigation">
         {[
           ["week", "/recipes", "This week"],
           ["box", "/recipes/box", "Recipes"],
@@ -113,7 +122,7 @@ export function Shell({ children, page, store }) {
             {label}
           </Link>
         ))}
-      </nav>
+      </GlassSurface>
     </div>
   );
 }
@@ -363,7 +372,7 @@ export default function Household({ page }) {
       {page==='week'&&<WeekActions store={store}/>}
       {page==='box'&&<div className="attention-controls"><button className={attention==='attention'?'primary':''} onClick={()=>{setAttention(attention?'':'attention');setQuery('');setMeal('');setCooked('');if(tag)router.push({pathname:'/recipes/box',query:{attention:attention?'':'attention'}},undefined,{shallow:true});}}>Needs attention · {state.recipes.filter(r=>recipeStatus(r,state)!=='Ready').length}</button><select aria-label="Import status" value={attention} onChange={e=>setAttention(e.target.value)}><option value="">All import states</option><option value="attention">Needs attention</option>{['Importing','Review','Needs ingredients','Ready'].map(v=><option key={v}>{v}</option>)}</select></div>}
       {page === "box" ? (
-        <div className="recipe-filters">
+        <GlassSurface className="recipe-filters">
           <label className="search-label">
             <span className="sr-only">Search recipes</span>
             <input
@@ -406,7 +415,7 @@ export default function Household({ page }) {
               <option value="no">Not cooked</option>
             </select>
           </div>
-        </div>
+        </GlassSurface>
       ) : null}
       <div className={page === "week" ? "week-columns" : "meal-list"}>
       {MEALS.filter((m) => !meal || meal === m).map((m) => {

@@ -697,7 +697,67 @@ html .recipes-app .recipe-filters select {
 .recipes-app .recipe-filters .filter-selects { margin-top: 4px; gap: 4px; }
 .recipes-app .recipe-filters select { width: 100%; min-width: 0; padding-inline: 8px; }
 .recipes-app .recipe-filters select option { background: var(--surface); color: var(--ink); }
-.recipes-main:has(.recipe-filters) :is(input, button, a, summary, select, textarea) { scroll-margin-top: 230px; }
+.recipes-glass-layout.has-recipe-search .recipes-main :is(input, button, a, summary, select, textarea) { scroll-margin-top: 230px; }
 @media (forced-colors: active) {
   .recipes-app .recipe-filters input, .recipes-app .recipe-filters select { border-color: ButtonText; }
 }
+
+/* @ybouane/liquidglass: one positioned viewport root, direct glass children.
+   Native controls sit above the injected WebGL canvases. */
+.recipes-glass-layout {
+  position: relative;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+}
+.recipes-glass-layout .recipes-main {
+  position: relative;
+  z-index: 0;
+  height: 100%;
+  overflow: auto;
+  overscroll-behavior-y: contain;
+  padding-top: calc(100px + env(safe-area-inset-top));
+  padding-bottom: calc(110px + env(safe-area-inset-bottom));
+  scrollbar-width: thin;
+}
+.recipes-glass-layout.has-recipe-search .recipes-main { padding-top: calc(226px + env(safe-area-inset-top)); }
+.recipes-app.recipes-glass-layout > .recipes-header {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+}
+.recipes-app.recipes-glass-layout > .recipe-filters {
+  position: absolute;
+  top: calc(86px + env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(848px, calc(100% - 32px));
+  margin: 0;
+}
+.recipes-glass-layout .liquid-glass {
+  isolation: isolate;
+  background: rgba(255,255,255,.6);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.8), inset 0 -1px 0 rgba(255,255,255,.2), 0 8px 32px rgba(25,30,40,.12);
+}
+html[data-recipe-theme=dark] .recipes-glass-layout .liquid-glass { background: rgba(30,32,39,.65); }
+.recipes-app[data-glass-ready] > .liquid-glass {
+  background: rgba(255,255,255,.24);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+html[data-recipe-theme=dark] .recipes-app[data-glass-ready] > .liquid-glass { background: rgba(25,27,34,.3); }
+.recipes-glass-layout .recipes-nav a[aria-current=page] {
+  background: linear-gradient(145deg, rgba(255,255,255,.35), var(--selection));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 2px 8px rgba(20,25,35,.06);
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more), (forced-colors: active) {
+  .recipes-app.recipes-glass-layout > .liquid-glass { background: var(--surface); backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
+.recipe-glass-backdrop { position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(140deg, #f4f5f8, #e5e8ee 55%, #fafafa); }
+html[data-recipe-theme=dark] .recipe-glass-backdrop { background: linear-gradient(140deg, #181a21, #282c36 55%, #13151b); }
+.recipes-glass-layout { isolation: isolate; }
+
+.recipes-glass-layout .recipes-main :is(input, button, a, summary, select, textarea) { scroll-margin-block: 110px; }
+.recipes-glass-layout.has-recipe-search .recipes-main :is(input, button, a, summary, select, textarea) { scroll-margin-top: 230px; }

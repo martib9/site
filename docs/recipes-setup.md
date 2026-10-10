@@ -85,3 +85,11 @@ This week offers a preview to shop selected unmade meals and a current-week-only
 Cooking mode includes ingredient checks, step navigation, portions, completion and optional screen-awake support when the browser permits it. Light/dark/device theme is stored per device. Display names are optional labels under household activity, not authenticated identities. Changes serialize behind background refreshes instead of being rejected as busy; visible tabs refresh every five seconds and show pending saves. Offline checkbox changes remain supported.
 
 Common destructive/planning changes can be undone for five minutes. Server-only snapshots are bounded to ten records; undo rejects a restore if affected state has changed since the action, avoiding overwriting a partner's newer work. No public recipe-sharing or multi-household access was introduced.
+
+## Liquid Glass surfaces
+
+The recipe header, search/filter bar and bottom navigation use `@ybouane/liquidglass` 1.0.3 from https://liquid-glass.ybouane.com/ (https://github.com/ybouane/liquidglass). This is the reference WebGL implementation, not an Apple platform API. The package is dynamically loaded in the browser, with one renderer per recipe shell; route changes, theme changes and hidden tabs release the previous instance. Native HTML controls remain interactive above its canvases.
+
+All glass panels are direct children of a positioned viewport root. The list scrolls independently beneath them. `glassCapture.js` compensates for the library snapshotter not preserving `scrollTop`: it composites only visible, bounded content blocks into a viewport-sized texture and refreshes after scrolling, content changes and resizing. Keep the content and backdrop in explicit stacking contexts so the library paints them in the correct order. The adapter uses the pinned library's exposed capture cache; review it before upgrading that dependency.
+
+CSS translucency remains available during loading or if WebGL initialization fails. Reduced motion disables WebGL; reduced transparency, increased contrast and forced colors use solid surfaces. Recipe text remains selectable. `patch-package` is a build dependency because the upstream package invokes it from its install hook.
