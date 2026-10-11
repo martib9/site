@@ -761,3 +761,44 @@ html[data-recipe-theme=dark] .recipe-glass-backdrop { background: linear-gradien
 
 .recipes-glass-layout .recipes-main :is(input, button, a, summary, select, textarea) { scroll-margin-block: 110px; }
 .recipes-glass-layout.has-recipe-search .recipes-main :is(input, button, a, summary, select, textarea) { scroll-margin-top: 230px; }
+
+/* Floating dropdown motion adapted from CodeFronts' Liquid Glass Dropdown.
+   Portals keep menus above the fixed glass and outside the scroll clipping. */
+.recipes-app .glass-select-trigger, .recipe-glass-options button {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; min-width: 0; min-height: 44px; margin: 0; padding: 11px 14px;
+  font: inherit; font-size: 14px; text-align: left; color: inherit;
+  border: 1px solid rgba(255,255,255,.32); border-radius: 14px;
+  background: rgba(255,255,255,.12); cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.3);
+}
+.glass-select-trigger > span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.glass-select-chevron { transition: transform .25s; }
+.glass-select-trigger[aria-expanded=true] .glass-select-chevron { transform: rotate(180deg); }
+.recipe-glass-options {
+  position: fixed; z-index: 1000; box-sizing: border-box; overflow-y: auto; overscroll-behavior: contain;
+  padding: 8px; border-radius: 18px; color: #23262d; font-family: inherit;
+  background: rgba(245,247,251,.78); border: 1px solid rgba(255,255,255,.55);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 26px 50px -24px rgba(0,0,0,.5);
+  backdrop-filter: blur(22px) saturate(180%); -webkit-backdrop-filter: blur(22px) saturate(180%);
+  animation: recipe-glass-drop .35s cubic-bezier(.3,1.3,.5,1);
+}
+.recipe-glass-options button { border: 0; background: transparent; box-shadow: none; border-radius: 10px; }
+.recipe-glass-options button:hover, .recipe-glass-options button:focus-visible { background: rgba(120,130,150,.16); outline: 2px solid currentColor; outline-offset: -2px; }
+.recipe-glass-options button[aria-selected=true] { font-weight: 650; background: rgba(120,130,150,.12); }
+html[data-recipe-theme=dark] .recipe-glass-options { color: #f1f2f5; background: rgba(31,34,42,.8); border-color: rgba(255,255,255,.25); }
+.recipes-app .filter-selects .glass-select-trigger { background: transparent; border-color: transparent; box-shadow: none; padding-inline: 8px; }
+.recipes-app .theme-control .glass-select-trigger { min-width: 145px; }
+.recipes-app .attention-controls .glass-select-trigger { width: auto; }
+.recipes-app[data-glass-ready] > .recipes-nav { background: rgba(255,255,255,.08); }
+html[data-recipe-theme=dark] .recipes-app[data-glass-ready] > .recipes-nav { background: rgba(25,27,34,.1); }
+.recipes-glass-layout .recipes-nav a { transition: background .24s, box-shadow .24s, transform .24s; }
+.recipes-glass-layout .recipes-nav a:hover { transform: translateY(-2px); }
+.recipes-glass-layout .recipes-nav a:active { transform: scale(.95); }
+.recipes-glass-layout .recipes-nav a[aria-current=page] { background: rgba(150,158,175,.1); box-shadow: inset 0 1px 0 rgba(255,255,255,.32); }
+.recipe-tab-enter { animation: recipe-tab-enter .32s cubic-bezier(.2,.7,.25,1); }
+@keyframes recipe-tab-enter { from { opacity: .25; translate: 0 12px; } to { opacity: 1; translate: 0 0; } }
+@keyframes recipe-glass-drop { 0% { opacity: 0; transform: translateY(-8px) scale(.96,.88); } 65% { opacity: 1; transform: translateY(2px) scaleY(1.02); } 100% { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .recipe-tab-enter, .recipe-glass-options { animation: none; } .glass-select-chevron, .recipes-glass-layout .recipes-nav a { transition: none; } }
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) { .recipe-glass-options { background: #f5f7fb; backdrop-filter: none; } html[data-recipe-theme=dark] .recipe-glass-options { background: #1f222a; } }
+@media (forced-colors: active) { .recipe-glass-options, .recipe-glass-options button, .recipes-app .glass-select-trigger { background: Canvas; color: CanvasText; border: 1px solid ButtonText; } }

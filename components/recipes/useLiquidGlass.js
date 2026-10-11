@@ -31,7 +31,7 @@ export function useLiquidGlass(rootRef, page) {
           for (const el of glassElements) el.dataset.config = JSON.stringify({
             cornerRadius: parseFloat(getComputedStyle(el).borderTopLeftRadius),
             zRadius: 12, refraction: .55, chromAberration: .012,
-            blurAmount: .5, edgeHighlight: .07, specular: .12,
+            blurAmount: .38, opacity: el.classList.contains('recipes-nav') ? .7 : .88, edgeHighlight: .07, specular: .12,
             fresnel: .7, shadowOpacity: .12,
             brightness: document.documentElement.dataset.recipeTheme === 'dark' ? -.16 : -.035,
           });
@@ -66,6 +66,7 @@ export function useLiquidGlass(rootRef, page) {
     const theme = new MutationObserver(start);
     theme.observe(document.documentElement, { attributes: true, attributeFilter: ['data-recipe-theme'] });
     root.addEventListener('scroll', refresh, true);
+    root.addEventListener('animationend', refresh);
     window.addEventListener('resize', refresh);
     root.addEventListener('input', refresh);
     root.addEventListener('change', refresh);
@@ -75,6 +76,7 @@ export function useLiquidGlass(rootRef, page) {
     return () => {
       disposed = true; clearTimeout(timer); stop(); changes.disconnect(); theme.disconnect();
       root.removeEventListener('scroll', refresh, true);
+      root.removeEventListener('animationend', refresh);
       window.removeEventListener('resize', refresh);
       root.removeEventListener('input', refresh); root.removeEventListener('change', refresh);
       preference.removeEventListener('change', start); document.removeEventListener('visibilitychange', start);

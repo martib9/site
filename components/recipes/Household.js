@@ -1,3 +1,4 @@
+import GlassSelect from './GlassSelect';
 import { useLiquidGlass } from './useLiquidGlass';
 import GlassSurface from './GlassSurface';
 import ThemeToggle from './ThemeToggle';
@@ -57,7 +58,7 @@ export function Shell({ children, page, store }) {
         </div>
       </GlassSurface>
       {filters}
-      <main className="recipes-main">
+      <main key={page} className="recipes-main recipe-tab-enter">
         {store.pending > 0 || !store.online ? (
           <p className="notice" role="status">
             {store.online ? "Syncing" : "Offline"} · {store.pending} changes
@@ -370,7 +371,7 @@ export default function Household({ page }) {
         </span>
       </div>
       {page==='week'&&<WeekActions store={store}/>}
-      {page==='box'&&<div className="attention-controls"><button className={attention==='attention'?'primary':''} onClick={()=>{setAttention(attention?'':'attention');setQuery('');setMeal('');setCooked('');if(tag)router.push({pathname:'/recipes/box',query:{attention:attention?'':'attention'}},undefined,{shallow:true});}}>Needs attention · {state.recipes.filter(r=>recipeStatus(r,state)!=='Ready').length}</button><select aria-label="Import status" value={attention} onChange={e=>setAttention(e.target.value)}><option value="">All import states</option><option value="attention">Needs attention</option>{['Importing','Review','Needs ingredients','Ready'].map(v=><option key={v}>{v}</option>)}</select></div>}
+      {page==='box'&&<div className="attention-controls"><button className={attention==='attention'?'primary':''} onClick={()=>{setAttention(attention?'':'attention');setQuery('');setMeal('');setCooked('');if(tag)router.push({pathname:'/recipes/box',query:{attention:attention?'':'attention'}},undefined,{shallow:true});}}>Needs attention · {state.recipes.filter(r=>recipeStatus(r,state)!=='Ready').length}</button><GlassSelect aria-label="Import status" value={attention} onChange={e=>setAttention(e.target.value)}><option value="">All import states</option><option value="attention">Needs attention</option>{['Importing','Review','Needs ingredients','Ready'].map(v=><option key={v}>{v}</option>)}</GlassSelect></div>}
       {page === "box" ? (
         <GlassSurface className="recipe-filters">
           <label className="search-label">
@@ -383,7 +384,7 @@ export default function Household({ page }) {
             />
           </label>
           <div className="filter-selects">
-            <select
+            <GlassSelect
               aria-label="Meal type"
               value={meal}
               onChange={(e) => setMeal(e.target.value)}
@@ -394,8 +395,8 @@ export default function Household({ page }) {
                   {title(m)}
                 </option>
               ))}
-            </select>
-            <select
+            </GlassSelect>
+            <GlassSelect
               aria-label="Tag"
               value={tag}
               onChange={(e) => setTag(e.target.value)}
@@ -404,8 +405,8 @@ export default function Household({ page }) {
               {allTags.map((t) => (
                 <option key={t}>{t}</option>
               ))}
-            </select>
-            <select
+            </GlassSelect>
+            <GlassSelect
               aria-label="Cooked status"
               value={cooked}
               onChange={(e) => setCooked(e.target.value)}
@@ -413,7 +414,7 @@ export default function Household({ page }) {
               <option value="">All recipes</option>
               <option value="yes">Cooked</option>
               <option value="no">Not cooked</option>
-            </select>
+            </GlassSelect>
           </div>
         </GlassSurface>
       ) : null}
@@ -740,14 +741,14 @@ function RecipeForm({ recipe, store }) {
       </label>
       <label>
         Meal type
-        <select value={meal} onChange={(e) => setMeal(e.target.value)}>
+        <GlassSelect aria-label="Meal type" value={meal} onChange={(e) => setMeal(e.target.value)}>
           <option value="">Choose automatically</option>
           {MEALS.map((m) => (
             <option key={m} value={m}>
               {title(m)}
             </option>
           ))}
-        </select>
+        </GlassSelect>
       </label>
       <label>
         Tags <span className="muted">(optional)</span>

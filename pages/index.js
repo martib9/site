@@ -12,7 +12,7 @@ const contactLinks = [
 
 const projectLinks = [
   { href: '/budget', label: 'Budget Tool' },
-  { href: '/recipes/box', label: 'Recipe Box' },
+  { href: '/recipes', label: 'This week · Recipes' },
   { href: '/travel-2026', label: 'Travel Plans' },
   { href: '/main/lxd/index.html', label: 'LxD 5 Years' },
   { href: '/main/bday/index.html', label: 'Lera BDay' },
