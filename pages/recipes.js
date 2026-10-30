@@ -1,5 +1,2 @@
-import Household from "../components/recipes/Household";
+export { default } from "../components/recipes/RecipeWorkspace";
 export { pageProps as getServerSideProps } from "../lib/recipes/auth";
-export default function Recipes() {
-  return <Household page="week" />;
-}

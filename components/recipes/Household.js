@@ -1,3 +1,6 @@
+import RecipeBoot, { useRecipeBoot } from './RecipeBoot';
+import PwaControls from './PwaControls';
+import { RECIPE_TABS, tabDestination } from '../../lib/recipes/navigation.mjs';
 import GlassSelect from './GlassSelect';
 import { useLiquidGlass } from './useLiquidGlass';
 import GlassSurface from './GlassSurface';
@@ -25,6 +28,7 @@ const amount = (i) =>
 
 export function Shell({ children, page, store }) {
   const glassRoot = useRef(null);
+  const navigation = useRouter();
   useLiquidGlass(glassRoot, `${page}-${Boolean(store.state)}`);
   const items = Children.toArray(children);
   const filters = items.find(child => child.props?.className === 'recipe-filters');
@@ -33,8 +37,10 @@ export function Shell({ children, page, store }) {
     <div ref={glassRoot} className={`recipes-app recipes-glass-layout ${filters ? "has-recipe-search" : ""} ${page === "week" ? "recipes-week" : ""}`}>
       <Head>
         <title>{`${({week:'This week',box:'All recipes',basket:'Basket',recipe:'Recipe',add:'Add recipe'})[page]||'Recipes'} · Recipes`}</title>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-title" content="Recipes" />
+        <meta name="theme-color" content="#20232b" />
         <meta name="robots" content="noindex,nofollow" />
-        <meta name="theme-color" content="#34363b" />
         <link rel="manifest" href="/recipes/manifest.webmanifest" />
         <link rel="apple-touch-icon" href="/recipes/icon-192.png" />
       </Head>
@@ -48,7 +54,7 @@ export function Shell({ children, page, store }) {
             <summary aria-label="Appearance and account settings">Settings</summary>
             <div className="recipes-settings-panel">
               <span className="muted">Appearance</span>
-              <ThemeToggle />
+              <PwaControls /><ThemeToggle />
               <button className="quiet" onClick={store.logout}>Sign out</button>
             </div>
           </details>
@@ -118,6 +124,12 @@ export function Shell({ children, page, store }) {
           <Link
             key={id}
             href={href}
+            onClick={event => {
+              if (!RECIPE_TABS[navigation.pathname] || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+              event.preventDefault();
+              const target = tabDestination(navigation, id);
+              navigation.push(target.url, target.as, { shallow: true, scroll: false });
+            }}
             aria-current={page === id ? "page" : undefined}
           >
             {label}
@@ -320,28 +332,18 @@ export function RecipeRow({ recipe: r, store, weekly = false, expanded = false }
 }
 export default function Household({ page }) {
   const router = useRouter();
+  const assetsReady = useRecipeBoot();
   const store = useHousehold(),
     [query, setQuery] = useState(""),
     [meal, setMeal] = useState(""),
     [cooked, setCooked] = useState(""),
     [attention,setAttention] = useState("");
   const tag = typeof router.query.tag === 'string' ? router.query.tag : '';
-  const setTag = value => router.push({pathname:'/recipes/box',query:value?{tag:value}:{}},undefined,{shallow:true});
+  const setTag = value => { const target = tabDestination(router, 'box', value ? { tag: value } : {}); return router.push(target.url, target.as, { shallow: true, scroll: false }); };
   useEffect(()=>{setQuery('');setMeal('');setCooked('');setAttention(router.query.attention==='attention'?'attention':'');},[tag]);
   const { state } = store;
-  if (!state)
-    return (
-      <Shell page={page} store={store}>
-        <h1>
-          {page === "week"
-            ? "This week"
-            : page === "box"
-              ? "All recipes"
-              : "Basket"}
-        </h1>
-        <p>Loading your recipes…</p>
-      </Shell>
-    );
+  if (!state || !assetsReady)
+    return <Shell page={page} store={store}><RecipeBoot error={store.error} retry={store.sync} /></Shell>;
   if (page === "basket")
     return (
       <Shell page={page} store={store}>

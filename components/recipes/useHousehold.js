@@ -114,10 +114,6 @@ export function useHousehold() {
     const timer = setInterval(() => {
       if (document.visibilityState === "visible") sync();
     }, 5000);
-    if ("serviceWorker" in navigator)
-      navigator.serviceWorker
-        .register("/recipes-sw.js", { scope: "/recipes" })
-        .catch(() => {});
     return () => {
       clearInterval(timer);
       window.removeEventListener("online", update);

@@ -35,12 +35,16 @@ export function useLiquidGlass(rootRef, page) {
             fresnel: .7, shadowOpacity: .12,
             brightness: document.documentElement.dataset.recipeTheme === 'dark' ? -.16 : -.035,
           });
-          const next = await LiquidGlass.init({ root, glassElements });
+          // Install the bounded capture before the pinned renderer's prewarm pass.
+          // Otherwise it serializes the entire recipe collection on every tab.
+          const next = new LiquidGlass({ root, glassElements });
+          instance = next;
+          detachCapture = attachScrollingCapture(next, root.querySelector('.recipes-main'));
+          await next._start();
           if (disposed || current !== generation) { next.destroy(); return; }
           instance = next;
           root.style.userSelect = "";
           root.style.webkitUserSelect = "";
-          detachCapture = attachScrollingCapture(next, root.querySelector('.recipes-main'));
           root.setAttribute('data-glass-ready', 'true');
         } catch (error) {
           // An unavailable GPU must never prevent recipe navigation.

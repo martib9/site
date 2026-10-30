@@ -802,3 +802,19 @@ html[data-recipe-theme=dark] .recipes-app[data-glass-ready] > .recipes-nav { bac
 @media (prefers-reduced-motion: reduce) { .recipe-tab-enter, .recipe-glass-options { animation: none; } .glass-select-chevron, .recipes-glass-layout .recipes-nav a { transition: none; } }
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) { .recipe-glass-options { background: #f5f7fb; backdrop-filter: none; } html[data-recipe-theme=dark] .recipe-glass-options { background: #1f222a; } }
 @media (forced-colors: active) { .recipe-glass-options, .recipe-glass-options button, .recipes-app .glass-select-trigger { background: Canvas; color: CanvasText; border: 1px solid ButtonText; } }
+
+/* Progressier-style layered gloss: lightweight startup glass needs no WebGL. */
+.recipe-boot { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 24px; background: var(--paper, #eceef3); }
+.recipe-boot-glass { position: relative; overflow: hidden; width: min(380px,100%); padding: 36px 28px; text-align: center; border-radius: 32px; border: 1px solid rgba(255,255,255,.45); background: rgba(255,255,255,.12); backdrop-filter: blur(24px) saturate(160%); -webkit-backdrop-filter: blur(24px) saturate(160%); box-shadow: inset 0 1px 0 rgba(255,255,255,.5),0 20px 60px rgba(20,25,35,.12); }
+.recipe-boot-glass::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg,rgba(255,255,255,.38),transparent 48%); pointer-events: none; }
+.recipe-boot-glass img { margin: 0 auto 22px; border-radius: 20px; animation: recipe-boot-float 1.8s ease-in-out infinite; }
+.recipe-boot-glass h1 { font-size: 23px; letter-spacing: -.5px; line-height: 1.25; }
+.recipe-boot-glass p { font-size: 14px; color: var(--muted); margin: 14px 0 24px; }
+.recipe-boot-track { height: 5px; overflow: hidden; border-radius: 20px; background: rgba(120,130,150,.15); }
+.recipe-boot-track span { display: block; height: 100%; width: 35%; border-radius: inherit; background: currentColor; opacity: .45; animation: recipe-boot-sweep 1.4s ease-in-out infinite; }
+.recipe-pwa-controls { font-size: 13px; padding-block: 8px; }
+.recipe-pwa-controls p { margin: 8px 0; }
+.recipe-pwa-controls small { display: block; margin-top: 8px; color: var(--muted); }
+@keyframes recipe-boot-sweep { from { transform: translateX(-110%); } to { transform: translateX(390%); } }
+@keyframes recipe-boot-float { 50% { transform: translateY(-6px); } }
+@media (prefers-reduced-motion: reduce) { .recipe-boot-glass img, .recipe-boot-track span { animation: none; } }

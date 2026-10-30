@@ -1,7 +1,7 @@
-const CACHE = "martib-recipes-v1";
+const CACHE = "martib-recipes-v3";
 self.addEventListener("install", (event) =>
   event.waitUntil(
-    caches.open(CACHE).then((c) => c.add("/recipes/offline.html")),
+    caches.open(CACHE).then((c) => c.addAll(["/recipes/offline.html", "/recipes/manifest.webmanifest", "/recipes/icon-192.png", "/recipes/icon-512.png"])),
   ),
 );
 self.addEventListener("activate", (event) =>
@@ -75,4 +75,40 @@ self.addEventListener("fetch", (event) => {
           }),
       ),
     );
+});
+
+// Warm only known recipe screens and immutable same-origin build assets.
+self.addEventListener('message', event => {
+  if (event.data?.type !== 'PRELOAD_RECIPES') return;
+  event.waitUntil((async () => {
+    const routes = ['/recipes', '/recipes/box', '/recipes/basket', '/recipes/add'];
+    const assets = (Array.isArray(event.data.assets) ? event.data.assets : []).filter(value => {
+      try { const url = new URL(value, self.location.origin); return url.origin === self.location.origin && url.pathname.startsWith('/_next/static/'); } catch { return false; }
+    }).slice(0, 80);
+    const cache = await caches.open(CACHE);
+    const fetched = await Promise.all(routes.map(async url => {
+      try {
+        const response = await fetch(url, { credentials: 'same-origin' });
+        if (!response.ok || response.redirected) return false;
+        const html = await response.clone().text();
+        await cache.put(url, response);
+        for (const match of html.matchAll(/(?:src|href)=["']([^"']*\/_next\/static\/[^"']+)["']/g)) {
+          const asset = new URL(match[1], self.location.origin);
+          if (asset.origin === self.location.origin && asset.pathname.startsWith('/_next/static/')) assets.push(asset.href);
+        }
+        return true;
+      } catch { return false; }
+    }));
+    const assetResults = await Promise.all([...new Set(assets)].map(async url => {
+      try {
+        if (await cache.match(url)) return true;
+        const response = await fetch(url, { credentials: 'same-origin' });
+        if (!response.ok || response.redirected) return false;
+        await cache.put(url, response);
+        return true;
+      } catch { return false; }
+    }));
+    const ready = fetched.every(Boolean) && assetResults.every(Boolean);
+    event.ports[0]?.postMessage({ ready });
+  })());
 });
