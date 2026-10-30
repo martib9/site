@@ -41,7 +41,7 @@ export default async function handler(req, res) {
   } catch (error) {
     // Log only a safe category and PostgreSQL/Node error code, never connection details.
     const message = String(error?.message || '');
-    const category = /quota|compute time|usage limit|exceeded/i.test(message) ? 'provider_quota' : /password authentication|authentication failed/i.test(message) ? 'database_authentication' : /timeout|timed out/i.test(message) ? 'connection_timeout' : 'database_error';
+    const category = /compute.{0,60}(?:quota|limit|exceed)|(?:quota|limit|exceed).{0,60}compute/i.test(message) ? 'compute_quota' : /storage.{0,60}(?:quota|limit|exceed)|(?:quota|limit|exceed).{0,60}storage/i.test(message) ? 'storage_quota' : /quota|compute time|usage limit|exceeded/i.test(message) ? 'provider_quota' : /password authentication|authentication failed/i.test(message) ? 'database_authentication' : /timeout|timed out/i.test(message) ? 'connection_timeout' : 'database_error';
     const code = typeof error?.code === 'string' && /^[A-Z0-9_]{1,24}$/.test(error.code) ? error.code : 'unknown';
     console.error('Recipe login database failure', { category, code });
     return res

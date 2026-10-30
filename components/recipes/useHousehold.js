@@ -111,11 +111,18 @@ export function useHousehold() {
     window.addEventListener("online", update);
     window.addEventListener("offline", update);
     window.addEventListener("focus", update);
+    // Keep an active household fresh, but let the database sleep when idle.
+    let lastActivity = Date.now();
+    const activity = () => { lastActivity = Date.now(); };
+    window.addEventListener('pointerdown', activity, { passive: true });
+    window.addEventListener('keydown', activity);
     const timer = setInterval(() => {
-      if (document.visibilityState === "visible") sync();
-    }, 5000);
+      if (document.visibilityState === "visible" && Date.now() - lastActivity < 120000) sync();
+    }, 30000);
     return () => {
       clearInterval(timer);
+      window.removeEventListener('pointerdown', activity);
+      window.removeEventListener('keydown', activity);
       window.removeEventListener("online", update);
       window.removeEventListener("offline", update);
       window.removeEventListener("focus", update);
